@@ -1,0 +1,94 @@
+{
+    "properties": {},
+    "description": "Copy of SLT to MySQL",
+    "processes": {
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 295.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 400000000,
+                    "spoolSize": 100
+                }
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "chunkSize": 50000,
+                    "subscriptionName": "JD1_T023",
+                    "massTransferID": "04Y",
+                    "tableName": "T023"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 196.99999904632568,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 163.99999952316284,52 163.99999952316284,43 191.99999904632568,43"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "250.99999904632568,52 290.9999990463257,52"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

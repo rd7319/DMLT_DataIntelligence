@@ -1,0 +1,69 @@
+{
+	"name": "generated.datatransform1_output1",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"CompanyCode": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_15"
+				}
+			},
+			{
+				"G/LAccountNumber": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"FinancialBudgetItem": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"FieldStatusGroup": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"TaxCategory": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"AccountCurrency": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"FinancialBudgetItem_REF": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"FieldStatusGroup_REF": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"TaxCategory_REF": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"AccountCurrency_REF": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			}
+		]
+	}
+}

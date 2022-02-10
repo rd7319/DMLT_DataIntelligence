@@ -1,0 +1,212 @@
+{
+    "properties": {},
+    "description": "SLT to MySQL",
+    "processes": {
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "chunkSize": 10000,
+                    "subscriptionName": "JD1_T023",
+                    "massTransferID": "04Y",
+                    "tableName": "T023"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 410.99999809265137,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "fromfile1": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 295.9999990463257,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Prepare Data",
+                "x": 509.99999809265137,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nfrom io import BytesIO\r\n\r\ndef onInput(input):\r\n    data_stream = StringIO(input)\r\n    df = pd.read_csv(data_stream,names = [\"ID\",\"Country\",\"FullName\",\"Title\",\"Company\",\"Address1\",\"Address2\",\"Address3\",\"City\",\"State\",\"Zipcode\",\"Email\",\"Phone\",\r\n    \"Date\",\"ERROR_ACTION\", \"ERROR_COLUMNS\", \"ROW_ID\"],header=None, delim_whitespace=False)\r\n    df = df.iloc[: , :-2]\r\n    \r\n    api.send(\"out\",df.to_csv(index = False,date_format=\"%Y-%m-%d\",header=True))\r\n    \r\n\r\napi.set_port_callback(\"input1\", onInput)    "
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 196.99999904632568,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "mysqlinsert1": {
+            "component": "MySQL_ExecuteMany",
+            "metadata": {
+                "label": "Aurora MySQL",
+                "x": 678.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nimport io\r\nimport mysql.connector\r\n\r\ndef on_input(File):\r\n    \r\n    connProp = api.config.Connection['connectionProperties']\r\n    #Connect to DB\r\n    mydb = mysql.connector.connect(\r\n          host= connProp['host'],\r\n          port=connProp['port'],  \r\n          user=connProp['user'],\r\n          database=connProp['database'],\r\n          password=connProp['password']\r\n        )\r\n    #Get DB Cursor    \r\n    cursor = mydb.cursor()\r\n    \r\n    #Read data to DataFrame\r\n    data_stream = io.StringIO(File)\r\n    df = pd.read_csv(data_stream)\r\n    \r\n    #first element will be header and last element will be blank so not considering them when we conver Dataframe to csv\r\n    #df_1=df.to_csv(index=False).split('\\n')[1:-1]\r\n    #df_1=df.to_csv(index=False).split('\\s+')[1:-1]\r\n    df_1=df.to_csv(index=False).split('\\n')[1:]\r\n    #getting the column count for each file given\r\n    #column_count=int(len(str(df_1).split(','))/len(df_1))\r\n    column_count = len(df.columns)\r\n    #generating data in necessary format\r\n    data=''\r\n    final_data=[]\r\n    final_data1=[]\r\n    \r\n    for row in range(0,len(df_1)-1):\r\n        for value in range(0,column_count):\r\n            if value == 0:\r\n                data=(str(df_1[row]).split(',')[value])\r\n                data='('+data\r\n                final_data.append(data)\r\n            elif value == (column_count-1):\r\n                data=(str(df_1[row]).split(',')[value])\r\n                data=data+')'\r\n                final_data.append(data)\r\n            else:\r\n                data=(str(df_1[row]).split(',')[value])\r\n                final_data.append(data)\r\n                \r\n    final_data=str(final_data).replace(\"'(\",\"('\").replace(\")'\",\"')\")   \r\n    final_data1 = eval(final_data)\r\n    \r\n    nstr = ''\r\n    for l in range(0,column_count):\r\n        if l == column_count - 1:\r\n            nstr += '%s'\r\n        else:    \r\n            nstr += '%s,'\r\n    \r\n    #concatenate all the records into insert query\r\n    insert_query = f\"insert into MATERIAL_GROUP values ({nstr})\"\r\n    \r\n    #Commit to DB\r\n    try:\r\n        cursor.executemany(insert_query, final_data1)\r\n        mydb.commit()\r\n        result = f\"Success - {cursor.rowcount} inserted\"\r\n    except mysql.connector.IntegrityError:\r\n        result = 'Failure'\r\n    finally:\r\n        mydb.close()       \r\n    \r\n    api.send(\"out\", result)\r\n\r\napi.set_port_callback(\"File\", on_input)",
+                    "Connection": {
+                        "MySQL Conection": "AURORA_DB"
+                    },
+                    "Table": "MATERIAL_GROUP"
+                }
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 847.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 163.99999952316284,52 163.99999952316284,61 191.99999904632568,61"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "250.99999904632568,52 290.9999990463257,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "349.9999990463257,61 377.9999985694885,61 377.9999985694885,43 405.99999809265137,43"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "464.99999809265137,52 504.99999809265137,52"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "802.9999980926514,52 842.9999980926514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "mysqlinsert1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "633.9999980926514,52 673.9999980926514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "File",
+                "process": "mysqlinsert1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

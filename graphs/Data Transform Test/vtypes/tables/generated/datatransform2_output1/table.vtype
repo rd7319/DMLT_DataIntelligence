@@ -1,0 +1,45 @@
+{
+	"name": "generated.datatransform2_output1",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"charcValue": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.string"
+				}
+			},
+			{
+				"charcFromNumericValue": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"language": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.string"
+				}
+			},
+			{
+				"charcValueDescription": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"charcValuePositionNumber": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int8"
+				}
+			},
+			{
+				"ID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_30"
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,39 @@
+{
+	"name": "generated.datatransform2_output1",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"charcValue": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"charcFromNumericValue": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"language": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"charcValueDescription": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"ID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_30"
+				}
+			}
+		]
+	}
+}

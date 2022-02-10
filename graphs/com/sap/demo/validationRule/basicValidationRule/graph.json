@@ -1,0 +1,187 @@
+{
+    "properties": {},
+    "iconsrc": "validationRule.svg",
+    "description": "Basic Validation Rule",
+    "processes": {
+        "validationrule1": {
+            "component": "com.sap.dh.dq.validationRule",
+            "metadata": {
+                "label": "Validation Rule",
+                "x": 181,
+                "y": 191,
+                "height": 82,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "inputSchema": [
+                        {
+                            "name": "ID",
+                            "type": "Integer",
+                            "length": 256
+                        },
+                        {
+                            "name": "Name",
+                            "type": "String",
+                            "length": 256
+                        },
+                        {
+                            "name": "Title",
+                            "type": "String",
+                            "length": 256
+                        },
+                        {
+                            "name": "Salary",
+                            "type": "Number"
+                        }
+                    ],
+                    "rules": [
+                        {
+                            "column": "Title",
+                            "condition": "IS NOT NULL",
+                            "failAction": "BOTH"
+                        }
+                    ],
+                    "substitutions": [
+                        {
+                            "column": "Title",
+                            "value": "'Intern'"
+                        }
+                    ]
+                }
+            }
+        },
+        "datagenerator1": {
+            "component": "com.sap.util.dataGenerator",
+            "metadata": {
+                "label": "Data Generator",
+                "x": 12,
+                "y": 192,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "// this operator runs the javascript below to generate a row of data \n// (randomly generating values for 4 fields) and sends the row of \n// data to the output pipe.  See comments below for more details on\n// format of the row of data generated.\n\n// starting value of ID field generated (will be incremented for each row)\nvar rowId = 1;\n\n// arrays to retrieve random Names and Titles\nvar employeeList = [\"Linda\", \"Glenn\", \"Marge\", \"Ben\", \"Ajay\", \"Seth\", \"Matt\", \"Tom\"];\nvar jobTitleList = [\"CEO\", \"Software Engineer\", \"Tester\", \"Writer\", \"\"];\n\n// generate a row of data every 1/2 second\n$.addTimer(\"500ms\", generateRow);\n\n// send one row of data to output pipe\nfunction generateRow(ctx) {\n    $.output(generateData());\n}\n\n/**\n * Generate a row of sample data (csv format). This data will match  \n * the Input Schema of the Validation Rule operator, which is:\n * \n *     Field Name   Data Type\n *     ----------   ---------\n *     ID           Integer\n *     Name         String(256)\n *     Title        String(256)\n *     Salary       Number\n * \n * NOTE #1:  csv format should not have spaces around comma\n *     Good:   1,John,Developer,45000.45\n *     Bad:    1, John, Developer, 45000.45\n * \n * NOTE #2:  Do not append line ending characters to row of data\n **/ \ngenerateData = function() {\n    // start with an ID for this row\n    var payload = rowId++ + \",\";\n    \n    // concatenate an employee name\n    payload += getEmployeeName() + \",\";\n    \n    // concatenate a job title\n    var jobTitle = \"\";\n    jobTitle = getJobTitle();\n    payload += jobTitle + \",\";\n \n    // concatenate a salary (based on jobTitle)   \n    payload += getSalary(jobTitle);\n\n    return payload;\n};\n\n// return random employee name\ngetEmployeeName = function () {\n    return(employeeList[getRandomInt(0, employeeList.length - 1)]);\n}\n\n// return random title\ngetJobTitle = function() {\n    return(jobTitleList[getRandomInt(0, jobTitleList.length - 1)]);\n}\n\n// return a random salary amount based upon jobTitle\ngetSalary = function (jobTitle) {\n    var min, max;\n    \n    if (jobTitle == \"CEO\") {\n        min = 150000;\n        max = 250000;\n    }\n    else if (jobTitle.length > 0) {\n        // all other job titles\n        min = 50000;\n        max = 100000;\n    }\n    else {\n        // no job title\n        min = 0;\n        max = 0;\n    }\n    // get a random floating point number\n    return(getRandomNumber(min, max));\n}\n\n// random number (floating point, with 2 decimal places)\ngetRandomNumber = function(min, max) {\n    return (Math.random() * (max - min) + min).toFixed(2);\n};\n\n// random integer\ngetRandomInt = function(min, max) {\n    return Math.floor(Math.random() * (max - min + 1)) + min;\n};\n"
+                }
+            }
+        },
+        "terminal1": {
+            "component": "com.sap.util.terminal",
+            "metadata": {
+                "label": "Pass Output",
+                "x": 381.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "terminal2": {
+            "component": "com.sap.util.terminal",
+            "metadata": {
+                "label": "Fail Output",
+                "x": 381.9999990463257,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "terminal3": {
+            "component": "com.sap.util.terminal",
+            "metadata": {
+                "label": "Fail Info Output",
+                "x": 381.9999990463257,
+                "y": 252,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "terminal4": {
+            "component": "com.sap.util.terminal",
+            "metadata": {
+                "label": "Error Output",
+                "x": 381.9999990463257,
+                "y": 372,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,232 176,232"
+            },
+            "src": {
+                "port": "output",
+                "process": "datagenerator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "validationrule1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,205 332.99999952316284,205 332.99999952316284,52 376.9999990463257,52"
+            },
+            "src": {
+                "port": "pass",
+                "process": "validationrule1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "terminal1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,223 348.99999952316284,223 348.99999952316284,172 376.9999990463257,172"
+            },
+            "src": {
+                "port": "fail",
+                "process": "validationrule1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "terminal2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,241 348.99999952316284,241 348.99999952316284,292 376.9999990463257,292"
+            },
+            "src": {
+                "port": "failInformation",
+                "process": "validationrule1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "terminal3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,259 332.99999952316284,259 332.99999952316284,412 376.9999990463257,412"
+            },
+            "src": {
+                "port": "outError",
+                "process": "validationrule1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "terminal4"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

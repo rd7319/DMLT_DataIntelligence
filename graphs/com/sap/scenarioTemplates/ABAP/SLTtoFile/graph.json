@@ -1,0 +1,262 @@
+{
+    "properties": {},
+    "iconsrc": "SAP_ABAP_Logo.png",
+    "description": "SLT to File",
+    "processes": {
+        "abapconverter1": {
+            "component": "com.sap.abap.toStringConverter",
+            "metadata": {
+                "label": "ABAP Converter",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "connectionID": "",
+                    "format": "csv"
+                }
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt_reader",
+            "metadata": {
+                "label": "SLT Connector",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "Chunk size": "1 portion",
+                    "connectionID": "",
+                    "Mass Transfer ID": "",
+                    "Table Name": "",
+                    "action": " "
+                }
+            }
+        },
+        "determinelastbatch1": {
+            "component": "com.sap.scenarioTemplates.ABAP.determineLastBatch",
+            "metadata": {
+                "label": "Determine Last Batch",
+                "x": 464.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {}
+            }
+        },
+        "tomessageconverter1": {
+            "component": "com.sap.util.toMessageConverter",
+            "metadata": {
+                "label": "ToMessage Converter",
+                "x": 365.9999990463257,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "limitfilesize1": {
+            "component": "com.sap.scenarioTemplates.ABAP.fileSizeLimit",
+            "metadata": {
+                "label": "Limit File Size",
+                "x": 633.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {}
+            }
+        },
+        "checklastbatch1": {
+            "component": "com.sap.scenarioTemplates.ABAP.checkLastBatch",
+            "metadata": {
+                "label": "Check Last Batch",
+                "x": 1217.9999961853027,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {}
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 1386.9999961853027,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "writefile2": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 917.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management"
+                    },
+                    "pathMode": "Static with placeholders",
+                    "path": "/tmp/file_<header:ABAPfilenumber>.csv",
+                    "mode": "Append",
+                    "joinBatches": false
+                }
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 818.9999980926514,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "fromfile1": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 1102.999997138977,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "abapconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 332.99999952316284,52 332.99999952316284,43 360.9999990463257,43"
+            },
+            "src": {
+                "port": "out",
+                "process": "abapconverter1"
+            },
+            "tgt": {
+                "port": "inbody",
+                "process": "tomessageconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "419.9999990463257,52 459.9999990463257,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "determinelastbatch1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "588.9999990463257,52 628.9999990463257,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "determinelastbatch1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "limitfilesize1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1341.9999961853027,52 1381.9999961853027,52"
+            },
+            "src": {
+                "port": "finished",
+                "process": "checklastbatch1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "757.9999990463257,52 785.9999985694885,52 785.9999985694885,61 813.9999980926514,61"
+            },
+            "src": {
+                "port": "out",
+                "process": "limitfilesize1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "872.9999980926514,52 912.9999980926514,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1041.9999980926514,43 1069.9999976158142,43 1069.9999976158142,52 1097.999997138977,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "writefile2"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1156.999997138977,61 1184.99999666214,61 1184.99999666214,52 1212.9999961853027,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "checklastbatch1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

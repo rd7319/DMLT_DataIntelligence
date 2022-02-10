@@ -1,0 +1,63 @@
+{
+    "properties": {},
+    "description": "Delete LTRC entries",
+    "processes": {
+        "sapabapoperator1": {
+            "component": "com.sap.abap.sap",
+            "metadata": {
+                "label": "Resilience Subscription Eraser V1",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "CAL_ECC",
+                    "operatorID": "com.sap.abap.subscr.eraser.v1",
+                    "readerObj": "All",
+                    "allSubscrID": "0EF78BDA1A151EDC98DD46D92ECF72BB"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "sapabapoperator1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

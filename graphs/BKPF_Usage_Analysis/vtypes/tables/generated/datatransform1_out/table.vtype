@@ -1,0 +1,27 @@
+{
+	"name": "generated.datatransform1_out",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"BUKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"GJAHR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"Posting Count": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			}
+		]
+	}
+}

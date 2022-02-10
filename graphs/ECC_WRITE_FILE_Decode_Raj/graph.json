@@ -1,0 +1,364 @@
+{
+    "properties": {},
+    "description": "ECC to HANA Table",
+    "processes": {
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 181,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000,
+                    "spoolSize": 320
+                }
+            }
+        },
+        "initializehanatable1": {
+            "component": "com.sap.hana.initTable",
+            "metadata": {
+                "label": "Initialize HANA Table",
+                "x": 1242.999997138977,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "CFIN_HANA_DB"
+                    },
+                    "tableType": "Row"
+                }
+            }
+        },
+        "wiretap3": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 1427.9999961853027,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 5000000
+                }
+            }
+        },
+        "writehanatable1": {
+            "component": "com.sap.hana.writeTable",
+            "metadata": {
+                "label": "Write HANA Table",
+                "x": 1596.9999961853027,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "CFIN_HANA_DB"
+                    },
+                    "statementType": "UPSERT"
+                }
+            }
+        },
+        "decodetable1": {
+            "component": "com.sap.table.decode",
+            "metadata": {
+                "label": "Decode Table",
+                "x": 534.9999990463257,
+                "y": 85.99999952316284,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "format": "CSV",
+                    "csvHeader": "None"
+                }
+            }
+        },
+        "slttohana1": {
+            "component": "SLT_To_HANA",
+            "metadata": {
+                "label": "SLT To HANA",
+                "x": 350,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef map_dtypes(meta,fields):\r\n    name = meta['Field']['COLUMNNAME']\r\n    cls = ''\r\n    typ = {}\r\n    prec = 0\r\n    scale = 0\r\n    for field in fields:\r\n        if field['Name'] == name:\r\n            kind = field['Kind']\r\n            \r\n            if kind == 'C':\r\n                cls = 'string'\r\n            elif kind == 'S' or kind == 'I':\r\n                cls = 'integer'\r\n                typ['hana'] = 'INTEGER'\r\n            elif kind == 'P':\r\n                cls = 'decimal'\r\n                typ['hana'] = 'DECIMAL'\r\n                prec = int(meta['Field']['ABAPLEN'].lstrip('0'))\r\n                scale = field['Decimals']\r\n            elif kind == 'F':\r\n                cls = 'float'\r\n            elif kind == 'D':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'DATE'\r\n            elif kind == 'T':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'TIME'    \r\n            else:\r\n                cls = 'string'\r\n    return cls,kind,typ,prec,scale    \r\n\r\ndef on_input(inData):\r\n    tabname = str(api.config.TabName)\r\n    # read body\r\n    data = StringIO(inData.body) \r\n    # read attributes\r\n    var = json.dumps(inData.attributes) \r\n    result = json.loads(var)\r\n    # from here we start json parsing \r\n    if 'message.lastBatch' in result:\r\n        #last batch\r\n        api.logger.info(\"Last batch\")\r\n        \r\n    else:\r\n        \r\n        ABAP = result['ABAP']\r\n        Fields = ABAP['Fields']\r\n        \r\n        meta = result['metadata']\r\n        \r\n        tabmsg = {}\r\n        tabmsg['Attributes'] = {}\r\n        tabmsg['Attributes']['table'] = {}\r\n        tabmsg['Attributes']['table']['version'] = 1\r\n        \r\n        tabmsg['Attributes']['table']['columns'] = []\r\n        cols = []\r\n        keys = []\r\n        \r\n        for field in meta:\r\n            name = str(field['Field']['COLUMNNAME'])\r\n            size = field['Field']['OUTPUTLEN'].lstrip('0')\r\n            if size == '':\r\n                continue\r\n            else:\r\n                size = int(size)\r\n            \r\n            nullable = \"False\"\r\n            if field['Field']['NULLABLE'] == 'X':\r\n                nullable = \"True\"\r\n                \r\n            cls,kind,typ,prec,scale = map_dtypes(field,Fields)     \r\n            \r\n            if cls == 'string':    \r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'size':size,'nullable' : nullable})\r\n            elif cls =='timestamp':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            elif cls == 'float':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            else:\r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'nullable' : nullable})\r\n            \r\n            if field['Field']['KEY'] == 'X':\r\n                keys.append(name)\r\n                \r\n        tabmsg['Attributes']['table']['primaryKey'] = keys\r\n        tabmsg['Attributes']['table']['columns'] = cols\r\n        tabmsg['Encoding'] = 'table'\r\n        \r\n        body = []\r\n        tab_payload = ''\r\n        while True:\r\n        # Read one line.\r\n            line = data.readline()\r\n        # If reach the end of the data then jump out of the loop.\r\n            if line == '':\r\n                break\r\n            else:\r\n                lista = []\r\n                if tab_payload == '':\r\n                    tab_paylaod = line.split(',')[-2]\r\n                    \r\n                #lista = line.split(',')\r\n                lista.append(line.strip())\r\n                body.append(lista)\r\n        \r\n        #tabmsg['Body'] = body\r\n        \r\n        #tabjson = json.dumps(tabmsg)\r\n        \r\n        if tabname == '':\r\n            tabmsg['Attributes']['table']['name'] = tab_payload.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        else:    \r\n            tabmsg['Attributes']['table']['name'] = tabname.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        \r\n        api.send('out', api.Message(attributes=tabmsg['Attributes'], body=None))\r\n        api.send('out2', api.Message(attributes=tabmsg['Attributes'], body=inData.body))\r\n        \r\napi.set_port_callback('input1', on_input)",
+                    "TabName": "${tableName}"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "out2",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 904.999997138977,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef on_input(attributes,body):\r\n    data = json.loads(body.body)\r\n    newdata = []\r\n    for i in data:\r\n        i = [\"0001-01-01\" if x==\"9999-99-99\" else x for x in i]\r\n        i = i[:-2]\r\n        newdata.append(i)\r\n    api.send('tableMessage', api.Message(attributes=attributes.attributes, body=newdata))\r\n        \r\napi.set_port_callback(['attributes','body'], on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "attributes",
+                        "type": "message"
+                    },
+                    {
+                        "name": "body",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "tableMessage",
+                        "type": "message.table"
+                    }
+                ]
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 1073.999997138977,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000
+                }
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 754.4999980926514,
+                "y": 160.99999952316284,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 719.9999980926514,
+                "y": 40.99999952316284,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 71.49999976158142,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "04Y",
+                    "tableName": "MARD",
+                    "subscriptionName": "Test123",
+                    "chunkSize": 50
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "1366.999997138977,102.49999976158142 1394.99999666214,102.49999976158142 1394.99999666214,111.49999976158142 1422.9999961853027,111.49999976158142"
+            },
+            "src": {
+                "port": "success",
+                "process": "initializehanatable1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1551.9999961853027,111.49999976158142 1591.9999961853027,111.49999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap3"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "writehanatable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,111.49999976158142 345,111.49999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "slttohana1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,120.49999976158142 501.99999952316284,120.49999976158142 501.99999952316284,125.99999952316284 529.9999990463257,125.99999952316284"
+            },
+            "src": {
+                "port": "out2",
+                "process": "slttohana1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "decodetable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,102.49999976158142 501.99999952316284,102.49999976158142 501.99999952316284,57 686.9999985694885,57 686.9999985694885,12 871.9999976158142,12 871.9999976158142,102.49999976158142 899.999997138977,102.49999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "slttohana1"
+            },
+            "tgt": {
+                "port": "attributes",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1028.999997138977,111.49999976158142 1068.999997138977,111.49999976158142"
+            },
+            "src": {
+                "port": "tableMessage",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1197.999997138977,111.49999976158142 1237.999997138977,111.49999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "initializehanatable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "658.9999990463257,125.99999952316284 686.9999985694885,125.99999952316284 686.9999985694885,176.99999952316284 749.4999980926514,176.99999952316284"
+            },
+            "src": {
+                "port": "output",
+                "process": "decodetable1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "808.4999980926514,185.99999952316284 871.9999976158142,185.99999952316284 871.9999976158142,120.49999976158142 899.999997138977,120.49999976158142"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "body",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "658.9999990463257,125.99999952316284 686.9999985694885,125.99999952316284 686.9999985694885,80.99999952316284 714.9999980926514,80.99999952316284"
+            },
+            "src": {
+                "port": "output",
+                "process": "decodetable1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,111.49999976158142 176,111.49999976158142"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

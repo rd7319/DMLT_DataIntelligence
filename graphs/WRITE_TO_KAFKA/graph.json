@@ -1,0 +1,174 @@
+{
+    "properties": {},
+    "description": "Write to Kafka",
+    "processes": {
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "CAL_ECC",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "002",
+                    "tableName": "KNA1",
+                    "subscriptionName": "KNA1_1",
+                    "chunkSize": 500
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "kafkaproducer1": {
+            "component": "com.sap.kafka.producer",
+            "metadata": {
+                "label": "Kafka Producer",
+                "x": 519,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connectionType": "manual",
+                    "brokers": "104.211.206.53:9092",
+                    "topic": "BUT100_Replicate",
+                    "kafkaVersion": "2.13.2",
+                    "manualPartitioning": false,
+                    "partition": 2,
+                    "maxMessageBatch": 4096,
+                    "maxMessageBytes": 104857600,
+                    "timeout": 300000000
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 688,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000
+                }
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Kafka Encoder",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef on_input(input1):\r\n    api.send('out', api.Message(attributes={\"data\" : \"pass\"}, body=input1))\r\n        \r\napi.set_port_callback(\"input1\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "any.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "643,52 683,52"
+            },
+            "src": {
+                "port": "markoffsets",
+                "process": "kafkaproducer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "message",
+                "process": "kafkaproducer1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

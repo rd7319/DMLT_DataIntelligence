@@ -1,0 +1,33 @@
+{
+    "description": "",
+    "processes": {
+        "flowagentsqlexecutor1": {
+            "component": "com.sap.dh.ds.sql.executor",
+            "metadata": {
+                "label": "Flowagent SQL Executor",
+                "x": 339,
+                "y": 128,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "MySQL",
+                    "mysqlConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "AURORA_DB"
+                    },
+                    "sqlStatements": "CREATE TABLE ZT001 (\r\nMANDT VARCHAR(3.0)NOT NULL,\r\nBLART VARCHAR(2.0)NOT NULL,\r\nNUMKR VARCHAR(5.0),\r\nKOARS VARCHAR(2.0),\r\nSTBLA VARCHAR(1.0),\r\nXNETB VARCHAR(1.0),\r\nXRVUP VARCHAR(1.0),\r\nXSYBL VARCHAR(1.0),\r\nXVORK VARCHAR(1.0),\r\nXKKPR VARCHAR(1.0),\r\nXGSUB VARCHAR(1.0),\r\nXMGES VARCHAR(4.0),\r\nBRGRU VARCHAR(2.0),\r\nRECID VARCHAR(2.0),\r\nRECIC VARCHAR(1.0),\r\nXMTXT VARCHAR(1.0),\r\nXMREF VARCHAR(1.0),\r\nXNGBK VARCHAR(4.0),\r\nKURST VARCHAR(1.0),\r\nXNEGP VARCHAR(1.0),\r\nXKOAA VARCHAR(1.0),\r\nXKOAD VARCHAR(1.0),\r\nXKOAK VARCHAR(1.0),\r\nXKOAM VARCHAR(1.0),\r\nXKOAS VARCHAR(1.0),\r\nXNMRL VARCHAR(1.0),\r\nXAUSG VARCHAR(1.0),\r\nXDTCH VARCHAR(1.0),\r\nBLKLS VARCHAR(1.0),\r\nXROLLUP VARCHAR(1.0),\r\nXPLAN VARCHAR(1.0),\r\nXALLOCACT VARCHAR(1.0),\r\nXALLOCPLAN VARCHAR(1.0),\r\nX_PP_PROCESS VARCHAR(1.0),\r\nXKURSX VARCHAR(1.0),\r\nXPOSACC VARCHAR(1.0),\r\nXUACPA VARCHAR(1.0),\r\nXMREF2 VARCHAR(1.0),\r\nPRIMARY KEY (MANDT,BLART));"
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [],
+    "inports": {},
+    "outports": {},
+    "properties": {},
+    "metadata": {
+        "generation": 1
+    }
+}

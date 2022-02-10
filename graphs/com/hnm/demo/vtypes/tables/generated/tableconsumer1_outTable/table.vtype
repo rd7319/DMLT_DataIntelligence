@@ -1,0 +1,169 @@
+{
+	"name": "generated.tableconsumer1_outTable",
+	"description": "auto-generated generated.tableconsumer1_outTable",
+	"vflow.type": "table",
+	"keys": [
+		"MANDT",
+		"ID"
+	],
+	"rows": {
+		"components": [
+			{
+				"MANDT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"ID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"CHAR6": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"CHAR20": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"SSTRING10": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"NUMC8": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_8"
+				}
+			},
+			{
+				"DATS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_8"
+				}
+			},
+			{
+				"TIMS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"DEC52": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_5_2"
+				}
+			},
+			{
+				"INT1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int16"
+				}
+			},
+			{
+				"INT2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int16"
+				}
+			},
+			{
+				"INT4": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"INT8": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int64"
+				}
+			},
+			{
+				"DECFLOAT16": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.binary_8"
+				}
+			},
+			{
+				"DECFLOAT34": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.binary_16"
+				}
+			},
+			{
+				"DEC62": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_6_2"
+				}
+			},
+			{
+				"D16D_10_3": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_10_3"
+				}
+			},
+			{
+				"GUID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.binary_16"
+				}
+			},
+			{
+				"DATN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.date"
+				}
+			},
+			{
+				"TIMN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.time"
+				}
+			},
+			{
+				"D16N": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.decfloat16"
+				}
+			},
+			{
+				"D34N": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.decfloat34"
+				}
+			},
+			{
+				"UTCLONG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.timestamp"
+				}
+			},
+			{
+				"TESTCOMMENT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.string"
+				}
+			},
+			{
+				"STATE1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"STATE2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			}
+		]
+	}
+}

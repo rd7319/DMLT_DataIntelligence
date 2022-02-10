@@ -1,0 +1,125 @@
+{
+    "properties": {},
+    "iconsrc": "satellite.svg",
+    "description": "Data Generator",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 519,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 1000000000,
+                    "spoolSize": 320000000
+                }
+            }
+        },
+        "javascriptv2operator1": {
+            "component": "com.sap.system.jsengine.v2",
+            "metadata": {
+                "label": "Javascript(v2) Operator",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "// This operator is needed to keep compatibility to the old datagenerator\n$.setPortCallback(\"input1\",doTick);\nvar counter = 0;\n\ngetRandom = function(min, max) {\n    return Math.random() * (max - min) + min;\n};\n\ngetRandomInt = function(min, max) {\n    return Math.floor(Math.random() * (max - min + 1)) + min;\n};\nvar payload = ''\ngenerateData = function(ctr) {\n\n    // payload = \"3,26.4,60.9,532.0,1.0,24.0,55.0,0,657.0,437.0,1388,5,-33,3.33\"\n    while(counter <= ctr){\n        payload += getRandomInt(2, 6) + \",\"; // DeviceID\n        payload += getRandom(25, 26) + \",\"; // Temperatur\n        payload += getRandom(40, 60) + \",\"; // Humidity\n        payload += getRandom(500, 600) + \",\"; // CO2    \n        payload += getRandom(0.9, 1.1) + \",\"; // CO    \n        payload += getRandom(23, 25) + \",\"; // LPG    \n        payload += getRandom(50, 60) + \",\"; // Smoke  \n        payload += getRandomInt(0, 1) + \",\"; // Presence \n        payload += getRandom(600, 800) + \",\"; // Light  \n        payload += getRandom(400, 500) + \"\\r\\n\"; // Sound  \n        counter++;\n    }\n    return payload;\n};\n\n// $.addTimer(\"500ms\",doTick);\n\nfunction doTick(ctx,s) {\n    var result = generateData(s);\n    $.output(result);\n}\n// your script goes in here\n\n"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "constantgenerator1": {
+            "component": "com.sap.util.constantGenerator",
+            "metadata": {
+                "label": "Constant Generator",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "counter": 1,
+                    "mode": "once",
+                    "content": "1000"
+                }
+            }
+        },
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "constantgenerator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "constantgenerator1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "javascriptv2operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 514,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "javascriptv2operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

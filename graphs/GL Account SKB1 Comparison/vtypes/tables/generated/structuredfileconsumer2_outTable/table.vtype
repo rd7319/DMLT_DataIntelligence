@@ -1,0 +1,15 @@
+{
+	"name": "generated.structuredfileconsumer2_outTable",
+	"description": "auto-generated generated.structuredfileconsumer2_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"C0": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			}
+		]
+	}
+}

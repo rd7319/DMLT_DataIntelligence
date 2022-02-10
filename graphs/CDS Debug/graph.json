@@ -1,0 +1,104 @@
+{
+    "description": "",
+    "processes": {
+        "abapcdsreader1": {
+            "component": "com.sap.abap.cds.reader",
+            "metadata": {
+                "label": "ABAP CDS Reader V2",
+                "x": 266,
+                "y": 158,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "Project_Atlas_CFIN",
+                    "operatorID": "com.sap.abap.cds.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "chunkSize": 2,
+                    "subscriptionName": "CDS_SALES",
+                    "cdsname": "I_SALESORGANIZATION"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 506,
+                "y": 49,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 757,
+                "y": 237,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "## Custom code build in Base Python3 operator to append headers in csv file.\n## Author: Shristi Drolia\n##         Manish Kumar\n## Publish Date: \n## Version : 1.0\n# Import Python Libraries\nimport io\nfrom io import StringIO\nfrom io import BytesIO\nimport csv\nimport pandas as pd\nimport json\nimport numpy as np\nimport datetime\nimport time\nimport uuid\n\n\n# read data coming from SLT operator\ndef on_input(inData):\n\n    \n# read body    \n    data = StringIO(inData.body)\n    api.logger.info(data)\n    api.logger.info(inData.body)\n\n# reading next batch of data             \napi.set_port_callback(\"input1\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "390,198 445.5,198 445.5,89 501,89"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "abapcdsreader1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "630,89 691,89 691,277 752,277"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "properties": {},
+    "metadata": {
+        "generation": 1
+    }
+}

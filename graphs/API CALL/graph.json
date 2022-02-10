@@ -1,0 +1,113 @@
+{
+    "properties": {},
+    "description": "API Call",
+    "processes": {
+        "openapiclient1": {
+            "component": "com.sap.openapi.client",
+            "metadata": {
+                "label": "OpenAPI Client",
+                "x": 181,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "connectionType": "manual",
+                    "schemes": "https",
+                    "host": "vsystem.ingress.dh-v2s5mq6l9.dh-canary.shoot.live.k8s-hana.ondemand.com",
+                    "authScheme": "basic",
+                    "user": "default\\admin",
+                    "password": "Welcome@123",
+                    "basePath": "/app/datahub-app-metadata/api/v1/catalog/containers/3D90E53354B09848BDE6D416DDB719A244E4003B5358A30D42F053081FFF6652450AFCA284A726F16118386CD87293BAE2020E99853FEFCA952B9AABC8EE38A1/children"
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 365.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": 12,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "// This operator is needed to keep compatibility to the old datagenerator\n\ngenerateMessage = function() {\n    var msg = {};\n    msg.Attributes = {};\n    msg.Attributes[\"openapi.header_params.x-requested-with\"] = \"XMLHttpRequest\";\n    msg.Attributes[\"openapi.consumes\"] = \"\";\n    msg.Attributes[\"openapi.produces\"] = \"application/json\";\n    msg.Attributes[\"openapi.method\"] = \"GET\";\n    msg.Attributes[\"openapi.path_pattern\"] = \"\";\n\n    return msg;\n}\n\n$.addTimer(\"2000ms\",doTick);\n\nfunction doTick(ctx) {\n    $.output(generateMessage());\n}\n"
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "API Parser",
+            "metadata": {
+                "label": "API Parser",
+                "x": 365.9999990463257,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "305,112 332.99999952316284,112 332.99999952316284,52 360.9999990463257,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "openapiclient1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,112 176,112"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "openapiclient1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,112 332.99999952316284,112 332.99999952316284,172 360.9999990463257,172"
+            },
+            "src": {
+                "port": "out",
+                "process": "openapiclient1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

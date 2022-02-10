@@ -1,0 +1,93 @@
+{
+    "properties": {},
+    "iconsrc": "../../openapi_logo.svg",
+    "description": "OpenAPI PlainClient Demo",
+    "processes": {
+        "openapiclient1": {
+            "component": "com.sap.openapi.client",
+            "metadata": {
+                "label": "OpenAPI Client",
+                "x": 163.99999713897705,
+                "y": 81.49999952316284,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {
+                    "basePath": "/openapi/service/samples/plain_greeter",
+                    "authScheme": "",
+                    "apiKeyValue": "",
+                    "apiKeyType": "",
+                    "apiKeyName": "",
+                    "password": "",
+                    "oauth2TokenUrl": "",
+                    "host": "localhost:8090",
+                    "schemes": "http",
+                    "produces": "",
+                    "method": "GET",
+                    "pathPattern": "",
+                    "oauth2Flow": "",
+                    "user": "",
+                    "description": ""
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 332,
+                "y": 81,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "messagegenerator1": {
+            "component": "com.sap.util.dataMessageGenerator",
+            "metadata": {
+                "label": "Request Generator",
+                "x": -4,
+                "y": 81,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "// This operator is needed to keep compatibility to the old datagenerator\nvar counter = 0;\n\nvar ping_sample = {\"operation\":\"ping\"};\nvar echo_sample = {\"operation\":\"echo\"};\nvar happy_sample = {\"operation\": \"happy\"};\n\nvar operations = [ping_sample, echo_sample, happy_sample];\n\nvar echochoices = [\"hola\", \"hallo\", \"hello\", \"bonjour\", \"namaste\", \"merhaba\", \"konchiwa\"];\n\ngetRandomChoice = function(choices) {\n    return choices[Math.floor(Math.random() * choices.length)];\n};\n\ngenerateMessage = function() {\n    var msg = {};\n    msg.Attributes = {};\n    // add x-requested-with header to pass the vsystem's csrf check\n    msg.Attributes[\"openapi.header_params.x-requested-with\"] = \"XMLHttpRequest\";\n\n    var opchoice = operations[counter % operations.length];\n    switch (opchoice[\"operation\"]) {\n        case \"ping\":\n            msg.Attributes[\"openapi.consumes\"] = \"\";\n            msg.Attributes[\"openapi.produces\"] = \"application/json\";\n            msg.Attributes[\"openapi.method\"] = \"GET\";\n            msg.Attributes[\"openapi.path_pattern\"] = \"/v1/ping\";\n            break;\n        case \"echo\":\n            msg.Body = getRandomChoice(echochoices);\n            msg.Attributes[\"openapi.consumes\"] = \"text/plain\";\n            msg.Attributes[\"openapi.produces\"] = \"application/json\";\n            msg.Attributes[\"openapi.method\"] = \"POST\";\n            msg.Attributes[\"openapi.path_pattern\"] = \"/v1/echo\";\n            break;\n        case \"happy\":\n            msg.Attributes[\"openapi.consumes\"] = \"\";\n            msg.Attributes[\"openapi.produces\"] = \"application/json\";\n            msg.Attributes[\"openapi.method\"] = \"GET\";\n            msg.Attributes[\"openapi.path_pattern\"] = \"/v1/happy\";\n            break;\n    }\n    msg.Attributes[\"message.request.id\"] = opchoice[\"operation\"] + \"-\" + counter;\n\n    counter++;\n    return msg;\n}\n\n$.addTimer(\"2000ms\",doTick);\n\nfunction doTick(ctx) {\n    $.output(generateMessage());\n}\n"
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "287.99999713897705,121.49999952316284 308,121.5 308,121 328,121"
+            },
+            "src": {
+                "port": "out",
+                "process": "openapiclient1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "120,121 140,121 140,121.5 159.99999713897705,121.49999952316284"
+            },
+            "src": {
+                "port": "output",
+                "process": "messagegenerator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "openapiclient1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

@@ -1,0 +1,104 @@
+{
+    "properties": {},
+    "icon": "envelope",
+    "description": "try mail",
+    "processes": {
+        "workflowterminator2": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 186,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "sendemail1": {
+            "component": "com.sap.email.send",
+            "metadata": {
+                "label": "Send Email",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "connectionProperties": {
+                            "host": "smtp.mail.yahoo.com",
+                            "port": 587,
+                            "user": "dcdeepika799@yahoo.com",
+                            "authenticationType": "Auth",
+                            "useTLS": false,
+                            "insecureSkipVerify": true,
+                            "password": "vuelvkrelxufvogl"
+                        },
+                        "configurationType": "Manual"
+                    },
+                    "defaultFrom": "dcdeepika799@yahoo.com",
+                    "defaultTo": [
+                        "dcdeepika799@yahoo.com"
+                    ],
+                    "defaultSubject": "Test"
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": -159,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "email_body = \"Dear User,\\n\\nyour pipeline failed.\"\r\napi.send(\"out\", email_body)\r\n"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,52 181,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "sendemail1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "-35,52 12,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sendemail1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

@@ -1,0 +1,185 @@
+{
+    "properties": {},
+    "description": "Copy of Python3_Inport_Test",
+    "processes": {
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 550.9999980926514,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\n\ncounter = 0\nmain_df = pd.DataFrame()\n\nclass Functor:\n    def __init__(self, n): \n        self.port = n \n    def clbck(self,message):\n        api.logger.info(message,self.port)\n        api.send(\"out\",f\"{message}{self.port}\")\n\nobj_dict = {}\n\ninp_port = api.get_inport_names()\napi.logger.info(inp_port)\n\nfor i in inp_port:\n    obj_dict[i] = Functor(i)\n    if obj_dict[i]:\n        api.set_port_callback(i, obj_dict[i].clbck)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "JD1",
+                        "type": "string"
+                    },
+                    {
+                        "name": "JD2",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 719.9999980926514,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 365.9999990463257,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap3": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 365.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "constantgenerator1": {
+            "component": "com.sap.util.constantGenerator",
+            "metadata": {
+                "label": "Constant Generator",
+                "x": -53,
+                "y": 8,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "mode": "pulse",
+                    "duration": "1s"
+                }
+            }
+        },
+        "constantgenerator2": {
+            "component": "com.sap.util.constantGenerator",
+            "metadata": {
+                "label": "Constant Generator",
+                "x": -22,
+                "y": 165,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "mode": "pulse",
+                    "duration": "5s",
+                    "content": "foo2"
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "674.9999980926514,112 714.9999980926514,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "102,205 231.5,205 231.5,172 360.9999990463257,172"
+            },
+            "src": {
+                "port": "out",
+                "process": "constantgenerator2"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "71,48 216,48 216,52 360.9999990463257,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "constantgenerator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "489.9999990463257,52 518,52 518,103 545.9999980926514,103"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap3"
+            },
+            "tgt": {
+                "port": "JD1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "489.9999990463257,172 518,172 518,121 545.9999980926514,121"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "JD2",
+                "process": "python3operator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

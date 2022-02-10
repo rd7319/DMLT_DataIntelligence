@@ -1,0 +1,137 @@
+{
+    "properties": {},
+    "description": "SLT to MySQL",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000000000
+                }
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "Existing",
+                    "action": "Initial Load",
+                    "massTransferID": "002",
+                    "tableName": "IMRG",
+                    "subscriptionID": "0EF78BDA1A151EDC97E89898FB0E92BB",
+                    "chunkSize": 50000,
+                    "subscriptionName": "default_<target>"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "initializemysqltable1": {
+            "component": "InitializeMySQL",
+            "metadata": {
+                "label": "Initialize My SQL Table",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "Connection": {
+                        "ConnectionID": "AURORA_DB"
+                    },
+                    "TableName": "ZZIMRG"
+                }
+            }
+        },
+        "mysqlinsert1": {
+            "component": "MySQL_ExecuteMany",
+            "metadata": {
+                "label": "MySQL Insert",
+                "x": 519,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "Connection": {
+                        "MySQL Conection": "AURORA_DB"
+                    },
+                    "Table": "ZZIMRG"
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "initializemysqltable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "initializemysqltable1"
+            },
+            "tgt": {
+                "port": "File",
+                "process": "mysqlinsert1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

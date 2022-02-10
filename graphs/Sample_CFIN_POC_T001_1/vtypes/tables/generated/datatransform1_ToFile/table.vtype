@@ -1,0 +1,75 @@
+{
+	"name": "generated.datatransform1_ToFile",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"CompanyCode": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"NameOfCompanyCode_SYS1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"City_SYS1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"Country_SYS1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"Currency_SYS1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"Language_SYS1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"NameOfCompanyCode_SYS2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"City_SYS2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"Country_SYS2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"Currency_SYS2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"Language_SYS2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,160 @@
+{
+    "properties": {},
+    "description": "SLT to MySQL Test",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000000000
+                }
+            }
+        },
+        "mysqlinsert1": {
+            "component": "MySQL_ExecuteMany",
+            "metadata": {
+                "label": "MySQL Insert/Update",
+                "x": 519,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "Connection": {
+                        "MySQL Conection": "AURORA_DB"
+                    },
+                    "script": "import pandas as pd\r\nimport io\r\nimport mysql.connector\r\nfrom time import perf_counter\r\nimport sys\r\nfrom pympler import asizeof\r\nimport json\r\n\r\ndef get_tab_cols_keys(abtyplist):\r\n    # query = f'SHOW columns FROM {table}'\r\n    # cursor.execute(query)\r\n    # lista = cursor.fetchall()\r\n    keys = []\r\n    cols = []\r\n    # for row in lista:\r\n    #     cols.append(row[0])\r\n    #     if row[3] == 'PRI':\r\n    #         keys.append(row[0])\r\n    for i in abtyplist:\r\n        cols.append(i.get('Field').get('COLUMNNAME'))\r\n        if i.get('Field').get('KEY') == 'X':\r\n            keys.append(i.get('Field').get('COLUMNNAME'))\r\n    cols.append(\"Table\")\r\n    cols.append(\"Flag\")\r\n    return cols,keys\r\n\r\ndef get_db_cursor(connProp):\r\n    #Connect to DB\r\n    mydb = mysql.connector.connect(\r\n          host= connProp['host'],\r\n          port=connProp['port'],  \r\n          user=connProp['user'],\r\n          database=connProp['database'],\r\n          password=connProp['password']\r\n        )\r\n    #Get DB Cursor  \r\n    return mydb,mydb.cursor()\r\n    \r\ndef build_insert(column_count,df,tableName):\r\n    api.logger.info(\"entered insert\")\r\n    #Placeholder string\r\n    nstr = ''\r\n    for l in range(0,column_count):\r\n        if l == column_count - 1:\r\n            nstr += '%s'\r\n        else:    \r\n            nstr += '%s,'\r\n    api.logger.info(\"loopend\")        \r\n    #generating data in necessary format(list of tuples)\r\n    final_data_ins = []\r\n\r\n    #df.fillna(\"\", inplace = True)\r\n    #api.logger.info(f\"before none - {df['XNETB']}\")\r\n    #df.to_numpy()[df==''] = None\r\n    #df.values[df == ''] = None\r\n    #api.logger.info(f\"after none - {df['XNETB']}\")\r\n    \r\n    api.logger.info(\"strmap starts\")\r\n\r\n    df = df.applymap(str)\r\n\r\n    api.logger.info(\"strmap mid\")\r\n    \r\n    #api.logger.info(df.head())\r\n    #final_data_ins = df.to_records(index=False).tolist()    \r\n    #api.logger.info(df.to_records(index=False))\r\n    start_time_none = perf_counter()\r\n    tmp_list = df.to_numpy()\r\n    tmp_list[tmp_list==''] = None\r\n    final_data_ins = list(map(tuple,tmp_list))\r\n    api.logger.info(f\"time for none{perf_counter() - start_time_none}\")\r\n    api.logger.info(\"strmap ends\")\r\n\r\n    #concatenate all the records into insert query\r\n    insert_query = f\"insert into {tableName} values ({nstr})\"\r\n\r\n    api.logger.info(\"left insert\")\r\n    return insert_query, final_data_ins\r\n\r\ndef build_update(cols,keys,df,tableName):\r\n    \r\n    #generating data in necessary format(list of tuples)\r\n    final_data_upd = []\r\n    \r\n    #pd.set_option('display.max_columns', None)\r\n    #df.fillna(\"\", inplace = True)\r\n    #api.logger.info(f\"before none - {df}\")\r\n    #df.to_numpy()[df==''] = None\r\n    #df.values[df == ''] = None\r\n    #api.logger.info(f\"after none - {df['XNETB']}\")\r\n    \r\n    df = df.applymap(str)\r\n    #final_data_upd = df.to_records(index=False).tolist()\r\n    start_time_none = perf_counter()\r\n    tmp_list = df.to_numpy()\r\n    tmp_list[tmp_list==''] = None\r\n    final_data_upd = list(map(tuple,tmp_list))\r\n    api.logger.info(perf_counter() - start_time_none)\r\n    \r\n    #get list of cols w/o keys\r\n    s = set(keys)\r\n    upd_cols = [x for x in cols if x not in s]\r\n    \r\n    #Build update Query\r\n    col_str = ', '.join('`{0}`'.format(k) for k in cols)\r\n    duplicates = ', '.join('{0}=VALUES({0})'.format(k) for k in upd_cols)\r\n    place_holders = ', '.join('%s'.format(k) for k in cols)\r\n    \r\n    query = \"INSERT INTO {0} ({1}) VALUES ({2})\".format(tableName, col_str, place_holders)\r\n    query = \"{0} ON DUPLICATE KEY UPDATE {1}\".format(query, duplicates)\r\n    \r\n    return query,final_data_upd\r\n    \r\ndef build_delete(cols,keys,df,tableName):\r\n    \r\n    #generating data in necessary format(list of tuples)\r\n    #final_data_del = []\r\n\r\n    df1 = df[keys]\r\n    final_data_del = list(map(tuple,df1.to_numpy()))\r\n    #get list of cols w/o keys\r\n\r\n    #Build delete Query\r\n    col = ', '.join(k for k in keys)\r\n    place_holders = ', '.join(str(k) for k in final_data_del)\r\n    \r\n    query = \"DELETE FROM {0} WHERE ({1}) IN ({2})\".format(tableName, col, place_holders)\r\n    return query\r\n    \r\ndef execute(mydb,cursor,stmt,final_data):\r\n    api.logger.info(\"entered execute\")\r\n    #api.logger.info(final_data)\r\n    start = perf_counter()\r\n    #Commit to DB\r\n    api.logger.info(stmt)\r\n    api.logger.info(str(sys.getsizeof(final_data)))\r\n    api.logger.info(str(asizeof.asizeof(final_data)))\r\n    try:\r\n        cursor.executemany(stmt, final_data)\r\n        mydb.commit()\r\n        result = f\"Success - {cursor.rowcount} inserted\"\r\n    except mysql.connector.IntegrityError as e:\r\n        api.logger.info(\"exception\")\r\n        result = 'Failure'\r\n        api.logger.info(e)\r\n        api.logger.info(perf_counter() - start)\r\n        api.propagate_exception(e)\r\n    # except mysql.connector.errors.DatabaseError as d:    \r\n    #     api.logger.info(\"exception\")\r\n    #     result = 'Failure'\r\n    #     api.logger.info(d)\r\n    #     api.logger.info(perf_counter() - start)\r\n    #     api.propagate_exception(d)\r\n        \r\n    api.logger.info(result)\r\n    api.logger.info(\"Time Taken for execute\")\r\n    api.logger.info(perf_counter() - start)\r\n    \r\n    return result\r\n    \r\ndef on_input(File):\r\n    \r\n    start_time = perf_counter()\r\n    \r\n    #Read attributes\r\n    var = json.dumps(File.attributes) \r\n    attr = json.loads(var)\r\n    \r\n    #CHECK If its last batch\r\n    if \"message.lastBatch\" in attr:\r\n        api.send(\"stop\",\"stop\")    \r\n    else:\r\n        dtypelist = attr.get('ABAP').get('Fields')\r\n        abaptypelist = attr.get('metadata')\r\n        abtyplist = [i for i in abaptypelist if not (i.get('Field').get('ABAPTYPE') == '')]\r\n        \r\n        #Read Operator Config\r\n        connProp = api.config.Connection['connectionProperties']\r\n        tableName = str(api.config.Table)\r\n        \r\n        #Get Connection and Cursor\r\n        mydb,cursor = get_db_cursor(connProp)\r\n        \r\n        #Get Cols and Keys from MySQL\r\n        cols,keys = get_tab_cols_keys(abtyplist)\r\n        \r\n        #Read data to DataFrame\r\n        data_stream = io.StringIO(File.body)\r\n        df = pd.read_csv(data_stream,names=cols,index_col=False,na_filter=False)\r\n        \r\n        #Split the Upd , Delete and Ins Data\r\n        df_upd = df[df[\"Flag\"] =='U']\r\n        #df_ins = df[(df[\"Flag\"] == 'I') | (df[\"Flag\"].isnull())]\r\n        df_ins = df[(df[\"Flag\"] == 'I') | (df[\"Flag\"] == '')]\r\n        df_del = df[df[\"Flag\"] == 'D']\r\n        \r\n        #Remove the last 2 columns(coming from SLT)\r\n        df = df.iloc[: , :-2]\r\n        df_upd = df_upd.iloc[: , :-2]\r\n        df_ins = df_ins.iloc[: , :-2]\r\n        df_del = df_del.iloc[: , :-2]\r\n        \r\n        #getting the column count for each file given\r\n        column_count = len(df.columns)\r\n        result = ''\r\n        \r\n        api.logger.info(\"Count Start\")\r\n        api.logger.info(df_ins.shape)\r\n        api.logger.info(df_upd.shape)\r\n        api.logger.info(\"Count End\")\r\n        \r\n        api.logger.info(\"time for processing\")\r\n        api.logger.info(perf_counter() - start_time)\r\n        \r\n        if df_ins.shape[0] > 0:\r\n            #Get Insert query and data\r\n            insert_query,insert_data = build_insert(column_count,df_ins,tableName)\r\n            #Execute insert\r\n            result_insert = execute(mydb,cursor,insert_query,insert_data)\r\n        \r\n        if df_upd.shape[0] > 0:\r\n            #Get Update query and data\r\n            update_query,update_data = build_update(cols[:-2],keys,df_upd,tableName)\r\n            #Execute update\r\n            result_update = execute(mydb,cursor,update_query,update_data)    \r\n \r\n        if df_del.shape[0] > 0:\r\n            #Get Delete query \r\n            delete_query = build_delete(cols[:-2],keys,df_del,tableName)\r\n            #Execute Delete\r\n            #result_delete = execute(mydb,cursor,delete_query,delete_data)  \r\n            try:\r\n                cursor.execute(delete_query)\r\n                mydb.commit()\r\n                result = f\"Success - {cursor.rowcount} inserted\"\r\n            except mysql.connector.IntegrityError as e:\r\n                api.logger.info(\"exception\")\r\n                result = 'Failure'\r\n                api.logger.info(e)\r\n                api.logger.info(perf_counter() - start)\r\n                api.propagate_exception(e)\r\n                #close the connection\r\n                mydb.close()       \r\n    \r\n        api.send(\"out\", result)\r\n\r\napi.set_port_callback(\"File\", on_input)",
+                    "Table": "ZZBSEG"
+                }
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "CAL_ECC",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "002",
+                    "tableName": "BSEG",
+                    "subscriptionName": "BSEG_011",
+                    "chunkSize": 50001
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "initializemysqltable1": {
+            "component": "InitializeMySQL",
+            "metadata": {
+                "label": "Initialize My SQL Table",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import json\nimport io\nimport mysql.connector\ndef data_type(kind,abaptype,length,abaplen,decimals):\n    api.logger.info('dtype')\n    if kind == 'C' or kind == 'N':\n        return f'VARCHAR({length})'\n    elif kind == 'I' or kind == 's':\n        return abaptype\n    elif kind == 'D':\n        return 'DATE'\n    elif kind == 'F':\n        return f'DOUBLE({abaplen},{decimals})'\n    elif kind == 'P':\n        return f'DECIMAL({abaplen},{decimals})'\n    elif kind == 'T':\n        return 'TIME'\n    else:\n        return 'VARCHAR({length})'\n\ndef KEY_NULL_CHECK(KEY_FLAG,NULL_FLAG):\n    if KEY_FLAG == 'X' or  NULL_FLAG == 'X':\n        return 'NOT NULL'\n    else:\n      return ''\n\ndef PRIMARY_KEY_CHECK(FIELD_NAME,KEY_FLAG):\n    if KEY_FLAG == 'X':\n        return FIELD_NAME + ','\n    else:\n      return ''\n      \ndef get_db_cursor(connProp):\n    api.logger.info('cusor')\n    #Connect to DB\n    mydb = mysql.connector.connect(\n          host= connProp['host'],\n          port=connProp['port'],  \n          user=connProp['user'],\n          database=connProp['database'],\n          password=connProp['password']\n        )\n    #Get DB Cursor  \n    api.logger.info('cursor end')\n    return mydb,mydb.cursor()\n\n    \ndef execute(mydb,cursor,stmt):\n    api.logger.info(\"entered execute\")\n    #Commit to DB\n    try:\n        cursor.execute(stmt)\n        mydb.commit()\n        result = f\"Table Created\"\n    except mysql.connector.IntegrityError as e:\n        api.logger.info(\"exception\")\n        result = 'Failure'\n        api.logger.info(e)\n        api.propagate_exception(e)\n    except mysql.connector.errors.DatabaseError as d:    \n        api.logger.info(\"exception\")\n        result = 'Failure'\n        api.logger.info(d)\n        api.propagate_exception(d)\n        \n    api.logger.info(result)\n    return result    \n\ndef on_input(message):\n    api.logger.info(\"start\")\n    var = json.dumps(message.attributes) \n\n    A = json.loads(var)\n    #Read Operator Config\n    connProp = api.config.Connection['connectionProperties']\n    tableName = str(api.config.TableName)    \n    \n    #Get Connection and Cursor\n    mydb,cursor = get_db_cursor(connProp)    \n    batchNo = int(A.get('message.batchIndex'))\n    api.logger.info(batchNo)\n    if batchNo > 1:\n        api.send(\"out\",message)\n    else:    \n        api.logger.info('intotabcreate')\n        abaptypelist = A.get(\"metadata\")\n        dtypelist = A.get(\"ABAP\").get(\"Fields\")\n            \n        abtyplist = [i for i in abaptypelist if not (i.get('Field').get('ABAPTYPE') == '')]\n        \n        Field_Name_Append = ''\n        Primary_Key_Append = ''\n        for i,data in enumerate(abtyplist):\n            #print(data.get('Field').get('COLUMNNAME') == dtypelist[i].get('Name'))\n            data1 = data.get('Field')\n            data2 = dtypelist[i]\n            Field_Name_Append = Field_Name_Append + data1.get(\"COLUMNNAME\") + ' ' +  data_type(data2.get('Kind'),data1.get('ABAPTYPE'),int(data1.get('OUTPUTLEN')),int(data1.get('ABAPLEN')), int(data1.get('DECIMALS'))) + ' ' + KEY_NULL_CHECK(data1.get(\"KEY\"),data1.get(\"NULLABLE\")) + ','\n            Primary_Key_Append = Primary_Key_Append + PRIMARY_KEY_CHECK(data1.get(\"COLUMNNAME\"),data1.get(\"KEY\"))\n            \n        SQL_Code = 'CREATE TABLE IF NOT EXISTS ' + tableName +  '(' + Field_Name_Append + 'PRIMARY KEY (' + Primary_Key_Append[:-1]+'));'\n        api.logger.info(SQL_Code)\n        result = execute(mydb,cursor,SQL_Code)\n        api.send(\"out\",message)\n\napi.set_port_callback(\"input1\", on_input)",
+                    "TableName": "ZZBSEG",
+                    "Connection": {
+                        "ConnectionID": "AURORA_DB"
+                    }
+                }
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 703.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "initializemysqltable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "initializemysqltable1"
+            },
+            "tgt": {
+                "port": "File",
+                "process": "mysqlinsert1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "643,61 670.9999995231628,61 670.9999995231628,52 698.9999990463257,52"
+            },
+            "src": {
+                "port": "stop",
+                "process": "mysqlinsert1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

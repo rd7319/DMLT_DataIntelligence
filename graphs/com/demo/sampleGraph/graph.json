@@ -1,0 +1,122 @@
+{
+    "description": "Sample Graph",
+    "processes": {
+        "tableconsumer1": {
+            "component": "com.sap.database.table.consumer.v2",
+            "metadata": {
+                "label": "Table Consumer",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "HANA_DB",
+                    "partitionType": "None",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DMLT_HANA"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DMLT_HANA",
+                                "type": "HANA_DB"
+                            },
+                            "name": "ACDOCC_GTT",
+                            "remoteObjectType": "GLOBAL TEMPORARY",
+                            "qualifiedName": "/SAPHANADB/ACDOCC_GTT",
+                            "nativeQualifiedName": "\"SAPHANADB\".\"ACDOCC_GTT\"",
+                            "owner": "SAPHANADB"
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": [],
+                                "uniqueKeys": [
+                                    {
+                                        "attributeReferences": [
+                                            "RCLNT",
+                                            "MODEL",
+                                            "RYEAR",
+                                            "BELNR",
+                                            "DOCLN"
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ],
+                        "filter": {
+                            "selectOptions": [
+                                {
+                                    "name": "MODEL",
+                                    "elements": [
+                                        {
+                                            "comparison": "=",
+                                            "low": "'TEST'"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "outports": [
+                    {
+                        "name": "outTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.tableconsumer1_outTable"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {},
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.tableconsumer1_outTable"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,52 168.99999952316284,52 168.99999952316284,61 196.99999904632568,61"
+            },
+            "src": {
+                "port": "outTable",
+                "process": "tableconsumer1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "properties": {},
+    "metadata": {
+        "generation": 1
+    }
+}

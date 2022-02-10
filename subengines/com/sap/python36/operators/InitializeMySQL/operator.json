@@ -1,0 +1,28 @@
+{
+    "description": "Initialize My SQL Table",
+    "component": "com.sap.system.python3Operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "input1",
+            "type": "message"
+        }
+    ],
+    "outports": [
+        {
+            "name": "out",
+            "type": "string"
+        }
+    ],
+    "iconsrc": "python.svg",
+    "config": {
+        "$type": "http://sap.com/vflow/InitializeMySQL.configSchema.json",
+        "script": "import json\nimport io\nimport mysql.connector\ndef data_type(kind,abaptype,length,abaplen,decimals):\n    api.logger.info('dtype')\n    if kind == 'C' or kind == 'N':\n        return f'VARCHAR({length})'\n    elif kind == 'I' or kind == 's':\n        return abaptype\n    elif kind == 'D':\n        return 'DATE'\n    elif kind == 'F':\n        return f'DOUBLE({abaplen},{decimals})'\n    elif kind == 'P':\n        return f'DECIMAL({abaplen},{decimals})'\n    elif kind == 'T':\n        return 'TIME'\n    else:\n        return 'VARCHAR({length})'\n\ndef KEY_NULL_CHECK(KEY_FLAG,NULL_FLAG):\n    if KEY_FLAG == 'X' or  NULL_FLAG == 'X':\n        return 'NOT NULL'\n    else:\n      return ''\n\ndef PRIMARY_KEY_CHECK(FIELD_NAME,KEY_FLAG):\n    if KEY_FLAG == 'X':\n        return FIELD_NAME + ','\n    else:\n      return ''\n      \ndef get_db_cursor(connProp):\n    api.logger.info('cusor')\n    #Connect to DB\n    mydb = mysql.connector.connect(\n          host= connProp['host'],\n          port=connProp['port'],  \n          user=connProp['user'],\n          database=connProp['database'],\n          password=connProp['password']\n        )\n    #Get DB Cursor  \n    api.logger.info('cursor end')\n    return mydb,mydb.cursor()\n\n    \ndef execute(mydb,cursor,stmt):\n    api.logger.info(\"entered execute\")\n    #Commit to DB\n    try:\n        cursor.execute(stmt)\n        mydb.commit()\n        result = f\"Table Created\"\n    except mysql.connector.IntegrityError as e:\n        api.logger.info(\"exception\")\n        result = 'Failure'\n        api.logger.info(e)\n        api.propagate_exception(e)\n    except mysql.connector.errors.DatabaseError as d:    \n        api.logger.info(\"exception\")\n        result = 'Failure'\n        api.logger.info(d)\n        api.propagate_exception(d)\n        \n    api.logger.info(result)\n    return result    \n\ndef on_input(message):\n    api.logger.info(\"start\")\n    var = json.dumps(message.attributes) \n\n    A = json.loads(var)\n    #Read Operator Config\n    connProp = api.config.Connection['connectionProperties']\n    tableName = str(api.config.TableName)    \n    \n    \n    batchNo = int(A.get('message.batchIndex'))\n    api.logger.info(batchNo)\n    if batchNo \u003e 1:\n        api.send(\"out\",message)\n    else:\n        #Get Connection and Cursor\n        mydb,cursor = get_db_cursor(connProp)\n        api.logger.info('intotabcreate')\n        abaptypelist = A.get(\"metadata\")\n        dtypelist = A.get(\"ABAP\").get(\"Fields\")\n            \n        abtyplist = [i for i in abaptypelist if not (i.get('Field').get('ABAPTYPE') == '')]\n        \n        Field_Name_Append = ''\n        Primary_Key_Append = ''\n        for i,data in enumerate(abtyplist):\n            #print(data.get('Field').get('COLUMNNAME') == dtypelist[i].get('Name'))\n            data1 = data.get('Field')\n            data2 = dtypelist[i]\n            Field_Name_Append = Field_Name_Append + '`' + data1.get(\"COLUMNNAME\") + '` ' +  data_type(data2.get('Kind'),data1.get('ABAPTYPE'),int(data1.get('OUTPUTLEN')),int(data1.get('ABAPLEN')), int(data1.get('DECIMALS'))) + ' ' + KEY_NULL_CHECK(data1.get(\"KEY\"),data1.get(\"NULLABLE\")) + ','\n            Primary_Key_Append = Primary_Key_Append + PRIMARY_KEY_CHECK(data1.get(\"COLUMNNAME\"),data1.get(\"KEY\"))\n            \n        SQL_Code = 'CREATE TABLE IF NOT EXISTS ' + tableName +  '(' + Field_Name_Append + 'PRIMARY KEY (' + Primary_Key_Append[:-1]+'));'\n        api.logger.info(SQL_Code)\n        result = execute(mydb,cursor,SQL_Code)\n        #CLose the connection\n        cursor.close()\n        mydb.close()\n        api.send(\"out\",message)\n\napi.set_port_callback(\"input1\", on_input)",
+        "scriptReference": "script.py"
+    },
+    "tags": {
+        "mysqlaurora": "8.0.12",
+        "python36": "",
+        "tornado": "5.0.2"
+    }
+}

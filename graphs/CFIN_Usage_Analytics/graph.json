@@ -1,0 +1,2515 @@
+{
+    "properties": {},
+    "description": "",
+    "processes": {
+        "structuredfileconsumer1": {
+            "component": "com.sap.storage.consumer.v3",
+            "metadata": {
+                "label": "Structured File Consumer",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 2,
+                "isNewAPI": true,
+                "config": {
+                    "service": "SDL",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DI_DATA_LAKE",
+                                "type": "SDL"
+                            },
+                            "name": "BKPF_20211118_CFIN_Usage_Analytics.csv",
+                            "remoteObjectType": "FILE.CSV",
+                            "qualifiedName": "/shared/sap/JD1/BKPF/BKPF_20211118/BKPF_20211118_CFIN_Usage_Analytics.csv",
+                            "nativeQualifiedName": "/shared/sap/JD1/BKPF/BKPF_20211118/BKPF_20211118_CFIN_Usage_Analytics.csv",
+                            "owner": "admin",
+                            "size": 2077756,
+                            "version": {
+                                "dataLastModified": 1637225420000,
+                                "metadataLastModified": 1637225420000,
+                                "metadataVersionNumber": 1637225420000
+                            }
+                        },
+                        "dataAccessConfiguration": {
+                            "rowDelimiter": "\n",
+                            "charset": "UTF-8",
+                            "textDelimiter": "\"",
+                            "header": true,
+                            "attributes": [
+                                {
+                                    "name": "BLDAT",
+                                    "format": "yyyy-MM-dd"
+                                },
+                                {
+                                    "name": "BUDAT",
+                                    "format": "yyyy-MM-dd"
+                                },
+                                {
+                                    "name": "CPUDT",
+                                    "format": "yyyy-MM-dd"
+                                },
+                                {
+                                    "name": "KURSF",
+                                    "format": "."
+                                },
+                                {
+                                    "name": "KURS2",
+                                    "format": "."
+                                },
+                                {
+                                    "name": "KURS3",
+                                    "format": "."
+                                }
+                            ],
+                            "escapeCharacter": "\"",
+                            "colDelimiter": ","
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": []
+                            }
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ]
+                    },
+                    "failOnStringTruncation": true
+                },
+                "outports": [
+                    {
+                        "name": "outTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ]
+            }
+        },
+        "datatransform1": {
+            "component": "com.sap.datatransform.v2",
+            "metadata": {
+                "label": "Data Transform",
+                "x": 186,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 2,
+                "isNewAPI": true,
+                "config": {
+                    "definition": {
+                        "nodeType": "ContainerNode",
+                        "inputs": [
+                            {
+                                "id": "fcb5608e-b48b-4025-bf95-1b6a84ae2f48",
+                                "nodeType": "InPort",
+                                "name": "input1",
+                                "attributes": [
+                                    {
+                                        "id": "e2bfa6ef-f47b-4b2e-a095-bcdaabfdfed9",
+                                        "name": "MANDT",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "66b956ea-575d-49f2-9226-69c9de51f832",
+                                        "name": "BUKRS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "728659a9-edc3-4503-889f-4f39b73a7b70",
+                                        "name": "BELNR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "b2aec52f-2bad-40ea-9c7c-d1d487bb5704",
+                                        "name": "GJAHR",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "ab7775bc-ff02-4095-903b-6c0c50cf7c0a",
+                                        "name": "BLART",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 2
+                                    },
+                                    {
+                                        "id": "2b141458-aa69-435a-a142-6cdc7ae461a0",
+                                        "name": "BLDAT",
+                                        "datatype": "date",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "42827bdc-0a31-4354-95ea-1146c84110c1",
+                                        "name": "BUDAT",
+                                        "datatype": "date",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "d683f6fa-6168-49c5-826f-11ac516c144a",
+                                        "name": "MONAT",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "36cc15ab-5750-48bc-ad36-f4adea0260e9",
+                                        "name": "CPUDT",
+                                        "datatype": "date",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "d8251b89-3f5f-4c9c-9b24-5d586478dc3c",
+                                        "name": "CPUTM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 12
+                                    },
+                                    {
+                                        "id": "6311808c-1a28-485f-b91a-6bb80e2e81c9",
+                                        "name": "AEDAT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "ce0c15d2-1f8d-4d52-ba46-3c68a390381d",
+                                        "name": "UPDDT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "98d8c84e-80a9-46cd-96df-1735e4ba81da",
+                                        "name": "WWERT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "eec52524-681a-4592-bf0f-9cb92a4af6a5",
+                                        "name": "USNAM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 12
+                                    },
+                                    {
+                                        "id": "a278a6bc-1c71-4dfd-9573-327244123f36",
+                                        "name": "TCODE",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "d21c4fd4-f424-4480-82e4-01e8723604ef",
+                                        "name": "BVORG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "14eafc41-5ecf-456f-900f-11af01a80c10",
+                                        "name": "XBLNR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "1c4e88b5-91b8-4489-93fd-92de4e9f4c63",
+                                        "name": "DBBLG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "64847753-e4a3-47cd-a068-6f70dfcf89ba",
+                                        "name": "STBLG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "676e6d13-a0a9-49f8-a637-156131b0aa33",
+                                        "name": "STJAH",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "0b2fa3d8-f182-48eb-ae72-8697c1124f82",
+                                        "name": "BKTXT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 25
+                                    },
+                                    {
+                                        "id": "b217f041-fd12-4188-a67c-89cb86308dfa",
+                                        "name": "WAERS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 3
+                                    },
+                                    {
+                                        "id": "fb547d46-ca71-447f-a9f6-92795b98bed6",
+                                        "name": "KURSF",
+                                        "datatype": "decimal",
+                                        "nullable": false,
+                                        "precision": 6,
+                                        "scale": 5
+                                    },
+                                    {
+                                        "id": "c4fde66f-7314-4a75-afa6-78ac85ed9de9",
+                                        "name": "KZWRS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "3c34c440-539c-4338-a871-d28f09e500fa",
+                                        "name": "KZKRS",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "99e9b8e9-f9e2-43b7-80b1-30376c0747d2",
+                                        "name": "BSTAT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "b696ebdb-e2db-449d-9bf9-90cf892f339e",
+                                        "name": "XNETB",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "b820f3d2-3dc0-4f55-92c0-4e7a74e8ca51",
+                                        "name": "FRATH",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "d3ec25c0-fcd6-45b8-9c46-b65b9cc979d6",
+                                        "name": "XRUEB",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "e45fe60c-0309-4293-b8d3-145f307e942e",
+                                        "name": "GLVOR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "d65a19aa-0bee-45f4-a56b-ab3beafe8266",
+                                        "name": "GRPID",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "a80a7f43-52ad-45bf-88d6-7e23e3a50b25",
+                                        "name": "DOKID",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "67326f6a-673b-4b97-8558-78250b447693",
+                                        "name": "ARCID",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "4bab1daf-1abe-4383-8c6f-14e30cb158db",
+                                        "name": "IBLAR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "553eff6c-e7e4-4604-9220-75f739fe8c2d",
+                                        "name": "AWTYP",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5
+                                    },
+                                    {
+                                        "id": "7a5c7713-8eb1-4888-aa7b-4511b1fbe9bc",
+                                        "name": "AWKEY",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 18
+                                    },
+                                    {
+                                        "id": "4dbcc5e1-ce47-4f86-89f2-8204745c4052",
+                                        "name": "FIKRS",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "5b1554fa-e250-4772-a87f-f94560b80c14",
+                                        "name": "HWAER",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 3
+                                    },
+                                    {
+                                        "id": "efaa0c3f-1161-4a46-8459-a8fb8118c951",
+                                        "name": "HWAE2",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 3
+                                    },
+                                    {
+                                        "id": "eb0c3cc9-931b-4dff-81ae-bfb334d33dea",
+                                        "name": "HWAE3",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 3
+                                    },
+                                    {
+                                        "id": "1bbeb66a-412c-4165-935c-e0b00691f5ae",
+                                        "name": "KURS2",
+                                        "datatype": "decimal",
+                                        "nullable": false,
+                                        "precision": 6,
+                                        "scale": 5
+                                    },
+                                    {
+                                        "id": "8140b3fd-7e6e-49a7-807d-310e4a58cd82",
+                                        "name": "KURS3",
+                                        "datatype": "decimal",
+                                        "nullable": false,
+                                        "precision": 6,
+                                        "scale": 5
+                                    },
+                                    {
+                                        "id": "4a635d80-c101-4c55-909b-13b81f9bc427",
+                                        "name": "BASW2",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "ea7fff9d-2fa2-4df7-95f8-b25fef74f893",
+                                        "name": "BASW3",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "902b3dae-f2ac-444f-9470-789ae9ee288a",
+                                        "name": "UMRD2",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "3f87549e-4f46-4581-96e4-356cda756054",
+                                        "name": "UMRD3",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "e862cc57-1b4c-406f-91f8-9346ed1e7c5e",
+                                        "name": "XSTOV",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "cb4bd8e1-9231-4739-ab75-002e87f319f8",
+                                        "name": "STODT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "0268df9a-b36e-4551-bc25-b10a9a4f633f",
+                                        "name": "XMWST",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "f2ef88ac-ce01-478e-bca5-9a4f84d82b0f",
+                                        "name": "CURT2",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "fe9be37a-ce3a-44cc-8cd7-bab5b4456e70",
+                                        "name": "CURT3",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "708682b9-e6a6-47e1-9963-c6c33b58fd3c",
+                                        "name": "KUTY2",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "87ec03ee-3539-4d29-9230-fff6c05672e7",
+                                        "name": "KUTY3",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "0eef32da-aee2-4561-afdd-8e48360f5229",
+                                        "name": "XSNET",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "e34963e9-bdee-4f7b-878a-8c82ef230592",
+                                        "name": "AUSBK",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "16d020aa-37d2-49d6-a7d5-ea35918c0d4c",
+                                        "name": "XUSVR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "d001a7e4-82e7-4a6b-8cb2-bbbd62fc8061",
+                                        "name": "DUEFL",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "7a51fbd6-6f96-4907-adfa-1f91f14d3578",
+                                        "name": "AWSYS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "ccf1e96f-5ece-4b33-8884-279deafff435",
+                                        "name": "TXKRS",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "4996657f-a0c9-43b2-b40b-ab8b4faf8b88",
+                                        "name": "LOTKZ",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "c4a84da7-1177-43df-8c2f-9dc2bc093319",
+                                        "name": "XWVOF",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "d2d8fdd5-de90-4f8e-abcc-adeb0886feb1",
+                                        "name": "STGRD",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 2
+                                    },
+                                    {
+                                        "id": "a09a7dec-e7b3-4109-bc20-e9b027375adf",
+                                        "name": "PPNAM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 7
+                                    },
+                                    {
+                                        "id": "c337f3fb-a0d6-4930-babd-3de986fd318f",
+                                        "name": "BRNCH",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "3f302a00-a88e-49a8-8020-29467927d93a",
+                                        "name": "NUMPG",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "7e4cc1f6-bdfd-4ce1-b2f8-0a322bd26f09",
+                                        "name": "ADISC",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "f2576d74-6777-4aa7-ba31-64708da0689f",
+                                        "name": "XREF1_HD",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "6b4822f2-d4a1-4187-867f-8d65b71b36f1",
+                                        "name": "XREF2_HD",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "7afb968d-1ada-46b4-9df0-c52db1edcf68",
+                                        "name": "XREVERSAL",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "2a941152-df19-4c8c-90e6-ed3000d85915",
+                                        "name": "REINDAT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "6d70104d-be2c-4b54-926e-15b3918fb2f1",
+                                        "name": "RLDNR",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 2
+                                    },
+                                    {
+                                        "id": "0165ebd0-5160-4c3b-bb77-69267c6a4f06",
+                                        "name": "LDGRP",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 2
+                                    },
+                                    {
+                                        "id": "b98b9ad2-6dc8-46d5-a83d-1890d6776eb8",
+                                        "name": "PROPMANO",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "033da013-0347-4af0-afc8-39a806296748",
+                                        "name": "XBLNR_ALT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "013b65e8-007e-4ec0-ad92-fa3875c885cb",
+                                        "name": "VATDATE",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "a70c4462-26ef-49cc-a1aa-d3807609e6e9",
+                                        "name": "DOCCAT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 6
+                                    },
+                                    {
+                                        "id": "8fd3669c-b757-4ecf-ad65-944a922bc181",
+                                        "name": "XSPLIT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "20bd03cf-a9f1-4c40-8586-b7041f8489b3",
+                                        "name": "CASH_ALLOC",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "8528d330-bdda-4f58-8eb5-45c3b5db09e8",
+                                        "name": "FOLLOW_ON",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "5d533875-c133-4851-a670-ab81db5e2851",
+                                        "name": "XREORG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "7cf9fe5b-4840-4f64-aa4e-771f4507c223",
+                                        "name": "SUBSET",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "e2fddc1b-f728-4f5e-acec-eb7435307aa4",
+                                        "name": "KURST",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    },
+                                    {
+                                        "id": "ffbb34a6-35a3-409f-8ab7-17ebbc18acd9",
+                                        "name": "KURSX",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "aa02c0da-ec16-49bc-b010-110612428725",
+                                        "name": "KUR2X",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "1a8bc3af-3f1b-4cf3-b574-7ebc73cf9220",
+                                        "name": "KUR3X",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "3bbc2dd0-5dc7-4c74-89ab-2e3aca3908ab",
+                                        "name": "XMCA",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "ccdcdfde-478b-4adc-ab26-1ae8aeef0f7e",
+                                        "name": "/SAPF15/STATUS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "d19d759c-c7a7-40a3-aa9c-ac7098bb50cd",
+                                        "name": "PSOTY",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "5aacbfe2-f216-48cf-b5c8-7b7d896c5975",
+                                        "name": "PSOAK",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "e5068bdb-2f77-43e7-9eff-2d122d4c9f5d",
+                                        "name": "PSOKS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "3829587a-8360-4520-88cb-c62daca390e1",
+                                        "name": "PSOSG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "0ff18a1a-25e7-42a7-b585-560570cb3546",
+                                        "name": "PSOFN",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "890cc668-e1db-4751-9a73-7cd8d778ab52",
+                                        "name": "INTFORM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "40beb340-07a5-4991-9eed-8d275d2b388d",
+                                        "name": "INTDATE",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "19b91482-d78f-4133-ad85-1c201f0f0795",
+                                        "name": "PSOBT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "b756e84c-4ea9-4fc8-9d6a-c9173ecf0248",
+                                        "name": "PSOZL",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "021013fd-cb2d-41ad-95a1-731771b61b86",
+                                        "name": "PSODT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "38bbce4d-d083-4d08-a175-b3869769d1b2",
+                                        "name": "PSOTM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 12
+                                    },
+                                    {
+                                        "id": "e5886242-0923-4759-aff8-ca1600676f94",
+                                        "name": "FM_UMART",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "54010493-4e9e-4b10-af20-be0b76e82041",
+                                        "name": "CCINS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "e8a38d32-ba82-4639-b1d6-677aaa069d4e",
+                                        "name": "CCNUM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "fe92fb6a-e869-4fca-92e1-73c43dd26049",
+                                        "name": "SSBLK",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "cf8c9e0b-32f0-4147-8bb1-eae9846dc31a",
+                                        "name": "BATCH",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "ed440c51-14c2-41ba-91ad-8cf9d096b9eb",
+                                        "name": "SNAME",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "286c7508-3e7c-4ed9-8d19-a3b200a96786",
+                                        "name": "SAMPLED",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "e77ddcdb-6e2f-4d86-8aa8-10a3c1d38222",
+                                        "name": "EXCLUDE_FLAG",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "96d5d154-7864-41eb-889c-de4f68069f4c",
+                                        "name": "BLIND",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "5f8abaf5-e947-4ec3-b16d-10ab0ce59a16",
+                                        "name": "OFFSET_STATUS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "af78f583-ad80-4cd6-8ae7-144cc3daaa8b",
+                                        "name": "OFFSET_REFER_DAT",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 10
+                                    },
+                                    {
+                                        "id": "2d737d0d-c2c5-41a1-8406-74aceec6fdfd",
+                                        "name": "PENRC",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "f586072c-50a2-4435-b647-9c23f17ca39a",
+                                        "name": "KNUMV",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "33b9e7de-b524-4d76-8c4b-a27eee25f80a",
+                                        "name": "TABLE_NAME",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "985de24b-c9ca-4a61-926f-09cb24c36eeb",
+                                        "name": "IUUC_OPERATION",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": 12,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "id": "94d2a68f-196b-4623-af5d-4efd74b27c8e",
+                                "nodeType": "OutPort",
+                                "name": "out",
+                                "attributes": [
+                                    {
+                                        "id": "d1340847-7b99-4eab-907b-2a7ac0d13dd8",
+                                        "name": "BUKRS",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "4c38340b-c679-4a24-837c-6426243808f2",
+                                        "name": "BELNR",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    },
+                                    {
+                                        "id": "a794ab9a-effd-4dd9-ac4e-cbb1085561da",
+                                        "name": "GJAHR",
+                                        "datatype": "int32",
+                                        "nullable": false
+                                    }
+                                ],
+                                "mode": "OVERWRITE",
+                                "UILayout": {
+                                    "x": 482,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "nodes": [
+                            {
+                                "id": "dc01834a-452c-4daa-bc81-345099b4d1f0",
+                                "type": "FilterNode",
+                                "nodeType": "FilterNode",
+                                "name": "Projection",
+                                "inputs": [
+                                    {
+                                        "id": "52bd45a9-bcd8-4a07-8bfc-df9b0ffc4cf7",
+                                        "name": "Projection_Input1",
+                                        "attributes": [
+                                            {
+                                                "id": "59ec3460-1af7-47ec-850a-40a7b792c5af",
+                                                "name": "MANDT",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "954946d2-1f5c-4269-8798-ec12eb9e1cf7",
+                                                "name": "BUKRS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "e62808bf-7a02-4c82-9552-c2f91607526f",
+                                                "name": "BELNR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "135a8277-812a-4c8a-89a0-f979c735df6a",
+                                                "name": "GJAHR",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "5a587144-c802-44b1-ab4f-d7bbc2252e3c",
+                                                "name": "BLART",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 2
+                                            },
+                                            {
+                                                "id": "69edc588-8127-47fe-b4cb-cb7f511d5ac7",
+                                                "name": "BLDAT",
+                                                "datatype": "date",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "21b5f5e7-b7b9-478b-8d7a-25efc7999409",
+                                                "name": "BUDAT",
+                                                "datatype": "date",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "f875d512-23a1-472a-bcc7-0f1f9999a852",
+                                                "name": "MONAT",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "6f5e7bcf-fc59-4885-baaa-81aade0d91a6",
+                                                "name": "CPUDT",
+                                                "datatype": "date",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "8a4a217e-b002-48c9-bb7c-dd809955efcf",
+                                                "name": "CPUTM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 12
+                                            },
+                                            {
+                                                "id": "fd154334-776b-4adb-bcfe-3e7c4093da8a",
+                                                "name": "AEDAT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "e0230ad6-0cb2-4fa1-b4c6-671d86af919b",
+                                                "name": "UPDDT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "b79bbb5f-aa8d-4cc4-b3da-a028fef5c106",
+                                                "name": "WWERT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "7c48d12c-0d0d-457f-be38-dd7c2f037019",
+                                                "name": "USNAM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 12
+                                            },
+                                            {
+                                                "id": "b2ed7119-bc8b-465d-a5a3-ef7da3c1ebd7",
+                                                "name": "TCODE",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "c8056861-f83e-4355-a724-a1435380bc5a",
+                                                "name": "BVORG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "8bf9046d-04f7-42a7-b918-8137db2790e6",
+                                                "name": "XBLNR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "c3b31555-ed49-4e95-86cd-8bc1e0c516b3",
+                                                "name": "DBBLG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "d170f129-6b5e-4262-9ad0-5f24ebfefaa8",
+                                                "name": "STBLG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "f4d9040c-c21b-4aae-ad36-cca98dee3a08",
+                                                "name": "STJAH",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "2b733814-5e65-4c57-a250-42ef42c231fe",
+                                                "name": "BKTXT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 25
+                                            },
+                                            {
+                                                "id": "42ab30c4-29f4-4a8b-b929-5cbd57b7d95b",
+                                                "name": "WAERS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 3
+                                            },
+                                            {
+                                                "id": "de8ab5e1-5048-4a32-b42e-6d0c6f5095a6",
+                                                "name": "KURSF",
+                                                "datatype": "decimal",
+                                                "nullable": false,
+                                                "precision": 6,
+                                                "scale": 5
+                                            },
+                                            {
+                                                "id": "113bc026-e32b-4d95-989b-81d2591e16f2",
+                                                "name": "KZWRS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "2914613f-3233-437d-97bd-29f743dc321f",
+                                                "name": "KZKRS",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "f1e72409-730f-4afe-9ad4-acfa17fb45b7",
+                                                "name": "BSTAT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "e1e1cbb2-0629-45a3-9002-61460bc74807",
+                                                "name": "XNETB",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "fbcd577d-2c80-4461-8b59-8fb0fa4fe464",
+                                                "name": "FRATH",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "1bbcc0ef-dc9c-421c-8f81-71c50839fcad",
+                                                "name": "XRUEB",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "fc128077-c667-4263-9196-b82c9d625e7f",
+                                                "name": "GLVOR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "d8832a8e-99af-49a6-a74b-3851a09765dd",
+                                                "name": "GRPID",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "8d79990c-7e93-4896-9118-3a9e3e44c2e3",
+                                                "name": "DOKID",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "ca9dc980-0e08-4900-a687-ddf62a1aabec",
+                                                "name": "ARCID",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "539a04fa-c8ab-4add-a102-eb75746315d6",
+                                                "name": "IBLAR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "4b108586-8bdc-414a-9ca2-268b0066c582",
+                                                "name": "AWTYP",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5
+                                            },
+                                            {
+                                                "id": "7f3c9ade-d9ac-4ba4-bacd-174afd7fa18f",
+                                                "name": "AWKEY",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 18
+                                            },
+                                            {
+                                                "id": "36c5a05d-994e-4c7b-94f5-6b89fa1aeb96",
+                                                "name": "FIKRS",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "64503f54-53b3-44cf-8c6e-6889ca3f1fab",
+                                                "name": "HWAER",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 3
+                                            },
+                                            {
+                                                "id": "d97e1d3f-fc11-466b-8afc-afb5283f00be",
+                                                "name": "HWAE2",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 3
+                                            },
+                                            {
+                                                "id": "17dd5b7d-6150-4f1b-8a85-1da892c9f452",
+                                                "name": "HWAE3",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 3
+                                            },
+                                            {
+                                                "id": "9d550687-6ddb-4dba-b1da-41b3e4f6d5b0",
+                                                "name": "KURS2",
+                                                "datatype": "decimal",
+                                                "nullable": false,
+                                                "precision": 6,
+                                                "scale": 5
+                                            },
+                                            {
+                                                "id": "287eccf9-0ae4-442a-883b-40c4e8c6fe62",
+                                                "name": "KURS3",
+                                                "datatype": "decimal",
+                                                "nullable": false,
+                                                "precision": 6,
+                                                "scale": 5
+                                            },
+                                            {
+                                                "id": "96e44a80-4257-4d10-a1c2-9289d85f471d",
+                                                "name": "BASW2",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "56539d8c-f611-46a7-a8cb-40c1a45e4bd7",
+                                                "name": "BASW3",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "d9a24b20-cadd-405c-acdf-36084d6e766b",
+                                                "name": "UMRD2",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "5537f763-9bf3-4f3d-8ca4-b5a6eaa7cbb8",
+                                                "name": "UMRD3",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "6b5eb1ea-007c-4f27-aaef-f23fe366fc21",
+                                                "name": "XSTOV",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "c2517fe6-a4d3-4704-813e-b627db57d97d",
+                                                "name": "STODT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "9a4b472f-9fde-4b02-af77-2084bc2b6f11",
+                                                "name": "XMWST",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "6aca1c21-17f7-448b-832a-3881d6ef7e35",
+                                                "name": "CURT2",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "4cbb9fda-d38a-432f-98a9-98340b853035",
+                                                "name": "CURT3",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "534260a4-aef0-4ff0-8351-f6a391105aa8",
+                                                "name": "KUTY2",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "7f2c0603-8e53-4e14-b98e-5a416abb6bb8",
+                                                "name": "KUTY3",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "195ac26f-a8a6-4a7b-b9aa-f86ed791eb30",
+                                                "name": "XSNET",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "3087ee40-0227-427d-a4bb-19d9a45f0a87",
+                                                "name": "AUSBK",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "a3a7b3f5-10e3-464b-a15d-a0e116a16ab6",
+                                                "name": "XUSVR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "0d79cd38-1ae9-48bf-b3fd-13c480f17ff4",
+                                                "name": "DUEFL",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "b2859129-ab87-4700-8a68-aae6bf757f1d",
+                                                "name": "AWSYS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "1f70a459-3ed6-43eb-9558-19a2a53ef7d7",
+                                                "name": "TXKRS",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "a05092bb-cc5f-4746-bf48-fdf4e28516c0",
+                                                "name": "LOTKZ",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "6cf8a413-dae0-4170-bf0f-658f168cf895",
+                                                "name": "XWVOF",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "f5e46bdf-e1c9-4a8e-8c85-cef0a6dea841",
+                                                "name": "STGRD",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 2
+                                            },
+                                            {
+                                                "id": "be5f30e2-3628-4e4e-b242-6f4cc1a1067d",
+                                                "name": "PPNAM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 7
+                                            },
+                                            {
+                                                "id": "57ab2378-1aa1-45d5-9195-b182dbf9e27f",
+                                                "name": "BRNCH",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "cf36b013-be4e-4b41-84e2-8220c75d386e",
+                                                "name": "NUMPG",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "8c3c357e-5d72-4c04-91e4-5862eb18197f",
+                                                "name": "ADISC",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "0680369f-fea1-490b-8f71-5e58a8e47848",
+                                                "name": "XREF1_HD",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "4ba3cca7-28d7-4f6b-81ce-142b950df6ee",
+                                                "name": "XREF2_HD",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "dcec1f20-cc6b-4ee9-8954-7369e471802a",
+                                                "name": "XREVERSAL",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "338bc94a-816d-49fd-8bb0-3efc7fcd9aa6",
+                                                "name": "REINDAT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "770731e3-4be8-4e2e-b51a-72909ca57fcc",
+                                                "name": "RLDNR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 2
+                                            },
+                                            {
+                                                "id": "5fb9400b-71f2-47bb-bc62-6df80b82b6a5",
+                                                "name": "LDGRP",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 2
+                                            },
+                                            {
+                                                "id": "73a28032-0a0c-4594-a451-822e19e96303",
+                                                "name": "PROPMANO",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "22e152c1-e784-4ff6-a74b-8b123ccf5c5e",
+                                                "name": "XBLNR_ALT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "820d5a49-b7fc-42a2-a9e6-46dcf2592525",
+                                                "name": "VATDATE",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "7d9dbeb5-f1c3-4a84-ab5a-080a12ca8771",
+                                                "name": "DOCCAT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 6
+                                            },
+                                            {
+                                                "id": "b89bc870-1806-45ab-a971-b91fdc620e5a",
+                                                "name": "XSPLIT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "62dc20dd-578f-42a7-8960-ee0093af8852",
+                                                "name": "CASH_ALLOC",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "2e1d793e-69d5-4f95-a1d6-2092ef15baf3",
+                                                "name": "FOLLOW_ON",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "660d50a7-3ace-4972-9c3e-a5df88776001",
+                                                "name": "XREORG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "64433446-f49f-4abc-b1aa-aaf5fb11ddbf",
+                                                "name": "SUBSET",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "450f4fc5-1e64-4f9b-9664-184f3c2039a4",
+                                                "name": "KURST",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            },
+                                            {
+                                                "id": "06403fb2-d23a-45a1-81b5-95eea5895b9d",
+                                                "name": "KURSX",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "89a950d3-33f3-4d27-93df-16fd299753dd",
+                                                "name": "KUR2X",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "78ab5de0-2dc2-4423-a604-05666d2ba36c",
+                                                "name": "KUR3X",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "89e8cd81-2415-4344-b030-4172cf7a9cbf",
+                                                "name": "XMCA",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "28cea076-7727-4366-9cb8-860fbe41c30c",
+                                                "name": "/SAPF15/STATUS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "7b52a21e-7b19-4407-a1e2-0ffe93db2198",
+                                                "name": "PSOTY",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "070f5555-b418-4de7-9365-e3a6b31ba7ca",
+                                                "name": "PSOAK",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "d9118957-8acb-4bc9-a4b3-0ac6d36108cb",
+                                                "name": "PSOKS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "419a13c0-972d-4e64-9fff-7cd108c71072",
+                                                "name": "PSOSG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "42a4533c-0513-4d14-9ae7-6ef4177ba694",
+                                                "name": "PSOFN",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "0c5234de-5280-499f-be1c-db83da679faa",
+                                                "name": "INTFORM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "53e7c58c-f244-4d7e-bc58-4595220a08b0",
+                                                "name": "INTDATE",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "3a868ab6-3d81-4c2f-8f7b-a8553a8d1672",
+                                                "name": "PSOBT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "a60fb7aa-5cdf-4a65-b7f5-ebf192317e33",
+                                                "name": "PSOZL",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "13f48da5-4527-41b7-9aa2-5af05fbc35bd",
+                                                "name": "PSODT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "41c9459c-e9c8-481e-9759-ba587d17b6a0",
+                                                "name": "PSOTM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 12
+                                            },
+                                            {
+                                                "id": "95050452-3c4e-4b27-9b3d-03407289e355",
+                                                "name": "FM_UMART",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "73d1564f-9db1-4c78-b6fe-677049caad98",
+                                                "name": "CCINS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "3035a213-9019-4e21-badd-cbda5d625d38",
+                                                "name": "CCNUM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "c5b83b37-b54c-4fb3-b4eb-3f6116d321a1",
+                                                "name": "SSBLK",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "eca2b00e-0637-495c-802e-474577c51dca",
+                                                "name": "BATCH",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "1ec637ee-9aef-4128-8971-65a38ca97128",
+                                                "name": "SNAME",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "6e9a96e7-9578-45ba-8895-f0b0c8afdee6",
+                                                "name": "SAMPLED",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "1ac89cae-ea3b-48c7-98a9-c8be7a661b24",
+                                                "name": "EXCLUDE_FLAG",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "6ec93518-5d66-4eb5-958c-bd9d43737284",
+                                                "name": "BLIND",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "6f71b035-70b5-4974-8aed-a63ed16b0510",
+                                                "name": "OFFSET_STATUS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "0e118cd8-2da4-4cee-9852-680f7f10dd34",
+                                                "name": "OFFSET_REFER_DAT",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "303a70ab-cca1-425e-9f79-d284875d844b",
+                                                "name": "PENRC",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "d0da85ad-ded7-4a0e-baa5-d38aea070b43",
+                                                "name": "KNUMV",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "165d93d2-a019-49e6-bd8d-13fb04e79cd3",
+                                                "name": "TABLE_NAME",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "8d7b3f91-eb99-48ae-b9a3-2b584ccffa03",
+                                                "name": "IUUC_OPERATION",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": "ca62f660-6ac2-437a-9c14-39d9addd5cca",
+                                        "name": "Projection_Output1",
+                                        "attributes": [
+                                            {
+                                                "id": "441ae305-b878-4671-b121-0806b0f902e2",
+                                                "name": "BUKRS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4,
+                                                "expression": "\"BUKRS\""
+                                            },
+                                            {
+                                                "id": "e197b2b0-9854-4951-bfbe-dd43cdb0a9e2",
+                                                "name": "BELNR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10,
+                                                "expression": "\"BELNR\""
+                                            },
+                                            {
+                                                "id": "dc4db999-1aa0-490b-ac91-60a5b580ce35",
+                                                "name": "GJAHR",
+                                                "datatype": "int32",
+                                                "nullable": false,
+                                                "expression": "\"GJAHR\""
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": 142,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 120
+                                },
+                                "expression": "\"GJAHR\" >= (YEAR(CURRENT_DATE()) - 2)"
+                            },
+                            {
+                                "id": "f0a4dfaf-5c63-43b7-9196-be8d84d3b99a",
+                                "type": "AggregationNode",
+                                "nodeType": "AggregationNode",
+                                "name": "Aggregation",
+                                "inputs": [
+                                    {
+                                        "id": "44e2fe59-9ee9-4ea7-9586-845e09293f4b",
+                                        "name": "Aggregation_Input1",
+                                        "attributes": [
+                                            {
+                                                "id": "112af0df-4d47-4d89-a015-41b9b28f4d1c",
+                                                "name": "BUKRS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "4a8dd1e4-dd88-43a2-b370-72dabf532374",
+                                                "name": "BELNR",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 10
+                                            },
+                                            {
+                                                "id": "cad51a6e-52ec-448d-9f71-18ec83f279d6",
+                                                "name": "GJAHR",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": "ba399ade-23e9-453f-a55f-8c92f4cdf867",
+                                        "name": "Aggregation_Output1",
+                                        "attributes": [
+                                            {
+                                                "id": "75daff92-17a3-4d0d-b8a0-bb81131afa44",
+                                                "name": "BUKRS",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "5fe948e3-ad4a-4ada-8cd4-4d7b3acad89e",
+                                                "name": "BELNR",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            },
+                                            {
+                                                "id": "c4acc06c-3483-4833-93bb-86ce12f782eb",
+                                                "name": "GJAHR",
+                                                "datatype": "int32",
+                                                "nullable": false
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": 312,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 120
+                                },
+                                "tableMappings": [
+                                    {
+                                        "source": "44e2fe59-9ee9-4ea7-9586-845e09293f4b",
+                                        "target": "ba399ade-23e9-453f-a55f-8c92f4cdf867",
+                                        "attributeMappings": [
+                                            {
+                                                "source": "112af0df-4d47-4d89-a015-41b9b28f4d1c",
+                                                "target": "75daff92-17a3-4d0d-b8a0-bb81131afa44"
+                                            },
+                                            {
+                                                "source": "4a8dd1e4-dd88-43a2-b370-72dabf532374",
+                                                "target": "5fe948e3-ad4a-4ada-8cd4-4d7b3acad89e"
+                                            },
+                                            {
+                                                "source": "cad51a6e-52ec-448d-9f71-18ec83f279d6",
+                                                "target": "c4acc06c-3483-4833-93bb-86ce12f782eb"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "aggregationTypes": [
+                                    "GROUP-BY",
+                                    "COUNT",
+                                    "GROUP-BY"
+                                ]
+                            }
+                        ],
+                        "tableMappings": [
+                            {
+                                "source": "fcb5608e-b48b-4025-bf95-1b6a84ae2f48",
+                                "target": "52bd45a9-bcd8-4a07-8bfc-df9b0ffc4cf7",
+                                "attributeMappings": [
+                                    {
+                                        "source": "e2bfa6ef-f47b-4b2e-a095-bcdaabfdfed9",
+                                        "target": "59ec3460-1af7-47ec-850a-40a7b792c5af"
+                                    },
+                                    {
+                                        "source": "66b956ea-575d-49f2-9226-69c9de51f832",
+                                        "target": "954946d2-1f5c-4269-8798-ec12eb9e1cf7"
+                                    },
+                                    {
+                                        "source": "728659a9-edc3-4503-889f-4f39b73a7b70",
+                                        "target": "e62808bf-7a02-4c82-9552-c2f91607526f"
+                                    },
+                                    {
+                                        "source": "b2aec52f-2bad-40ea-9c7c-d1d487bb5704",
+                                        "target": "135a8277-812a-4c8a-89a0-f979c735df6a"
+                                    },
+                                    {
+                                        "source": "ab7775bc-ff02-4095-903b-6c0c50cf7c0a",
+                                        "target": "5a587144-c802-44b1-ab4f-d7bbc2252e3c"
+                                    },
+                                    {
+                                        "source": "2b141458-aa69-435a-a142-6cdc7ae461a0",
+                                        "target": "69edc588-8127-47fe-b4cb-cb7f511d5ac7"
+                                    },
+                                    {
+                                        "source": "42827bdc-0a31-4354-95ea-1146c84110c1",
+                                        "target": "21b5f5e7-b7b9-478b-8d7a-25efc7999409"
+                                    },
+                                    {
+                                        "source": "d683f6fa-6168-49c5-826f-11ac516c144a",
+                                        "target": "f875d512-23a1-472a-bcc7-0f1f9999a852"
+                                    },
+                                    {
+                                        "source": "36cc15ab-5750-48bc-ad36-f4adea0260e9",
+                                        "target": "6f5e7bcf-fc59-4885-baaa-81aade0d91a6"
+                                    },
+                                    {
+                                        "source": "d8251b89-3f5f-4c9c-9b24-5d586478dc3c",
+                                        "target": "8a4a217e-b002-48c9-bb7c-dd809955efcf"
+                                    },
+                                    {
+                                        "source": "6311808c-1a28-485f-b91a-6bb80e2e81c9",
+                                        "target": "fd154334-776b-4adb-bcfe-3e7c4093da8a"
+                                    },
+                                    {
+                                        "source": "ce0c15d2-1f8d-4d52-ba46-3c68a390381d",
+                                        "target": "e0230ad6-0cb2-4fa1-b4c6-671d86af919b"
+                                    },
+                                    {
+                                        "source": "98d8c84e-80a9-46cd-96df-1735e4ba81da",
+                                        "target": "b79bbb5f-aa8d-4cc4-b3da-a028fef5c106"
+                                    },
+                                    {
+                                        "source": "eec52524-681a-4592-bf0f-9cb92a4af6a5",
+                                        "target": "7c48d12c-0d0d-457f-be38-dd7c2f037019"
+                                    },
+                                    {
+                                        "source": "a278a6bc-1c71-4dfd-9573-327244123f36",
+                                        "target": "b2ed7119-bc8b-465d-a5a3-ef7da3c1ebd7"
+                                    },
+                                    {
+                                        "source": "d21c4fd4-f424-4480-82e4-01e8723604ef",
+                                        "target": "c8056861-f83e-4355-a724-a1435380bc5a"
+                                    },
+                                    {
+                                        "source": "14eafc41-5ecf-456f-900f-11af01a80c10",
+                                        "target": "8bf9046d-04f7-42a7-b918-8137db2790e6"
+                                    },
+                                    {
+                                        "source": "1c4e88b5-91b8-4489-93fd-92de4e9f4c63",
+                                        "target": "c3b31555-ed49-4e95-86cd-8bc1e0c516b3"
+                                    },
+                                    {
+                                        "source": "64847753-e4a3-47cd-a068-6f70dfcf89ba",
+                                        "target": "d170f129-6b5e-4262-9ad0-5f24ebfefaa8"
+                                    },
+                                    {
+                                        "source": "676e6d13-a0a9-49f8-a637-156131b0aa33",
+                                        "target": "f4d9040c-c21b-4aae-ad36-cca98dee3a08"
+                                    },
+                                    {
+                                        "source": "0b2fa3d8-f182-48eb-ae72-8697c1124f82",
+                                        "target": "2b733814-5e65-4c57-a250-42ef42c231fe"
+                                    },
+                                    {
+                                        "source": "b217f041-fd12-4188-a67c-89cb86308dfa",
+                                        "target": "42ab30c4-29f4-4a8b-b929-5cbd57b7d95b"
+                                    },
+                                    {
+                                        "source": "fb547d46-ca71-447f-a9f6-92795b98bed6",
+                                        "target": "de8ab5e1-5048-4a32-b42e-6d0c6f5095a6"
+                                    },
+                                    {
+                                        "source": "c4fde66f-7314-4a75-afa6-78ac85ed9de9",
+                                        "target": "113bc026-e32b-4d95-989b-81d2591e16f2"
+                                    },
+                                    {
+                                        "source": "3c34c440-539c-4338-a871-d28f09e500fa",
+                                        "target": "2914613f-3233-437d-97bd-29f743dc321f"
+                                    },
+                                    {
+                                        "source": "99e9b8e9-f9e2-43b7-80b1-30376c0747d2",
+                                        "target": "f1e72409-730f-4afe-9ad4-acfa17fb45b7"
+                                    },
+                                    {
+                                        "source": "b696ebdb-e2db-449d-9bf9-90cf892f339e",
+                                        "target": "e1e1cbb2-0629-45a3-9002-61460bc74807"
+                                    },
+                                    {
+                                        "source": "b820f3d2-3dc0-4f55-92c0-4e7a74e8ca51",
+                                        "target": "fbcd577d-2c80-4461-8b59-8fb0fa4fe464"
+                                    },
+                                    {
+                                        "source": "d3ec25c0-fcd6-45b8-9c46-b65b9cc979d6",
+                                        "target": "1bbcc0ef-dc9c-421c-8f81-71c50839fcad"
+                                    },
+                                    {
+                                        "source": "e45fe60c-0309-4293-b8d3-145f307e942e",
+                                        "target": "fc128077-c667-4263-9196-b82c9d625e7f"
+                                    },
+                                    {
+                                        "source": "d65a19aa-0bee-45f4-a56b-ab3beafe8266",
+                                        "target": "d8832a8e-99af-49a6-a74b-3851a09765dd"
+                                    },
+                                    {
+                                        "source": "a80a7f43-52ad-45bf-88d6-7e23e3a50b25",
+                                        "target": "8d79990c-7e93-4896-9118-3a9e3e44c2e3"
+                                    },
+                                    {
+                                        "source": "67326f6a-673b-4b97-8558-78250b447693",
+                                        "target": "ca9dc980-0e08-4900-a687-ddf62a1aabec"
+                                    },
+                                    {
+                                        "source": "4bab1daf-1abe-4383-8c6f-14e30cb158db",
+                                        "target": "539a04fa-c8ab-4add-a102-eb75746315d6"
+                                    },
+                                    {
+                                        "source": "553eff6c-e7e4-4604-9220-75f739fe8c2d",
+                                        "target": "4b108586-8bdc-414a-9ca2-268b0066c582"
+                                    },
+                                    {
+                                        "source": "7a5c7713-8eb1-4888-aa7b-4511b1fbe9bc",
+                                        "target": "7f3c9ade-d9ac-4ba4-bacd-174afd7fa18f"
+                                    },
+                                    {
+                                        "source": "4dbcc5e1-ce47-4f86-89f2-8204745c4052",
+                                        "target": "36c5a05d-994e-4c7b-94f5-6b89fa1aeb96"
+                                    },
+                                    {
+                                        "source": "5b1554fa-e250-4772-a87f-f94560b80c14",
+                                        "target": "64503f54-53b3-44cf-8c6e-6889ca3f1fab"
+                                    },
+                                    {
+                                        "source": "efaa0c3f-1161-4a46-8459-a8fb8118c951",
+                                        "target": "d97e1d3f-fc11-466b-8afc-afb5283f00be"
+                                    },
+                                    {
+                                        "source": "eb0c3cc9-931b-4dff-81ae-bfb334d33dea",
+                                        "target": "17dd5b7d-6150-4f1b-8a85-1da892c9f452"
+                                    },
+                                    {
+                                        "source": "1bbeb66a-412c-4165-935c-e0b00691f5ae",
+                                        "target": "9d550687-6ddb-4dba-b1da-41b3e4f6d5b0"
+                                    },
+                                    {
+                                        "source": "8140b3fd-7e6e-49a7-807d-310e4a58cd82",
+                                        "target": "287eccf9-0ae4-442a-883b-40c4e8c6fe62"
+                                    },
+                                    {
+                                        "source": "4a635d80-c101-4c55-909b-13b81f9bc427",
+                                        "target": "96e44a80-4257-4d10-a1c2-9289d85f471d"
+                                    },
+                                    {
+                                        "source": "ea7fff9d-2fa2-4df7-95f8-b25fef74f893",
+                                        "target": "56539d8c-f611-46a7-a8cb-40c1a45e4bd7"
+                                    },
+                                    {
+                                        "source": "902b3dae-f2ac-444f-9470-789ae9ee288a",
+                                        "target": "d9a24b20-cadd-405c-acdf-36084d6e766b"
+                                    },
+                                    {
+                                        "source": "3f87549e-4f46-4581-96e4-356cda756054",
+                                        "target": "5537f763-9bf3-4f3d-8ca4-b5a6eaa7cbb8"
+                                    },
+                                    {
+                                        "source": "e862cc57-1b4c-406f-91f8-9346ed1e7c5e",
+                                        "target": "6b5eb1ea-007c-4f27-aaef-f23fe366fc21"
+                                    },
+                                    {
+                                        "source": "cb4bd8e1-9231-4739-ab75-002e87f319f8",
+                                        "target": "c2517fe6-a4d3-4704-813e-b627db57d97d"
+                                    },
+                                    {
+                                        "source": "0268df9a-b36e-4551-bc25-b10a9a4f633f",
+                                        "target": "9a4b472f-9fde-4b02-af77-2084bc2b6f11"
+                                    },
+                                    {
+                                        "source": "f2ef88ac-ce01-478e-bca5-9a4f84d82b0f",
+                                        "target": "6aca1c21-17f7-448b-832a-3881d6ef7e35"
+                                    },
+                                    {
+                                        "source": "fe9be37a-ce3a-44cc-8cd7-bab5b4456e70",
+                                        "target": "4cbb9fda-d38a-432f-98a9-98340b853035"
+                                    },
+                                    {
+                                        "source": "708682b9-e6a6-47e1-9963-c6c33b58fd3c",
+                                        "target": "534260a4-aef0-4ff0-8351-f6a391105aa8"
+                                    },
+                                    {
+                                        "source": "87ec03ee-3539-4d29-9230-fff6c05672e7",
+                                        "target": "7f2c0603-8e53-4e14-b98e-5a416abb6bb8"
+                                    },
+                                    {
+                                        "source": "0eef32da-aee2-4561-afdd-8e48360f5229",
+                                        "target": "195ac26f-a8a6-4a7b-b9aa-f86ed791eb30"
+                                    },
+                                    {
+                                        "source": "e34963e9-bdee-4f7b-878a-8c82ef230592",
+                                        "target": "3087ee40-0227-427d-a4bb-19d9a45f0a87"
+                                    },
+                                    {
+                                        "source": "16d020aa-37d2-49d6-a7d5-ea35918c0d4c",
+                                        "target": "a3a7b3f5-10e3-464b-a15d-a0e116a16ab6"
+                                    },
+                                    {
+                                        "source": "d001a7e4-82e7-4a6b-8cb2-bbbd62fc8061",
+                                        "target": "0d79cd38-1ae9-48bf-b3fd-13c480f17ff4"
+                                    },
+                                    {
+                                        "source": "7a51fbd6-6f96-4907-adfa-1f91f14d3578",
+                                        "target": "b2859129-ab87-4700-8a68-aae6bf757f1d"
+                                    },
+                                    {
+                                        "source": "ccf1e96f-5ece-4b33-8884-279deafff435",
+                                        "target": "1f70a459-3ed6-43eb-9558-19a2a53ef7d7"
+                                    },
+                                    {
+                                        "source": "4996657f-a0c9-43b2-b40b-ab8b4faf8b88",
+                                        "target": "a05092bb-cc5f-4746-bf48-fdf4e28516c0"
+                                    },
+                                    {
+                                        "source": "c4a84da7-1177-43df-8c2f-9dc2bc093319",
+                                        "target": "6cf8a413-dae0-4170-bf0f-658f168cf895"
+                                    },
+                                    {
+                                        "source": "d2d8fdd5-de90-4f8e-abcc-adeb0886feb1",
+                                        "target": "f5e46bdf-e1c9-4a8e-8c85-cef0a6dea841"
+                                    },
+                                    {
+                                        "source": "a09a7dec-e7b3-4109-bc20-e9b027375adf",
+                                        "target": "be5f30e2-3628-4e4e-b242-6f4cc1a1067d"
+                                    },
+                                    {
+                                        "source": "c337f3fb-a0d6-4930-babd-3de986fd318f",
+                                        "target": "57ab2378-1aa1-45d5-9195-b182dbf9e27f"
+                                    },
+                                    {
+                                        "source": "3f302a00-a88e-49a8-8020-29467927d93a",
+                                        "target": "cf36b013-be4e-4b41-84e2-8220c75d386e"
+                                    },
+                                    {
+                                        "source": "7e4cc1f6-bdfd-4ce1-b2f8-0a322bd26f09",
+                                        "target": "8c3c357e-5d72-4c04-91e4-5862eb18197f"
+                                    },
+                                    {
+                                        "source": "f2576d74-6777-4aa7-ba31-64708da0689f",
+                                        "target": "0680369f-fea1-490b-8f71-5e58a8e47848"
+                                    },
+                                    {
+                                        "source": "6b4822f2-d4a1-4187-867f-8d65b71b36f1",
+                                        "target": "4ba3cca7-28d7-4f6b-81ce-142b950df6ee"
+                                    },
+                                    {
+                                        "source": "7afb968d-1ada-46b4-9df0-c52db1edcf68",
+                                        "target": "dcec1f20-cc6b-4ee9-8954-7369e471802a"
+                                    },
+                                    {
+                                        "source": "2a941152-df19-4c8c-90e6-ed3000d85915",
+                                        "target": "338bc94a-816d-49fd-8bb0-3efc7fcd9aa6"
+                                    },
+                                    {
+                                        "source": "6d70104d-be2c-4b54-926e-15b3918fb2f1",
+                                        "target": "770731e3-4be8-4e2e-b51a-72909ca57fcc"
+                                    },
+                                    {
+                                        "source": "0165ebd0-5160-4c3b-bb77-69267c6a4f06",
+                                        "target": "5fb9400b-71f2-47bb-bc62-6df80b82b6a5"
+                                    },
+                                    {
+                                        "source": "b98b9ad2-6dc8-46d5-a83d-1890d6776eb8",
+                                        "target": "73a28032-0a0c-4594-a451-822e19e96303"
+                                    },
+                                    {
+                                        "source": "033da013-0347-4af0-afc8-39a806296748",
+                                        "target": "22e152c1-e784-4ff6-a74b-8b123ccf5c5e"
+                                    },
+                                    {
+                                        "source": "013b65e8-007e-4ec0-ad92-fa3875c885cb",
+                                        "target": "820d5a49-b7fc-42a2-a9e6-46dcf2592525"
+                                    },
+                                    {
+                                        "source": "a70c4462-26ef-49cc-a1aa-d3807609e6e9",
+                                        "target": "7d9dbeb5-f1c3-4a84-ab5a-080a12ca8771"
+                                    },
+                                    {
+                                        "source": "8fd3669c-b757-4ecf-ad65-944a922bc181",
+                                        "target": "b89bc870-1806-45ab-a971-b91fdc620e5a"
+                                    },
+                                    {
+                                        "source": "20bd03cf-a9f1-4c40-8586-b7041f8489b3",
+                                        "target": "62dc20dd-578f-42a7-8960-ee0093af8852"
+                                    },
+                                    {
+                                        "source": "8528d330-bdda-4f58-8eb5-45c3b5db09e8",
+                                        "target": "2e1d793e-69d5-4f95-a1d6-2092ef15baf3"
+                                    },
+                                    {
+                                        "source": "5d533875-c133-4851-a670-ab81db5e2851",
+                                        "target": "660d50a7-3ace-4972-9c3e-a5df88776001"
+                                    },
+                                    {
+                                        "source": "7cf9fe5b-4840-4f64-aa4e-771f4507c223",
+                                        "target": "64433446-f49f-4abc-b1aa-aaf5fb11ddbf"
+                                    },
+                                    {
+                                        "source": "e2fddc1b-f728-4f5e-acec-eb7435307aa4",
+                                        "target": "450f4fc5-1e64-4f9b-9664-184f3c2039a4"
+                                    },
+                                    {
+                                        "source": "ffbb34a6-35a3-409f-8ab7-17ebbc18acd9",
+                                        "target": "06403fb2-d23a-45a1-81b5-95eea5895b9d"
+                                    },
+                                    {
+                                        "source": "aa02c0da-ec16-49bc-b010-110612428725",
+                                        "target": "89a950d3-33f3-4d27-93df-16fd299753dd"
+                                    },
+                                    {
+                                        "source": "1a8bc3af-3f1b-4cf3-b574-7ebc73cf9220",
+                                        "target": "78ab5de0-2dc2-4423-a604-05666d2ba36c"
+                                    },
+                                    {
+                                        "source": "3bbc2dd0-5dc7-4c74-89ab-2e3aca3908ab",
+                                        "target": "89e8cd81-2415-4344-b030-4172cf7a9cbf"
+                                    },
+                                    {
+                                        "source": "ccdcdfde-478b-4adc-ab26-1ae8aeef0f7e",
+                                        "target": "28cea076-7727-4366-9cb8-860fbe41c30c"
+                                    },
+                                    {
+                                        "source": "d19d759c-c7a7-40a3-aa9c-ac7098bb50cd",
+                                        "target": "7b52a21e-7b19-4407-a1e2-0ffe93db2198"
+                                    },
+                                    {
+                                        "source": "5aacbfe2-f216-48cf-b5c8-7b7d896c5975",
+                                        "target": "070f5555-b418-4de7-9365-e3a6b31ba7ca"
+                                    },
+                                    {
+                                        "source": "e5068bdb-2f77-43e7-9eff-2d122d4c9f5d",
+                                        "target": "d9118957-8acb-4bc9-a4b3-0ac6d36108cb"
+                                    },
+                                    {
+                                        "source": "3829587a-8360-4520-88cb-c62daca390e1",
+                                        "target": "419a13c0-972d-4e64-9fff-7cd108c71072"
+                                    },
+                                    {
+                                        "source": "0ff18a1a-25e7-42a7-b585-560570cb3546",
+                                        "target": "42a4533c-0513-4d14-9ae7-6ef4177ba694"
+                                    },
+                                    {
+                                        "source": "890cc668-e1db-4751-9a73-7cd8d778ab52",
+                                        "target": "0c5234de-5280-499f-be1c-db83da679faa"
+                                    },
+                                    {
+                                        "source": "40beb340-07a5-4991-9eed-8d275d2b388d",
+                                        "target": "53e7c58c-f244-4d7e-bc58-4595220a08b0"
+                                    },
+                                    {
+                                        "source": "19b91482-d78f-4133-ad85-1c201f0f0795",
+                                        "target": "3a868ab6-3d81-4c2f-8f7b-a8553a8d1672"
+                                    },
+                                    {
+                                        "source": "b756e84c-4ea9-4fc8-9d6a-c9173ecf0248",
+                                        "target": "a60fb7aa-5cdf-4a65-b7f5-ebf192317e33"
+                                    },
+                                    {
+                                        "source": "021013fd-cb2d-41ad-95a1-731771b61b86",
+                                        "target": "13f48da5-4527-41b7-9aa2-5af05fbc35bd"
+                                    },
+                                    {
+                                        "source": "38bbce4d-d083-4d08-a175-b3869769d1b2",
+                                        "target": "41c9459c-e9c8-481e-9759-ba587d17b6a0"
+                                    },
+                                    {
+                                        "source": "e5886242-0923-4759-aff8-ca1600676f94",
+                                        "target": "95050452-3c4e-4b27-9b3d-03407289e355"
+                                    },
+                                    {
+                                        "source": "54010493-4e9e-4b10-af20-be0b76e82041",
+                                        "target": "73d1564f-9db1-4c78-b6fe-677049caad98"
+                                    },
+                                    {
+                                        "source": "e8a38d32-ba82-4639-b1d6-677aaa069d4e",
+                                        "target": "3035a213-9019-4e21-badd-cbda5d625d38"
+                                    },
+                                    {
+                                        "source": "fe92fb6a-e869-4fca-92e1-73c43dd26049",
+                                        "target": "c5b83b37-b54c-4fb3-b4eb-3f6116d321a1"
+                                    },
+                                    {
+                                        "source": "cf8c9e0b-32f0-4147-8bb1-eae9846dc31a",
+                                        "target": "eca2b00e-0637-495c-802e-474577c51dca"
+                                    },
+                                    {
+                                        "source": "ed440c51-14c2-41ba-91ad-8cf9d096b9eb",
+                                        "target": "1ec637ee-9aef-4128-8971-65a38ca97128"
+                                    },
+                                    {
+                                        "source": "286c7508-3e7c-4ed9-8d19-a3b200a96786",
+                                        "target": "6e9a96e7-9578-45ba-8895-f0b0c8afdee6"
+                                    },
+                                    {
+                                        "source": "e77ddcdb-6e2f-4d86-8aa8-10a3c1d38222",
+                                        "target": "1ac89cae-ea3b-48c7-98a9-c8be7a661b24"
+                                    },
+                                    {
+                                        "source": "96d5d154-7864-41eb-889c-de4f68069f4c",
+                                        "target": "6ec93518-5d66-4eb5-958c-bd9d43737284"
+                                    },
+                                    {
+                                        "source": "5f8abaf5-e947-4ec3-b16d-10ab0ce59a16",
+                                        "target": "6f71b035-70b5-4974-8aed-a63ed16b0510"
+                                    },
+                                    {
+                                        "source": "af78f583-ad80-4cd6-8ae7-144cc3daaa8b",
+                                        "target": "0e118cd8-2da4-4cee-9852-680f7f10dd34"
+                                    },
+                                    {
+                                        "source": "2d737d0d-c2c5-41a1-8406-74aceec6fdfd",
+                                        "target": "303a70ab-cca1-425e-9f79-d284875d844b"
+                                    },
+                                    {
+                                        "source": "f586072c-50a2-4435-b647-9c23f17ca39a",
+                                        "target": "d0da85ad-ded7-4a0e-baa5-d38aea070b43"
+                                    },
+                                    {
+                                        "source": "33b9e7de-b524-4d76-8c4b-a27eee25f80a",
+                                        "target": "165d93d2-a019-49e6-bd8d-13fb04e79cd3"
+                                    },
+                                    {
+                                        "source": "985de24b-c9ca-4a61-926f-09cb24c36eeb",
+                                        "target": "8d7b3f91-eb99-48ae-b9a3-2b584ccffa03"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "97,52 137,52"
+                                }
+                            },
+                            {
+                                "source": "ca62f660-6ac2-437a-9c14-39d9addd5cca",
+                                "target": "44e2fe59-9ee9-4ea7-9586-845e09293f4b",
+                                "attributeMappings": [
+                                    {
+                                        "source": "441ae305-b878-4671-b121-0806b0f902e2",
+                                        "target": "112af0df-4d47-4d89-a015-41b9b28f4d1c"
+                                    },
+                                    {
+                                        "source": "e197b2b0-9854-4951-bfbe-dd43cdb0a9e2",
+                                        "target": "4a8dd1e4-dd88-43a2-b370-72dabf532374"
+                                    },
+                                    {
+                                        "source": "dc4db999-1aa0-490b-ac91-60a5b580ce35",
+                                        "target": "cad51a6e-52ec-448d-9f71-18ec83f279d6"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "267,52 307,52"
+                                }
+                            },
+                            {
+                                "source": "ba399ade-23e9-453f-a55f-8c92f4cdf867",
+                                "target": "94d2a68f-196b-4623-af5d-4efd74b27c8e",
+                                "attributeMappings": [
+                                    {
+                                        "source": "75daff92-17a3-4d0d-b8a0-bb81131afa44",
+                                        "target": "d1340847-7b99-4eab-907b-2a7ac0d13dd8"
+                                    },
+                                    {
+                                        "source": "5fe948e3-ad4a-4ada-8cd4-4d7b3acad89e",
+                                        "target": "4c38340b-c679-4a24-837c-6426243808f2"
+                                    },
+                                    {
+                                        "source": "c4acc06c-3483-4833-93bb-86ce12f782eb",
+                                        "target": "a794ab9a-effd-4dd9-ac4e-cbb1085561da"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "437,52 477,52"
+                                }
+                            }
+                        ],
+                        "invalidMappings": []
+                    }
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.datatransform1_out"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator.v2",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 524,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 2,
+                "isNewAPI": true,
+                "config": {}
+            }
+        },
+        "structuredfileproducer1": {
+            "component": "com.sap.storage.producer.v3",
+            "metadata": {
+                "label": "Structured File Producer",
+                "x": 355,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 2,
+                "isNewAPI": true,
+                "config": {
+                    "service": "SDL",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DI_DATA_LAKE",
+                                "type": "SDL"
+                            },
+                            "qualifiedName": "/shared/sap/JD1/Usage_Analysis_BKPF",
+                            "name": "Usage_Analysis_BKPF"
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": [
+                                    {
+                                        "name": "BUKRS",
+                                        "templateType": "string",
+                                        "length": 4
+                                    },
+                                    {
+                                        "name": "BELNR",
+                                        "templateType": "int32"
+                                    },
+                                    {
+                                        "name": "GJAHR",
+                                        "templateType": "int32"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "format": "CSV",
+                    "mode": "overwrite",
+                    "additionalProperties_csv": {
+                        "columnDelimiter": ",",
+                        "csvHeaderIncluded": true
+                    },
+                    "writePartFiles": false,
+                    "attributeMappings": [
+                        {
+                            "expression": "\"BUKRS\"",
+                            "target": "BUKRS"
+                        },
+                        {
+                            "expression": "\"BELNR\"",
+                            "target": "BELNR"
+                        },
+                        {
+                            "expression": "\"GJAHR\"",
+                            "target": "GJAHR"
+                        }
+                    ]
+                },
+                "inports": [
+                    {
+                        "name": "inTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.datatransform1_out"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,52 181,52"
+            },
+            "src": {
+                "port": "outTable",
+                "process": "structuredfileconsumer1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "datatransform1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "310,52 350,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "datatransform1"
+            },
+            "tgt": {
+                "port": "inTable",
+                "process": "structuredfileproducer1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "479,52 519,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "structuredfileproducer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 2
+    }
+}

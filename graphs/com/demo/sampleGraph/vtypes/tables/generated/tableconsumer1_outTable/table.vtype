@@ -1,0 +1,736 @@
+{
+	"name": "generated.tableconsumer1_outTable",
+	"description": "auto-generated generated.tableconsumer1_outTable",
+	"vflow.type": "table",
+	"keys": [
+		"RCLNT",
+		"MODEL",
+		"RYEAR",
+		"BELNR",
+		"DOCLN"
+	],
+	"rows": {
+		"components": [
+			{
+				"RCLNT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"MODEL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"RYEAR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"BELNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"DOCLN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"DELFLG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"TIMESTAMP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_15_0"
+				}
+			},
+			{
+				"USNAM": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			},
+			{
+				"RLDNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"MODEL_VER": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"VERID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"RBUKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"PBUKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"RCOMP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"RVERS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"BPC_CATG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"RTC_CATG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"KTOPL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"RACCT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"PR_UUID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.binary_16"
+				}
+			},
+			{
+				"PKOKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"PLEVL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"RCNTR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"PRCTR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"RFAREA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_16"
+				}
+			},
+			{
+				"RBUSA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"KOKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"SEGMENT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"SCNTR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"PPRCTR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"SFAREA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_16"
+				}
+			},
+			{
+				"SBUSA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"RASSC": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"PSEGMENT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"RMVCT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"AUDIT_TRA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"BTTYPE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"DOCAUTO": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"REF_BELNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"REF_DOCLN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"RWCUR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"RHCUR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"RKCUR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"RCO_OCUR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"CONS_CUR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"RUNIT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"RVUNIT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"RRUNIT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"RMSL_TYPE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"RIUNIT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"QUNIT1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"QUNIT2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"QUNIT3": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"CO_MEINH": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"WSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_2"
+				}
+			},
+			{
+				"HSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_2"
+				}
+			},
+			{
+				"KSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_2"
+				}
+			},
+			{
+				"CONS_SL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_2"
+				}
+			},
+			{
+				"MSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"MFSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"VMSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"VMFSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"RMSL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"QUANT1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"QUANT2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"QUANT3": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_23_3"
+				}
+			},
+			{
+				"DRCRK": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"POPER": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"PERIV": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"FISCYEARPER": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_7"
+				}
+			},
+			{
+				"BUDAT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_8"
+				}
+			},
+			{
+				"BLDAT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_8"
+				}
+			},
+			{
+				"BLART": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"BUZEI": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"BSCHL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"BSTAT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"GLACCOUNT_TYPE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"MATNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_40"
+				}
+			},
+			{
+				"WERKS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"LIFNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"KUNNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"MWSKZ": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"ANLN1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			},
+			{
+				"ANLN2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"ANBWA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"MOVCAT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"ANLGR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			},
+			{
+				"ANLGR2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"SETTLEMENT_RULE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"PS_POSID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_24"
+				}
+			},
+			{
+				"PS_PSPID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_24"
+				}
+			},
+			{
+				"ACDOC_EEW_DUMMY": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"DUMMY_INCL_EEW_COBL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"FKART": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"VKORG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"VTWEG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"SPART": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"MATNR_COPA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_40"
+				}
+			},
+			{
+				"MATKL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_9"
+				}
+			},
+			{
+				"KDGRP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"LAND1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"BRSCH": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"BZIRK": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_6"
+				}
+			},
+			{
+				"KUNRE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"KUNWE": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"KONZS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"ACDOC_COPA_EEW_DUMMY_PA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"DUMMY_MRKT_SGMNT_EEW_PS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"RCONGR1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"RCONGR2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"RCONGR3": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"RTFLG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"PENTITY": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_32"
+				}
+			},
+			{
+				"SRC": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"ENTITY": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_32"
+				}
+			},
+			{
+				"LRLDNR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"LKTOPL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"LRACCT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_10"
+				}
+			},
+			{
+				"AMTLVL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"GJHHR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			}
+		]
+	}
+}

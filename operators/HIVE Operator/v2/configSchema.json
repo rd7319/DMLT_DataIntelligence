@@ -1,0 +1,83 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$id": "http://sap.com/vflow/HIVE Operator.v2.configSchema.json",
+    "type": "object",
+    "properties": {
+        "codelanguage": {
+            "type": "string"
+        },
+        "script": {
+            "type": "string"
+        },
+        "hive_host": {
+            "title": "Host name of HIVE Server 2",
+            "type": "string"
+        },
+        "hive_port": {
+            "title": "Port",
+            "type": "number"
+        },
+        "database": {
+            "title": "HIVE Database",
+            "description": "Database you with to connect",
+            "type": "string"
+        },
+        "ssl_enabled": {
+            "type": "boolean"
+        },
+        "principal": {
+            "type": "string"
+        },
+        "user_principal": {
+            "type": "string"
+        },
+        "key_tab": {
+            "title": "key_tab",
+            "description": "Pointing to key tab file",
+            "type": "string",
+            "enum": [
+                "dvmrmsvc01.headless"
+            ]
+        },
+        "krb_conf": {
+            "title": "krb_conf",
+            "description": "Adding Kerberos File",
+            "type": "string",
+            "enum": [
+                "krb5"
+            ]
+        },
+        "jks_file": {
+            "title": "jks_file",
+            "description": "Adding JKS File",
+            "type": "string",
+            "enum": [
+                "cm-auto-global_truststore"
+            ]
+        },
+        "mypassword": {
+            "title": "Password",
+            "type": "object",
+            "properties": {}
+        },
+        "Query_mode": {
+            "title": "Query Mode",
+            "type": "string",
+            "enum": [
+                "select",
+                "insert_single",
+                "insert_bulk",
+                "create",
+                "drop",
+                "set",
+                "truncate",
+                "show",
+                "describe"
+            ]
+        },
+        "Query": {
+            "title": "Query",
+            "type": "string"
+        }
+    }
+}

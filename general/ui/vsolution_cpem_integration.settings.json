@@ -1,0 +1,1 @@
+{"operatorCategories":[{"name":"SAP Integration","entities":["com.sap.cpem.consumer","com.sap.cpem.producer"]}],"graphCategories":[{"name":"SAP Integration","entities":["com.sap.demo.cpem.consumption","com.sap.demo.cpem.production"]}],"graphSnippetCategories":[],"extensions":null}

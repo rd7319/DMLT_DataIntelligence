@@ -1,0 +1,77 @@
+{
+    "properties": {},
+    "description": "Jupyter Operator Example",
+    "processes": {
+        "jupyter1": {
+            "component": "com.sap.jupyter",
+            "metadata": {
+                "label": "Jupyter",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "extensible": true,
+                "config": {
+                    "notebookFilePath": "myWidgets"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "terminal1": {
+            "component": "com.sap.util.terminal",
+            "metadata": {
+                "label": "Terminal",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "jupyter1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "terminal1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 524,52 524,-3 126,-3 126,52 176,52"
+            },
+            "src": {
+                "port": "out1",
+                "process": "terminal1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "jupyter1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

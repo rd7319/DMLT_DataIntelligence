@@ -1,0 +1,8 @@
+{
+	"name": "generated.decimal_15_0",
+	"description": "Decimal(15,0)",
+	"vflow.type": "scalar",
+	"template": "decimal",
+	"value.precision": 15,
+	"value.scale": 0
+}

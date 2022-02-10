@@ -1,0 +1,314 @@
+{
+    "properties": {},
+    "description": "S4 ADX",
+    "processes": {
+        "s4hanaequipment1": {
+            "component": "com.tfnsw.poc.node.s4h.equipment",
+            "metadata": {
+                "label": "S/4 HANA Equipment",
+                "x": 1118.9999961853027,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "tomessageconverter1": {
+            "component": "com.sap.util.toMessageConverter",
+            "metadata": {
+                "label": "ToMessage Converter",
+                "x": 850.9999961853027,
+                "y": 87,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "formatconverter1": {
+            "component": "com.sap.util.formatConverter",
+            "metadata": {
+                "label": "Format Converter",
+                "x": 665.999997138977,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "csvHeaderIncluded": true
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Error Log",
+                "x": 381.99999809265137,
+                "y": 117,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "toblobconverter1": {
+            "component": "com.sap.util.toBlobConverter",
+            "metadata": {
+                "label": "ToBlob Converter",
+                "x": 566.999997138977,
+                "y": 87,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "readfile1": {
+            "component": "com.sap.file.read",
+            "metadata": {
+                "label": "Read File",
+                "x": 196.99999904632568,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "isBatch": false
+                }
+            }
+        },
+        "monitorfiles1": {
+            "component": "com.sap.file.monitor",
+            "metadata": {
+                "label": "Monitor Files",
+                "x": 12,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "path": "/shared/TACP/poc/landing_zone/asset_data",
+                    "filter": "With regular expression",
+                    "pattern": "TEST_ADX2.csv",
+                    "events": {
+                        "alreadyExists": true,
+                        "deleted": false,
+                        "modified": true,
+                        "new": true,
+                        "notModified": false
+                    }
+                }
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 949.9999961853027,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "fromfile2": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 416.49999809265137,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "wiretap41": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 1303.9999952316284,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap4"
+        },
+        "wiretap411": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Error Log",
+                "x": 1303.9999952316284,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap41"
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "s4hanaequipment1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "s4-equipment": ""
+            },
+            "multiplicity": 1
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,103 163.99999952316284,103 163.99999952316284,112 191.99999904632568,112"
+            },
+            "src": {
+                "port": "ref",
+                "process": "monitorfiles1"
+            },
+            "tgt": {
+                "port": "ref",
+                "process": "readfile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "320.9999990463257,121 348.9999985694885,121 348.9999985694885,157 376.99999809265137,157"
+            },
+            "src": {
+                "port": "error",
+                "process": "readfile1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "620.999997138977,112 660.999997138977,112"
+            },
+            "src": {
+                "port": "outbytearray",
+                "process": "toblobconverter1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "formatconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "904.9999961853027,112 944.9999961853027,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        },
+        {
+            "metadata": {
+                "points": "789.999997138977,112 817.9999966621399,112 817.9999966621399,103 845.9999961853027,103"
+            },
+            "src": {
+                "port": "output",
+                "process": "formatconverter1"
+            },
+            "tgt": {
+                "port": "inbody",
+                "process": "tomessageconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "470.49999809265137,61 533.9999976158142,61 533.9999976158142,112 561.999997138977,112"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile2"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "toblobconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "320.9999990463257,103 348.9999985694885,103 348.9999985694885,52 411.49999809265137,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "readfile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1073.9999961853027,112 1113.9999961853027,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap4"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "s4hanaequipment1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1242.9999961853027,103 1270.9999957084656,103 1270.9999957084656,52 1298.9999952316284,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "s4hanaequipment1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap41"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1242.9999961853027,121 1270.9999957084656,121 1270.9999957084656,172 1298.9999952316284,172"
+            },
+            "src": {
+                "port": "error",
+                "process": "s4hanaequipment1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap411"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

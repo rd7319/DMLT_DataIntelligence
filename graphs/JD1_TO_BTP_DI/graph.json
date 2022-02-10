@@ -1,0 +1,128 @@
+{
+    "properties": {},
+    "description": "SLT replication of table T001 to DI",
+    "processes": {
+        "writefile1": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 295.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "pathMode": "Static (from configuration)",
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "path": "/shared/Test%20DI_S4/JD1_T003.csv",
+                    "mode": "Overwrite",
+                    "joinBatches": true,
+                    "tableName": "T003"
+                }
+            }
+        },
+        "sltconnector2": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "action": "Initial Load",
+                    "Mass Transfer ID": "04Y",
+                    "Table Name": "T001",
+                    "Chunk size": 300,
+                    "subscriptionType": "New",
+                    "massTransferID": "04Y",
+                    "tableName": "T003",
+                    "subscriptionName": "JD1_T003",
+                    "chunkSize": 10000
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 196.99999904632568,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 383,
+                "y": 163,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 163.99999952316284,52 163.99999952316284,61 191.99999904632568,61"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector2"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "250.99999904632568,52 290.9999990463257,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "419.9999990463257,43 470,43 470,123 328,123 328,203 378,203"
+            },
+            "src": {
+                "port": "file",
+                "process": "writefile1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

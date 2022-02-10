@@ -1,0 +1,29 @@
+{
+    "description": "Aurora_Write",
+    "component": "com.sap.system.python3Operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "File",
+            "type": "string"
+        }
+    ],
+    "outports": [
+        {
+            "name": "out",
+            "type": "string"
+        }
+    ],
+    "icon": "puzzle-piece",
+    "iconsrc": "aws-rds.svg",
+    "config": {
+        "$type": "http://sap.com/vflow/Aurora_Write.configSchema.json",
+        "script": "def on_input(File):\r\n        \r\n    api.send(\"out\", \"Hello\")\r\n\r\napi.set_port_callback(\"File\", on_input)"
+    },
+    "tags": {
+        "mysqlaurora": "8.0.12",
+        "opensuse": "",
+        "python36": "",
+        "tornado": "5.0.2"
+    }
+}

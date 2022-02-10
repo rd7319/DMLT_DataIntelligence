@@ -1,0 +1,825 @@
+{
+    "properties": {},
+    "iconsrc": "",
+    "icon": "",
+    "description": "Copy of S4 Characteristics",
+    "processes": {
+        "s4hanacharacteristics1": {
+            "component": "com.tfnsw.poc.node.s4h.characteristics",
+            "metadata": {
+                "label": "S/4 HANA Characteristics",
+                "x": 875.9999961853027,
+                "y": 80,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 670.999997138977,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap41": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Payload",
+                "x": 1136.999994277954,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap4"
+        },
+        "wiretap411": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Error Log",
+                "x": 1136.999994277954,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap41"
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 501.99999713897705,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\nimport json\nimport io\n\ndef on_input(charac,values):\n    #charac_cols = ['characteristic','']\n    charac_stream = io.BytesIO(charac.body)\n    value_stream = io.BytesIO(values.body)\n    \n    df_charac = pd.read_csv(charac_stream)\n    df_value = pd.read_csv(value_stream)\n    \n    payload_list = []\n    payload_dict = {}\n    \n    Charc_Head_json_list =  json.loads(json.dumps(list(df_charac.T.to_dict().values())))\n\n    for char_i in df_charac.iterrows():\n    \n        Charc_Value_filter = df_value[df_value['ID']==char_i['attributeCode']]\n        \n        Charc_Value_Append =  json.loads(json.dumps(list(Charc_Value_filter.T.to_dict().values())))\n        \n        char_i.update(to_CharacteristicValue = Charc_Value_Append )\n        \n    \n    api.send(\"out\", api.Message(attributes={\"message.batchTotal\":len(a)},body=json.dumps(Charc_Head_json_list)))\n\napi.set_port_callback([\"input1\",\"input2\"], on_input)\n"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "any.*"
+                    },
+                    {
+                        "name": "input2",
+                        "type": "any.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "structuredfileconsumer1": {
+            "component": "com.sap.storage.consumer.v2",
+            "metadata": {
+                "label": "Structured File Consumer",
+                "x": 14,
+                "y": -23,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "SDL",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DI_DATA_LAKE",
+                                "type": "SDL"
+                            },
+                            "name": "2Attribute_List_V1.meta.csv",
+                            "remoteObjectType": "FILE.CSV",
+                            "qualifiedName": "/shared/NSW/2Attribute_List_V1.meta.csv",
+                            "nativeQualifiedName": "/shared/NSW/2Attribute_List_V1.meta.csv",
+                            "owner": "admin",
+                            "size": 162704,
+                            "version": {
+                                "dataLastModified": 1638425826000,
+                                "metadataLastModified": 1638425826000,
+                                "metadataVersionNumber": 1638425826000
+                            }
+                        },
+                        "dataAccessConfiguration": {
+                            "rowDelimiter": "\r\n",
+                            "charset": "UTF-8",
+                            "textDelimiter": "\"",
+                            "header": true,
+                            "escapeCharacter": "\"",
+                            "colDelimiter": ","
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": []
+                            }
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ]
+                    },
+                    "failOnStringTruncation": false
+                },
+                "outports": [
+                    {
+                        "name": "outTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ]
+            }
+        },
+        "structuredfileconsumer2": {
+            "component": "com.sap.storage.consumer.v2",
+            "metadata": {
+                "label": "Structured File Consumer",
+                "x": 14,
+                "y": 120,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "SDL",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DI_DATA_LAKE",
+                                "type": "SDL"
+                            },
+                            "name": "3Attribute_Value_List.meta.csv",
+                            "remoteObjectType": "FILE.CSV",
+                            "qualifiedName": "/shared/NSW/3Attribute_Value_List.meta.csv",
+                            "nativeQualifiedName": "/shared/NSW/3Attribute_Value_List.meta.csv",
+                            "owner": "admin",
+                            "size": 95452,
+                            "version": {
+                                "dataLastModified": 1638425823000,
+                                "metadataLastModified": 1638425823000,
+                                "metadataVersionNumber": 1638425823000
+                            }
+                        },
+                        "dataAccessConfiguration": {
+                            "rowDelimiter": "\r\n",
+                            "charset": "UTF-8",
+                            "textDelimiter": "\"",
+                            "header": true,
+                            "escapeCharacter": "\"",
+                            "colDelimiter": ","
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": []
+                            }
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ]
+                    },
+                    "failOnStringTruncation": false
+                },
+                "outports": [
+                    {
+                        "name": "outTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer2_outTable"
+                    }
+                ]
+            }
+        },
+        "datatransform1": {
+            "component": "com.sap.datatransform",
+            "metadata": {
+                "label": "Data Transform",
+                "x": 219,
+                "y": -18,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "definition": {
+                        "nodeType": "ContainerNode",
+                        "inputs": [
+                            {
+                                "id": "a227dfda-8598-4b52-acc2-78e575f4a3d9",
+                                "nodeType": "InPort",
+                                "name": "input3",
+                                "attributes": [
+                                    {
+                                        "id": "51ad8457-3f17-47ac-9065-38c51228b263",
+                                        "name": "attributeCode",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 30
+                                    },
+                                    {
+                                        "id": "9d9d474f-aca1-4983-a0e4-bc69d3c59b97",
+                                        "name": "description",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 37
+                                    },
+                                    {
+                                        "id": "9d586c2b-e3c2-42ff-a335-dec5f8feb7d4",
+                                        "name": "longDescription",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 880
+                                    },
+                                    {
+                                        "id": "a00ec911-4fc9-4a07-8299-5d9ce359b0e7",
+                                        "name": "UoM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "f7b52a68-d917-4251-9d08-778eca3e9866",
+                                        "name": "valueList",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 30
+                                    },
+                                    {
+                                        "id": "8ea99203-a16c-4866-9e49-6db2fcc27c92",
+                                        "name": "dataType",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 12
+                                    },
+                                    {
+                                        "id": "25053047-47c1-4fb9-a9b5-795efd96d90d",
+                                        "name": "dataFormat",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 24
+                                    },
+                                    {
+                                        "id": "90f8799a-c756-4c82-9be8-82baaf2b8ba5",
+                                        "name": "isProperty",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 1
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": -695,
+                                    "y": -128,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "outputs": [],
+                        "nodes": [
+                            {
+                                "id": "b8162253-dd5a-42b9-bb27-8cd171fe4111",
+                                "type": "FilterNode",
+                                "nodeType": "FilterNode",
+                                "name": "Projection",
+                                "inputs": [
+                                    {
+                                        "id": "54bc0689-c3dd-40db-a301-a1f6e092a8d0",
+                                        "name": "Projection_Input1",
+                                        "attributes": [
+                                            {
+                                                "id": "2a5382b0-fafe-48b8-9814-446c3f7d815d",
+                                                "name": "attributeCode",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 30
+                                            },
+                                            {
+                                                "id": "c6ff3024-075c-409d-a7de-b28f0860eb88",
+                                                "name": "description",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 37
+                                            },
+                                            {
+                                                "id": "17750279-6636-45e3-931d-265c31772f98",
+                                                "name": "longDescription",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 880
+                                            },
+                                            {
+                                                "id": "3676cfcf-8b4b-479f-819d-d9db8f6ec796",
+                                                "name": "UoM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "8e070a91-78e1-4fa2-9371-2a54ba8ed6a4",
+                                                "name": "valueList",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 30
+                                            },
+                                            {
+                                                "id": "e4dc54c6-3626-4440-8f2a-1959cc101fb5",
+                                                "name": "dataType",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 12
+                                            },
+                                            {
+                                                "id": "6026827c-9967-425d-a152-2d6330c884ce",
+                                                "name": "dataFormat",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 24
+                                            },
+                                            {
+                                                "id": "d981c77c-c117-4491-8e11-6f202e383ad3",
+                                                "name": "isProperty",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 1
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": "1fab6584-6bdd-45e4-8089-00d1f861a0d7",
+                                        "name": "Projection_Output1",
+                                        "attributes": [
+                                            {
+                                                "id": "bfc90b0a-c4ca-4100-8ac8-4aba231b6f18",
+                                                "name": "characteristic",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 30,
+                                                "expression": "\"attributeCode\""
+                                            },
+                                            {
+                                                "id": "ba1f07b4-6be0-4131-ae39-15bb3ed28cd2",
+                                                "name": "charcStatus",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 255
+                                            },
+                                            {
+                                                "id": "7331b14f-93a4-4af8-a734-0fcea44a6faa",
+                                                "name": "charcDataType",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 255,
+                                                "expression": "\"dataType\""
+                                            },
+                                            {
+                                                "id": "a4edb9e3-d4a7-46fa-b8ea-0365fc7649d9",
+                                                "name": "charcLength",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 255
+                                            },
+                                            {
+                                                "id": "fa0b3f60-e2c2-40a0-8967-2d12a91ae9ca",
+                                                "name": "charcDecimals",
+                                                "datatype": "string",
+                                                "nullable": true
+                                            },
+                                            {
+                                                "id": "3f66a579-67b9-4f08-81de-5681d373ac48",
+                                                "name": "multipleValuesAreAllowed",
+                                                "datatype": "string",
+                                                "nullable": true
+                                            },
+                                            {
+                                                "id": "e71ce644-01f1-4804-933f-2dc11a21085a",
+                                                "name": "language",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 255
+                                            },
+                                            {
+                                                "id": "c8d7c53d-e331-4dc8-995d-9e8dbd0f7979",
+                                                "name": "charcDescription",
+                                                "datatype": "string",
+                                                "nullable": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": -400,
+                                    "y": -59,
+                                    "height": 80,
+                                    "width": 120
+                                }
+                            }
+                        ],
+                        "tableMappings": [
+                            {
+                                "source": "a227dfda-8598-4b52-acc2-78e575f4a3d9",
+                                "target": "54bc0689-c3dd-40db-a301-a1f6e092a8d0",
+                                "attributeMappings": [
+                                    {
+                                        "source": "51ad8457-3f17-47ac-9065-38c51228b263",
+                                        "target": "2a5382b0-fafe-48b8-9814-446c3f7d815d"
+                                    },
+                                    {
+                                        "source": "9d9d474f-aca1-4983-a0e4-bc69d3c59b97",
+                                        "target": "c6ff3024-075c-409d-a7de-b28f0860eb88"
+                                    },
+                                    {
+                                        "source": "9d586c2b-e3c2-42ff-a335-dec5f8feb7d4",
+                                        "target": "17750279-6636-45e3-931d-265c31772f98"
+                                    },
+                                    {
+                                        "source": "a00ec911-4fc9-4a07-8299-5d9ce359b0e7",
+                                        "target": "3676cfcf-8b4b-479f-819d-d9db8f6ec796"
+                                    },
+                                    {
+                                        "source": "f7b52a68-d917-4251-9d08-778eca3e9866",
+                                        "target": "8e070a91-78e1-4fa2-9371-2a54ba8ed6a4"
+                                    },
+                                    {
+                                        "source": "8ea99203-a16c-4866-9e49-6db2fcc27c92",
+                                        "target": "e4dc54c6-3626-4440-8f2a-1959cc101fb5"
+                                    },
+                                    {
+                                        "source": "25053047-47c1-4fb9-a9b5-795efd96d90d",
+                                        "target": "6026827c-9967-425d-a152-2d6330c884ce"
+                                    },
+                                    {
+                                        "source": "90f8799a-c756-4c82-9be8-82baaf2b8ba5",
+                                        "target": "d981c77c-c117-4491-8e11-6f202e383ad3"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "-610,-88 -507.5,-88 -507.5,-19 -405,-19"
+                                }
+                            }
+                        ],
+                        "invalidMappings": []
+                    }
+                },
+                "additionalinports": [
+                    {
+                        "name": "input3",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ]
+            }
+        },
+        "datatransform2": {
+            "component": "com.sap.datatransform",
+            "metadata": {
+                "label": "Data Transform",
+                "x": 209,
+                "y": 124,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "definition": {
+                        "nodeType": "ContainerNode",
+                        "inputs": [
+                            {
+                                "id": "e96d7985-0914-4f81-b94d-218abce590d1",
+                                "nodeType": "InPort",
+                                "name": "input4",
+                                "attributes": [
+                                    {
+                                        "id": "c34979d1-adf9-407c-902d-d927f890ae22",
+                                        "name": "ID",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 30
+                                    },
+                                    {
+                                        "id": "96d915f0-064d-4979-94f2-7759a473a0d1",
+                                        "name": "dataType",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 12
+                                    },
+                                    {
+                                        "id": "837d0b2c-35c9-439f-8883-c926ef23d36a",
+                                        "name": "dataformat",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 11
+                                    },
+                                    {
+                                        "id": "c60803ef-fc27-43d3-b486-070ae802fd1c",
+                                        "name": "Code",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 30
+                                    },
+                                    {
+                                        "id": "30a11aca-86c8-4904-95c8-37aecaced96c",
+                                        "name": "value",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 130
+                                    },
+                                    {
+                                        "id": "a1f4cb2c-ddd1-4967-a4a0-2e8d9f4b0a77",
+                                        "name": "description",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 130
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": -324,
+                                    "y": -35,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "id": "39e59a50-5ff8-4157-a4f6-acf6726a0053",
+                                "nodeType": "OutPort",
+                                "name": "output1",
+                                "attributes": [],
+                                "mode": "OVERWRITE",
+                                "UILayout": {
+                                    "x": 122,
+                                    "y": 295,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "nodes": [
+                            {
+                                "id": "e6ae2239-7fc1-44e3-aa1b-b52d80848c5e",
+                                "type": "FilterNode",
+                                "nodeType": "FilterNode",
+                                "name": "Projection",
+                                "inputs": [
+                                    {
+                                        "id": "46211e35-72b2-412c-be0d-d97603618073",
+                                        "name": "Projection_Input1",
+                                        "attributes": [
+                                            {
+                                                "id": "589c0801-890e-45ff-a155-c8c6f83ccb34",
+                                                "name": "ID",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 30
+                                            },
+                                            {
+                                                "id": "c20ad889-095f-40ba-a93c-71fce44e34fe",
+                                                "name": "dataType",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 12
+                                            },
+                                            {
+                                                "id": "40314e52-6088-49ee-9224-a359940cb370",
+                                                "name": "dataformat",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 11
+                                            },
+                                            {
+                                                "id": "d072bbbf-800f-4a97-9482-a33786f651c1",
+                                                "name": "Code",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 30
+                                            },
+                                            {
+                                                "id": "cc1622f2-0467-4d1d-a51c-c1e6bf915f26",
+                                                "name": "value",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 130
+                                            },
+                                            {
+                                                "id": "a51b4bfb-a5eb-4af9-84f7-a53b56f1c87d",
+                                                "name": "description",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 130
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": "df0b7066-bbf7-46b4-9c90-d4d750832226",
+                                        "name": "Projection_Output1",
+                                        "attributes": []
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": -41,
+                                    "y": 78,
+                                    "height": 80,
+                                    "width": 120
+                                }
+                            }
+                        ],
+                        "tableMappings": [
+                            {
+                                "source": "e96d7985-0914-4f81-b94d-218abce590d1",
+                                "target": "46211e35-72b2-412c-be0d-d97603618073",
+                                "attributeMappings": [
+                                    {
+                                        "source": "c34979d1-adf9-407c-902d-d927f890ae22",
+                                        "target": "589c0801-890e-45ff-a155-c8c6f83ccb34"
+                                    },
+                                    {
+                                        "source": "96d915f0-064d-4979-94f2-7759a473a0d1",
+                                        "target": "c20ad889-095f-40ba-a93c-71fce44e34fe"
+                                    },
+                                    {
+                                        "source": "837d0b2c-35c9-439f-8883-c926ef23d36a",
+                                        "target": "40314e52-6088-49ee-9224-a359940cb370"
+                                    },
+                                    {
+                                        "source": "c60803ef-fc27-43d3-b486-070ae802fd1c",
+                                        "target": "d072bbbf-800f-4a97-9482-a33786f651c1"
+                                    },
+                                    {
+                                        "source": "30a11aca-86c8-4904-95c8-37aecaced96c",
+                                        "target": "cc1622f2-0467-4d1d-a51c-c1e6bf915f26"
+                                    },
+                                    {
+                                        "source": "a1f4cb2c-ddd1-4967-a4a0-2e8d9f4b0a77",
+                                        "target": "a51b4bfb-a5eb-4af9-84f7-a53b56f1c87d"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "-239,5 -142.5,5 -142.5,118 -46,118"
+                                }
+                            },
+                            {
+                                "source": "df0b7066-bbf7-46b4-9c90-d4d750832226",
+                                "target": "39e59a50-5ff8-4157-a4f6-acf6726a0053",
+                                "attributeMappings": [],
+                                "UILayout": {
+                                    "points": "84,118 100.5,118 100.5,335 117,335"
+                                }
+                            }
+                        ],
+                        "invalidMappings": []
+                    }
+                },
+                "additionalinports": [
+                    {
+                        "name": "input4",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer2_outTable"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output1",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.datatransform2_output1"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "s4hanacharacteristics1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "s4-characteristics": ""
+            },
+            "multiplicity": 1
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "794.999997138977,112 822.9999966621399,112 822.9999966621399,120 870.9999961853027,120"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap4"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "s4hanacharacteristics1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "999.9999961853027,111 1027.9999957084656,111 1027.9999957084656,114.5 1103.9999947547913,114.5 1103.9999947547913,52 1131.999994277954,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap41"
+            }
+        },
+        {
+            "metadata": {
+                "points": "999.9999961853027,129 1027.9999957084656,129 1027.9999957084656,125.5 1103.9999947547913,125.5 1103.9999947547913,172 1131.999994277954,172"
+            },
+            "src": {
+                "port": "error",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap411"
+            }
+        },
+        {
+            "metadata": {
+                "points": "625.999997138977,112 665.999997138977,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        },
+        {
+            "metadata": {
+                "points": "138,17 176,17 176,22 214,22"
+            },
+            "src": {
+                "port": "outTable",
+                "process": "structuredfileconsumer1"
+            },
+            "tgt": {
+                "port": "input3",
+                "process": "datatransform1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "119,162 223,162"
+            },
+            "src": {
+                "port": "outTable",
+                "process": "structuredfileconsumer2"
+            },
+            "tgt": {
+                "port": "input4",
+                "process": "datatransform2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

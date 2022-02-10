@@ -1,0 +1,135 @@
+{
+    "properties": {},
+    "description": "Copy of Test read data",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 332,
+                "y": 27,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 186,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V1",
+                "x": -214,
+                "y": 17,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DMS_CAL_S4",
+                    "operatorID": "com.sap.abap.slt.reader.v1",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "009",
+                    "tableName": "BUT100",
+                    "subscriptionName": "BUT100",
+                    "chunkSize": 50000
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outData",
+                        "type": "abap.*"
+                    }
+                ]
+            }
+        },
+        "abapconverter1": {
+            "component": "com.sap.abap.stringConverter",
+            "metadata": {
+                "label": "ABAP Converter",
+                "x": 2,
+                "y": 22,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "operatorID": "com.sap.abap.toStringConverter",
+                    "connectionID": "DMS_CAL_S4",
+                    "format": "csv"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "abap.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "-90,57 -46.5,57 -46.5,62 -3,62"
+            },
+            "src": {
+                "port": "outData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "abapconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "126,62 153.5,62 153.5,43 181,43"
+            },
+            "src": {
+                "port": "out",
+                "process": "abapconverter1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "240,52 283.5,52 283.5,67 327,67"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

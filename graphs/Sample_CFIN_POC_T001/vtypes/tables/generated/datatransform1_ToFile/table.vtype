@@ -1,0 +1,75 @@
+{
+	"name": "generated.datatransform1_ToFile",
+	"description": "auto-generated",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"BUKRS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"BUTXT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"ORT01": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"LAND1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"WAERS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"SPRAS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"BUTXT_1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"ORT01_1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_25"
+				}
+			},
+			{
+				"LAND1_1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"WAERS_1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"SPRAS_1": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			}
+		]
+	}
+}

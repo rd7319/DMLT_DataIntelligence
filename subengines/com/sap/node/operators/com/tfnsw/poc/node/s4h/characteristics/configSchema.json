@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$id": "http://sap.com/vflow/com.tfnsw.poc.node.s4h.characteristics.configSchema.json",
+    "type": "object",
+    "properties": {
+        "codelanguage": {
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": false
+            }
+        },
+        "script": {
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": false
+            }
+        },
+        "batch": {
+            "title": "Batch",
+            "type": "boolean"
+        },
+        "connectionType": {
+            "title": "Connection Type",
+            "type": "string",
+            "enum": [
+                "Manual",
+                "connection"
+            ]
+        },
+        "host": {
+            "title": "Host",
+            "type": "string"
+        },
+        "user": {
+            "title": "User",
+            "description": "User name",
+            "type": "string"
+        },
+        "password": {
+            "title": "password",
+            "type": "string",
+            "format": "password"
+        },
+        "connection": {
+            "title": "Connection",
+            "type": "object",
+            "properties": {
+                "configurationType": {
+                    "title": "Configuration Type",
+                    "type": "string",
+                    "enum": [
+                        "Configuration Manager",
+                        "Manual"
+                    ]
+                },
+                "connectionId": {
+                    "title": "Connection ID",
+                    "type": "string",
+                    "format": "com.sap.dh.connection.id",
+                    "sap_vflow_valuehelp": {
+                        "url": "/app/datahub-app-connection/connections?connectionTypes=ODATA",
+                        "valuepath": "id"
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "batch",
+        "connectionType",
+        "user",
+        "password"
+    ]
+}

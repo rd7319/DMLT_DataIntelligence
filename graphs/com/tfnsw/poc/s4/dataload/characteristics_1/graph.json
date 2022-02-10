@@ -1,0 +1,877 @@
+{
+    "properties": {},
+    "iconsrc": "",
+    "icon": "",
+    "description": "S4 Characteristics",
+    "processes": {
+        "s4hanacharacteristics1": {
+            "component": "com.tfnsw.poc.node.s4h.characteristics",
+            "metadata": {
+                "label": "S/4 HANA Characteristics",
+                "x": 1267,
+                "y": 107,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "formatconverter1": {
+            "component": "com.sap.util.formatConverter",
+            "metadata": {
+                "label": "Format Converter",
+                "x": 686.9999961853027,
+                "y": 117,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "csvHeaderIncluded": true
+                }
+            }
+        },
+        "toblobconverter1": {
+            "component": "com.sap.util.toBlobConverter",
+            "metadata": {
+                "label": "ToBlob Converter",
+                "x": 536.499997138977,
+                "y": 147,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "tabletomessageconverter1": {
+            "component": "com.sap.util.tableToMessageConverter",
+            "metadata": {
+                "label": "Table To Message Converter",
+                "x": 386.99999809265137,
+                "y": 132,
+                "height": 50,
+                "width": 50,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "additionalProperties_csv": {
+                        "columnDelimiter": ",",
+                        "textDelimiterStyle": "Minimal",
+                        "csvHeaderIncluded": true,
+                        "csvHeaderIncludedBehavior": "Every batch"
+                    },
+                    "batchSize": 5000
+                },
+                "inports": [
+                    {
+                        "name": "inTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.datatransform1_output1"
+                    }
+                ]
+            }
+        },
+        "datatransform1": {
+            "component": "com.sap.datatransform",
+            "metadata": {
+                "label": "Data Transform",
+                "x": 201.99999904632568,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "definition": {
+                        "nodeType": "ContainerNode",
+                        "inputs": [
+                            {
+                                "id": "4278427e-cca7-4f7e-85e3-aa653fb28d7f",
+                                "nodeType": "InPort",
+                                "name": "input1",
+                                "attributes": [
+                                    {
+                                        "id": "bf1bcf46-4f1c-4220-a395-41962076548d",
+                                        "name": "attributeCode",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 50
+                                    },
+                                    {
+                                        "id": "142b926b-5fc1-4d7a-918b-92de540b53ef",
+                                        "name": "description",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 255
+                                    },
+                                    {
+                                        "id": "c5140aec-0da5-468b-b83e-b3cca1497b0f",
+                                        "name": "longDescription",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "9f978eba-df57-4cf4-90f2-73558fb6e004",
+                                        "name": "UoM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "05af3443-ab68-4f64-a247-624a76d11e3a",
+                                        "name": "valueList",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 50
+                                    },
+                                    {
+                                        "id": "7f210615-5ecf-471d-9694-a79092004a3f",
+                                        "name": "dataType",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 20
+                                    },
+                                    {
+                                        "id": "6e855cb4-b2cc-471d-85b6-542794f48c7a",
+                                        "name": "dataFormat",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 50
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": 12,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "id": "81c5cf2b-bb3e-4116-979f-5dcaa82c1feb",
+                                "nodeType": "OutPort",
+                                "name": "output1",
+                                "attributes": [
+                                    {
+                                        "id": "0c3f904f-cf66-41f5-ab5e-939316d0a70c",
+                                        "name": "Characteristic",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 100
+                                    },
+                                    {
+                                        "id": "1111e9d9-d56e-4f22-8160-6620661a4d48",
+                                        "name": "CharcDataType",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 100
+                                    },
+                                    {
+                                        "id": "b5230434-0286-4410-a66a-4f549b777e61",
+                                        "name": "description_short",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 255
+                                    },
+                                    {
+                                        "id": "27622641-4ad1-4199-bc72-8290ac3d9c84",
+                                        "name": "description_long",
+                                        "datatype": "string",
+                                        "nullable": true,
+                                        "length": 5000
+                                    },
+                                    {
+                                        "id": "3fb10229-4b7f-4cc0-a8eb-9afc90112afa",
+                                        "name": "CharcLength",
+                                        "datatype": "int16",
+                                        "nullable": true
+                                    },
+                                    {
+                                        "id": "35a40e5d-9751-450a-93a3-f3ec4cdaf180",
+                                        "name": "CharcDecimals",
+                                        "datatype": "int16",
+                                        "nullable": true
+                                    },
+                                    {
+                                        "id": "2064bc2f-d0a9-4d6f-9adb-59cc575740b3",
+                                        "name": "UoM",
+                                        "datatype": "string",
+                                        "nullable": false,
+                                        "length": 4
+                                    },
+                                    {
+                                        "id": "25b92134-681c-4660-8192-5f9677f41bee",
+                                        "name": "CharcStatus",
+                                        "datatype": "string",
+                                        "nullable": true,
+                                        "length": 1
+                                    }
+                                ],
+                                "mode": "OVERWRITE",
+                                "UILayout": {
+                                    "x": 312,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 80
+                                }
+                            }
+                        ],
+                        "nodes": [
+                            {
+                                "id": "9ad06e63-76a3-4947-8a13-44f018cba177",
+                                "type": "FilterNode",
+                                "nodeType": "FilterNode",
+                                "name": "Projection",
+                                "inputs": [
+                                    {
+                                        "id": "53f2fc8d-ad37-42db-8f39-858d75fcc4d9",
+                                        "name": "Projection_Input1",
+                                        "attributes": [
+                                            {
+                                                "id": "c1fad2be-2127-4e87-a928-5622bf55b6bf",
+                                                "name": "attributeCode",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 50
+                                            },
+                                            {
+                                                "id": "246cc9e9-aa59-4dbf-886d-c184cacbd2d2",
+                                                "name": "description",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 255
+                                            },
+                                            {
+                                                "id": "7b7b1e59-cd7a-4798-9752-dd69363a5cc1",
+                                                "name": "longDescription",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 5000
+                                            },
+                                            {
+                                                "id": "cfc22de5-2914-400d-9922-3bdd9af1ea57",
+                                                "name": "UoM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4
+                                            },
+                                            {
+                                                "id": "4545412e-2199-47b2-85e7-a5f75695e8b0",
+                                                "name": "valueList",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 50
+                                            },
+                                            {
+                                                "id": "b541731e-e5f2-4f36-a528-9663043f138c",
+                                                "name": "dataType",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 20
+                                            },
+                                            {
+                                                "id": "0a15a329-f5e4-4558-8f9b-7b8c2e2a7328",
+                                                "name": "dataFormat",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 50
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "outputs": [
+                                    {
+                                        "id": "f152d34e-8f27-4847-9260-68e542e58268",
+                                        "name": "Projection_Output1",
+                                        "attributes": [
+                                            {
+                                                "id": "156b9096-e570-4e8c-ac9e-92f21b4254fd",
+                                                "name": "Characteristic",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 100,
+                                                "expression": "UPPER(TRIM(\"attributeCode\"))"
+                                            },
+                                            {
+                                                "id": "39f068b0-183e-4eaa-8e78-24fc3040d74d",
+                                                "name": "CharcDataType",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 100,
+                                                "expression": "MAP(TRIM(UPPER(\"dataType\")), 'ALPHANUMERIC','CHAR','INTEGER','NUM','DECIMAL','NUM','DATE','DAT','CHAR')"
+                                            },
+                                            {
+                                                "id": "1530a2cb-3016-4c49-abac-78b2316949ac",
+                                                "name": "description_short",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 255,
+                                                "expression": "REPLACE(\"description\", '_', ' ')"
+                                            },
+                                            {
+                                                "id": "23da7392-6528-484b-844c-1813fef09e4a",
+                                                "name": "description_long",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 5000,
+                                                "expression": "\"longDescription\""
+                                            },
+                                            {
+                                                "id": "5b338a89-56ed-478e-94ec-2a8a1ff832c0",
+                                                "name": "CharcLength",
+                                                "datatype": "int16",
+                                                "nullable": true,
+                                                "expression": "30"
+                                            },
+                                            {
+                                                "id": "1cec4eb0-6609-488d-871d-6f3de055e436",
+                                                "name": "CharcDecimals",
+                                                "datatype": "int16",
+                                                "nullable": true,
+                                                "expression": "0"
+                                            },
+                                            {
+                                                "id": "d6aacdc4-3e31-4c99-adbd-816ec57bdecd",
+                                                "name": "UoM",
+                                                "datatype": "string",
+                                                "nullable": false,
+                                                "length": 4,
+                                                "expression": "\"UoM\""
+                                            },
+                                            {
+                                                "id": "dbb08783-4673-4c4e-aab2-b1c9c58264c6",
+                                                "name": "CharcStatus",
+                                                "datatype": "string",
+                                                "nullable": true,
+                                                "length": 1,
+                                                "expression": "'1'"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "UILayout": {
+                                    "x": 142,
+                                    "y": 12,
+                                    "height": 80,
+                                    "width": 120
+                                }
+                            }
+                        ],
+                        "tableMappings": [
+                            {
+                                "source": "4278427e-cca7-4f7e-85e3-aa653fb28d7f",
+                                "target": "53f2fc8d-ad37-42db-8f39-858d75fcc4d9",
+                                "attributeMappings": [
+                                    {
+                                        "source": "bf1bcf46-4f1c-4220-a395-41962076548d",
+                                        "target": "c1fad2be-2127-4e87-a928-5622bf55b6bf"
+                                    },
+                                    {
+                                        "source": "142b926b-5fc1-4d7a-918b-92de540b53ef",
+                                        "target": "246cc9e9-aa59-4dbf-886d-c184cacbd2d2"
+                                    },
+                                    {
+                                        "source": "c5140aec-0da5-468b-b83e-b3cca1497b0f",
+                                        "target": "7b7b1e59-cd7a-4798-9752-dd69363a5cc1"
+                                    },
+                                    {
+                                        "source": "9f978eba-df57-4cf4-90f2-73558fb6e004",
+                                        "target": "cfc22de5-2914-400d-9922-3bdd9af1ea57"
+                                    },
+                                    {
+                                        "source": "05af3443-ab68-4f64-a247-624a76d11e3a",
+                                        "target": "4545412e-2199-47b2-85e7-a5f75695e8b0"
+                                    },
+                                    {
+                                        "source": "7f210615-5ecf-471d-9694-a79092004a3f",
+                                        "target": "b541731e-e5f2-4f36-a528-9663043f138c"
+                                    },
+                                    {
+                                        "source": "6e855cb4-b2cc-471d-85b6-542794f48c7a",
+                                        "target": "0a15a329-f5e4-4558-8f9b-7b8c2e2a7328"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "92,52 142,52"
+                                }
+                            },
+                            {
+                                "source": "f152d34e-8f27-4847-9260-68e542e58268",
+                                "target": "81c5cf2b-bb3e-4116-979f-5dcaa82c1feb",
+                                "attributeMappings": [
+                                    {
+                                        "source": "156b9096-e570-4e8c-ac9e-92f21b4254fd",
+                                        "target": "0c3f904f-cf66-41f5-ab5e-939316d0a70c"
+                                    },
+                                    {
+                                        "source": "39f068b0-183e-4eaa-8e78-24fc3040d74d",
+                                        "target": "1111e9d9-d56e-4f22-8160-6620661a4d48"
+                                    },
+                                    {
+                                        "source": "1530a2cb-3016-4c49-abac-78b2316949ac",
+                                        "target": "b5230434-0286-4410-a66a-4f549b777e61"
+                                    },
+                                    {
+                                        "source": "23da7392-6528-484b-844c-1813fef09e4a",
+                                        "target": "27622641-4ad1-4199-bc72-8290ac3d9c84"
+                                    },
+                                    {
+                                        "source": "5b338a89-56ed-478e-94ec-2a8a1ff832c0",
+                                        "target": "3fb10229-4b7f-4cc0-a8eb-9afc90112afa"
+                                    },
+                                    {
+                                        "source": "1cec4eb0-6609-488d-871d-6f3de055e436",
+                                        "target": "35a40e5d-9751-450a-93a3-f3ec4cdaf180"
+                                    },
+                                    {
+                                        "source": "d6aacdc4-3e31-4c99-adbd-816ec57bdecd",
+                                        "target": "2064bc2f-d0a9-4d6f-9adb-59cc575740b3"
+                                    },
+                                    {
+                                        "source": "dbb08783-4673-4c4e-aab2-b1c9c58264c6",
+                                        "target": "25b92134-681c-4660-8192-5f9677f41bee"
+                                    }
+                                ],
+                                "UILayout": {
+                                    "points": "262,52 312,52"
+                                }
+                            }
+                        ],
+                        "invalidMappings": []
+                    }
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output1",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.datatransform1_output1"
+                    }
+                ]
+            }
+        },
+        "structuredfileconsumer1": {
+            "component": "com.sap.storage.consumer.v2",
+            "metadata": {
+                "label": "Attributes File",
+                "x": 17,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "SDL",
+                    "serviceConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "source": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "DI_DATA_LAKE",
+                                "type": "SDL"
+                            },
+                            "name": "2Attribute_List.meta.csv",
+                            "remoteObjectType": "FILE.CSV",
+                            "qualifiedName": "/shared/TACP/poc/landing_zone/master_data/2Attribute_List.meta.csv",
+                            "nativeQualifiedName": "/shared/TACP/poc/landing_zone/master_data/2Attribute_List.meta.csv",
+                            "owner": "di-poc",
+                            "size": 161999,
+                            "version": {
+                                "dataLastModified": 1636581807000,
+                                "metadataLastModified": 1636581807000,
+                                "metadataVersionNumber": 1636581807000
+                            }
+                        },
+                        "dataAccessConfiguration": {
+                            "rowDelimiter": "\r\n",
+                            "charset": "UTF-8",
+                            "textDelimiter": "\"",
+                            "header": true,
+                            "escapeCharacter": "\"",
+                            "colDelimiter": ","
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": []
+                            }
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ]
+                    },
+                    "failOnStringTruncation": true
+                },
+                "outports": [
+                    {
+                        "name": "outTable",
+                        "type": "table",
+                        "vtype-ID": "$GRAPH.generated.structuredfileconsumer1_outTable"
+                    }
+                ]
+            }
+        },
+        "tomessageconverter1": {
+            "component": "com.sap.util.toMessageConverter",
+            "metadata": {
+                "label": "ToMessage Converter",
+                "x": 906.4999952316284,
+                "y": 147,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 1056.999994277954,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "odataqueryconsumer1": {
+            "component": "com.sap.dh.sdi.odata.query.consumer",
+            "metadata": {
+                "label": "OData Query Consumer",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "odataConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "S4_ODATA_API_CLFN_CHARACTERISTIC_SRV"
+                    },
+                    "native_sql_statement": "/A_ClfnCharacteristicForKeyDate"
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 871.9999952316284,
+                "y": 27,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "flowagentcsvproducer1": {
+            "component": "com.sap.dh.ds.csv.producer",
+            "metadata": {
+                "label": "Flowagent CSV Producer",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "batchSize": 5000,
+                    "additionalProperties_csv": {
+                        "columnDelimiter": ",",
+                        "csvHeaderIncluded": true,
+                        "textDelimiterStyle": "Always",
+                        "csvHeaderIncludedBehavior": "Every batch"
+                    }
+                }
+            }
+        },
+        "toblobconverter11": {
+            "component": "com.sap.util.toBlobConverter",
+            "metadata": {
+                "label": "ToBlob Converter",
+                "x": 386.99999809265137,
+                "y": 42,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            },
+            "name": "toblobconverter1"
+        },
+        "formatconverter11": {
+            "component": "com.sap.util.formatConverter",
+            "metadata": {
+                "label": "Format Converter",
+                "x": 501.99999713897705,
+                "y": 27,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "csvHeaderIncluded": true
+                }
+            },
+            "name": "formatconverter1"
+        },
+        "tomessageconverter11": {
+            "component": "com.sap.util.toMessageConverter",
+            "metadata": {
+                "label": "ToMessage Converter",
+                "x": 721.4999961853027,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            },
+            "name": "tomessageconverter1"
+        },
+        "wiretap41": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Payload",
+                "x": 1444.999994277954,
+                "y": 57,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap4"
+        },
+        "wiretap411": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Error Log",
+                "x": 1444.999994277954,
+                "y": 172,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap41"
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "s4hanacharacteristics1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "s4-characteristics": ""
+            },
+            "multiplicity": 1
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,172 196.99999904632568,172"
+            },
+            "src": {
+                "port": "outTable",
+                "process": "structuredfileconsumer1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "datatransform1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "325.9999990463257,172 353.9999985694885,172 353.9999985694885,157 381.99999809265137,157"
+            },
+            "src": {
+                "port": "output1",
+                "process": "datatransform1"
+            },
+            "tgt": {
+                "port": "inTable",
+                "process": "tabletomessageconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "590.499997138977,172 653.9999966621399,172 653.9999966621399,157 681.9999961853027,157"
+            },
+            "src": {
+                "port": "outbytearray",
+                "process": "toblobconverter1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "formatconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "440.99999809265137,157 468.9999976158142,157 468.9999976158142,172 531.499997138977,172"
+            },
+            "src": {
+                "port": "outMessage",
+                "process": "tabletomessageconverter1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "toblobconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "810.9999961853027,157 838.9999957084656,157 838.9999957084656,163 901.4999952316284,163"
+            },
+            "src": {
+                "port": "output",
+                "process": "formatconverter1"
+            },
+            "tgt": {
+                "port": "inbody",
+                "process": "tomessageconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "960.4999952316284,172 1023.9999947547913,172 1023.9999947547913,112 1051.999994277954,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,43 168.99999952316284,43 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "outConfig",
+                "process": "odataqueryconsumer1"
+            },
+            "tgt": {
+                "port": "inConfig",
+                "process": "flowagentcsvproducer1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "325.9999990463257,52 353.9999985694885,52 353.9999985694885,67 381.99999809265137,67"
+            },
+            "src": {
+                "port": "outMessage",
+                "process": "flowagentcsvproducer1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "toblobconverter11"
+            }
+        },
+        {
+            "metadata": {
+                "points": "440.99999809265137,67 496.99999713897705,67"
+            },
+            "src": {
+                "port": "outbytearray",
+                "process": "toblobconverter11"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "formatconverter11"
+            }
+        },
+        {
+            "metadata": {
+                "points": "625.999997138977,67 653.9999966621399,67 653.9999966621399,43 716.4999961853027,43"
+            },
+            "src": {
+                "port": "output",
+                "process": "formatconverter11"
+            },
+            "tgt": {
+                "port": "inbody",
+                "process": "tomessageconverter11"
+            }
+        },
+        {
+            "metadata": {
+                "points": "775.4999961853027,52 838.9999957084656,52 838.9999957084656,67 866.9999952316284,67"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter11"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1180.999994277954,112 1221.5,112 1221.5,147 1262,147"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap4"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "s4hanacharacteristics1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1391,138 1415.5,138 1415.5,97 1439.999994277954,97"
+            },
+            "src": {
+                "port": "output",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap41"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1391,156 1415.5,156 1415.5,212 1439.999994277954,212"
+            },
+            "src": {
+                "port": "error",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap411"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

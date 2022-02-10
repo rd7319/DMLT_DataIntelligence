@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+
+<head>
+    <title> Jupyter Operator in Productive Mode</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./style.css">
+
+    </style>
+</head>
+
+<body>
+    <div class="logos">
+        <img height="100px" src="./sap_logo.png" alt="SAP logo">
+        <img height="100px" src="./jupyter_logo.png" alt="Jupyter logo">
+    </div>
+    <div class="centered-text">
+        <h1>Jupyter Operator in Productive Mode</h1>
+        <p>Jupyter operator is currently running in productive mode, which means that the notebook content cannot be edited. If you want to edit the running code or interact with the data in the jupyter notebook UI, run the graph in non-productive mode.
+        </p>
+
+        <h2>Running code:</h2>
+
+        <div class="code-block"><code># Jupyter operator
+
+
+data='test'
+api.send('out', data)
+
+
+def on_data_in(value):
+    print(value)
+    api.send('out', value)
+
+
+api.try_port_callback('in', on_data_in)
+
+
+api.set_port_callback('in', on_data_in)
+
+
+api.remove_port_callback(on_data_in)
+
+
+def my_productive_code(value):
+    api.send('out', value)
+    
+api.set_port_callback('in', my_productive_code)
+
+
+</code></div>
+
+    </div>
+</body>
+
+</html>

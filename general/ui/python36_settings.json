@@ -1,0 +1,1 @@
+{"operatorCategories":[{"name":"Processing","entities":["com.sap.system.python3Operator"]},{"name":"Utilities","entities":["com.sap.util.datageneratorpy3","com.sap.util.python3TypeToBlob","com.sap.util.python3TypeToString","MySQL_ExecuteMany","MySQL Insert - Custom","Aurora_Write","API Parser"]}],"graphCategories":null,"graphSnippetCategories":null,"extensions":null}

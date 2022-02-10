@@ -1,0 +1,219 @@
+{
+    "properties": {},
+    "groupResources": {},
+    "description": "G_ECC_LOAD_FROM_SLT_LIMIT_REPLICATION",
+    "processes": {
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "Chunk size": "1 portion",
+                    "action": "Initial Load",
+                    "Mass Transfer ID": "001",
+                    "Table Name": "${tableName}",
+                    "subscriptionType": "New",
+                    "massTransferID": "${mtid}",
+                    "tableName": "${tableName}",
+                    "subscriptionName": "REPLICAT_${mtid}_${tableName}",
+                    "chunkSize": 50000
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "writefile1": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 715.9999980926514,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "pathMode": "Static with placeholders",
+                    "path": "/shared/sap/${src}/${tableName}/${tableName}_<header:foldername>/${tableName}_<header:mydatetime>.csv",
+                    "mode": "Create only",
+                    "joinBatches": true
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 350,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "## Custom code build in Base Python3 operator to append headers in csv file.\n## Author: Shristi Drolia\n##         Manish Kumar\n## Publish Date: \n## Version : 1.0\n# Import Python Libraries\nimport io\nfrom io import StringIO\nfrom io import BytesIO\nimport csv\nimport pandas as pd\nimport json\nimport numpy as np\nimport datetime\nimport time\nimport uuid\n\n\n# read data coming from SLT operator\ndef on_input(inData):\n# Formulation of date and time variable which will be used in filename\n    mytimestamp = datetime.datetime.now()\n    mydate = datetime.datetime.strftime(mytimestamp, \"%Y%m%d\")\n    mytime = datetime.datetime.strftime(mytimestamp, \"%H%M%S%f\")\n    mydatetime = mydate+\"_\"+mytime+\"_\"+str(uuid.uuid4())\n    \n# read body    \n    data = StringIO(inData.body)\n# read attribute    \n    attr = inData.attributes\n    \n# columns extraction from json attributes    \n    ABAPKEY = attr['ABAP']\n\n# col variable to store column names\n    col= []\n\n# last batch determination \n    if('message.lastBatch' in attr):\n        MSG = '1'\n    else:\n        MSG = '0'\n# sending stop signal once last batch is detected    \n    if(MSG == '1'):\n        api.send(\"stop\", \"stop\")\n        \n    else:    \n# preparing list of columns         \n        for columnname in ABAPKEY['Fields']:\n            col.append(columnname['Name'])\n# dataframe with columns and data            \n        df = pd.read_csv(data, index_col=False, names=col, dtype = 'str')\n# dataframe consversion to csv with header attributes\n        df_csv = df.to_csv(index=False, header = True)\n\n#attribute to store date and time and counter \n        attr['mydatetime'] = mydatetime\n        \n        \n# determine if the load is in initail phase or cdc and based on that folder name is determined\n        if(df['IUUC_OPERATION'].iloc[0] in ('I', 'U', 'D')):\n            attr['foldername'] = 'CDC_DI'\n            \n\n# sending csv as output            \n            api.send(\"output\", api.Message(attributes = attr, body=df_csv))\n        \n        else:\n            attr['foldername'] = mydate\n# sending csv as output            \n            api.send(\"output\", api.Message(attributes = attr, body=df_csv))\n# reading next batch of data             \napi.set_port_callback(\"input1\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output",
+                        "type": "message"
+                    },
+                    {
+                        "name": "stop",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 567.4999990463257,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 534.9999990463257,
+                "y": 117,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 181,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 715.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "474,103 501.99999952316284,103 501.99999952316284,61 562.4999990463257,61"
+            },
+            "src": {
+                "port": "output",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "621.4999990463257,52 682.9999985694885,52 682.9999985694885,172 710.9999980926514,172"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,121 501.99999952316284,121 501.99999952316284,157 529.9999990463257,157"
+            },
+            "src": {
+                "port": "stop",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,112 176,112"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,112 345,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "621.4999990463257,52 710.9999980926514,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

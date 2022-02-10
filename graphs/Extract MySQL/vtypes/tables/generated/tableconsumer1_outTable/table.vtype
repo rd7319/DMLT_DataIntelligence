@@ -1,0 +1,99 @@
+{
+	"name": "generated.tableconsumer1_outTable",
+	"description": "auto-generated generated.tableconsumer1_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"Client": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"MaterialGroup": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"Division": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"LREF3": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"ReferenceMaterial": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"GroupMaterial": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"DepartmentNumber": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"AuthorizationGroup": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"GEWEI": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"BrazilianNCMCode": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"ValuationClass": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"PurchasingValueKey": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"ANLKL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"EventScenario": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"PRICE_GROUP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			}
+		]
+	}
+}

@@ -1,0 +1,51 @@
+{
+	"name": "generated.structuredfileconsumer1_outTable",
+	"description": "auto-generated generated.structuredfileconsumer1_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"attributeCode": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_50"
+				}
+			},
+			{
+				"description": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_255"
+				}
+			},
+			{
+				"longDescription": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"UoM": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"valueList": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_50"
+				}
+			},
+			{
+				"dataType": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_20"
+				}
+			},
+			{
+				"dataFormat": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_50"
+				}
+			}
+		]
+	}
+}

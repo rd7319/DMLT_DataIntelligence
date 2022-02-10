@@ -1,0 +1,249 @@
+{
+	"name": "generated.structuredfileconsumer1_outTable",
+	"description": "auto-generated generated.structuredfileconsumer1_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"MANDT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"BLART": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"NUMKR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"KOARS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"STBLA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_2"
+				}
+			},
+			{
+				"XNETB": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XRVUP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XSYBL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XVORK": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XKKPR": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XGSUB": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XMGES": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"BRGRU": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.decimal_2_1"
+				}
+			},
+			{
+				"RECID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"RECIC": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XMTXT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XMREF": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XNGBK": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"KURST": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_3"
+				}
+			},
+			{
+				"XNEGP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XKOAA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XKOAD": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XKOAK": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XKOAM": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XKOAS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XNMRL": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XAUSG": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XDTCH": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"BLKLS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XROLLUP": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XPLAN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XALLOCACT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XALLOCPLAN": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"X_PP_PROCESS": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XKURSX": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XPOSACC": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_1"
+				}
+			},
+			{
+				"XUACPA": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"XMREF2": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			},
+			{
+				"TABLE_NAME": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_4"
+				}
+			},
+			{
+				"IUUC_OPERATION": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5000"
+				}
+			}
+		]
+	}
+}

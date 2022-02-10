@@ -1,0 +1,45 @@
+{
+	"name": "generated.structuredfileconsumer1_outTable",
+	"description": "auto-generated generated.structuredfileconsumer1_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"TemplateID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_7"
+				}
+			},
+			{
+				"Description": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			},
+			{
+				"Parent": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_5"
+				}
+			},
+			{
+				"Level": {
+					"vflow.type": "scalar",
+					"vtype-ID": "com.sap.core.int32"
+				}
+			},
+			{
+				"TOT": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_7"
+				}
+			},
+			{
+				"TOTDescription": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_31"
+				}
+			}
+		]
+	}
+}

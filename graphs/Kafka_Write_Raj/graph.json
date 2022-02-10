@@ -1,0 +1,403 @@
+{
+    "properties": {},
+    "description": "Kafka_write_Raj",
+    "processes": {
+        "initializehanatable1": {
+            "component": "com.sap.hana.initTable",
+            "metadata": {
+                "label": "Initialize HANA Table",
+                "x": 1295.9999952316284,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DMLT_HANA"
+                    },
+                    "tableType": "Row"
+                }
+            }
+        },
+        "writehanatable1": {
+            "component": "com.sap.hana.writeTable",
+            "metadata": {
+                "label": "Write HANA Table",
+                "x": 1480.999994277954,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "DMLT_HANA"
+                    },
+                    "statementType": "UPSERT"
+                }
+            }
+        },
+        "decodetable1": {
+            "component": "com.sap.table.decode",
+            "metadata": {
+                "label": "Decode Table",
+                "x": 756.999997138977,
+                "y": 86.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "format": "CSV",
+                    "csvHeader": "None"
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 1126.9999952316284,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef on_input(attributes,body):\r\n    data = json.loads(body.body)\r\n    var = json.dumps(attributes.attributes)\r\n    metadata = json.loads(var)\r\n    api.logger.info(metadata)\r\n    api.logger.info(data)\r\n    newdata = []\r\n    for i in data:\r\n        #i = [\"0001-01-01\" if x == \"9999-99-99\" else x for x in i]\r\n        for n,fields in enumerate(i[:-2]):\r\n            #if n <= (len(metadata[\"table\"][\"columns\"]) - 1):\r\n            if fields == \"9999-99-99\":\r\n                i[n] = \"0001-01-01\"\r\n\r\n            dtype = list(metadata.values())[0]['columns'][n]['class']\r\n\r\n            if dtype == 'integer':\r\n                i[n] = int(fields) \r\n        newdata.append(i)\r\n    api.send('tableMessage', api.Message(attributes=attributes.attributes, body=newdata))\r\n        \r\napi.set_port_callback(['attributes','body'], on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "attributes",
+                        "type": "message"
+                    },
+                    {
+                        "name": "body",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "tableMessage",
+                        "type": "message.table"
+                    }
+                ]
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 1480.999994277954,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000
+                }
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 976.4999961853027,
+                "y": 161.49999976158142,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 941.9999961853027,
+                "y": 41.49999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "kafkaconsumer1": {
+            "component": "com.sap.kafka.consumer2",
+            "metadata": {
+                "label": "Kafka Consumer",
+                "x": 17,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "kafkaVersion": "2.13.2",
+                    "brokers": "104.211.206.53:9092",
+                    "groupId": "qs-but000-hana",
+                    "topics": "qs-but000"
+                }
+            }
+        },
+        "python3operator2": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Kafka Decoder",
+                "x": 201.99999904632568,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "from io import StringIO\r\nimport json\r\n\r\ndef on_input(input1):\r\n    main = json.loads(input1.body)\r\n    if \"Attributes\" in main and \"Body\" in main:\r\n        api.send('out', api.Message(attributes=main[\"Attributes\"], body=main[\"Body\"]))\r\n        \r\napi.set_port_callback(\"input1\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 386.99999809265137,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap3": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 1000000000000000
+                }
+            }
+        },
+        "python3operator3": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Kafka to Hana",
+                "x": 555.9999980926514,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef map_dtypes(meta,fields):\r\n    name = meta['Field']['COLUMNNAME']\r\n    cls = ''\r\n    typ = {}\r\n    prec = 0\r\n    scale = 0\r\n    for field in fields:\r\n        if field['Name'] == name:\r\n            kind = field['Kind']\r\n            \r\n            if kind == 'C':\r\n                cls = 'string'\r\n                typ['hana'] = 'NVARCHAR'\r\n            elif kind == 'S' or kind == 'I':\r\n                cls = 'integer'\r\n                typ['hana'] = 'BIGINT'\r\n            elif kind == 'P':\r\n                cls = 'decimal'\r\n                typ['hana'] = 'DECIMAL'\r\n                prec = int(meta['Field']['ABAPLEN'].lstrip('0'))\r\n                scale = field['Decimals']\r\n            elif kind == 'F':\r\n                cls = 'float'\r\n            elif kind == 'D':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'DATE'\r\n            elif kind == 'T':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'TIME'    \r\n            else:\r\n                cls = 'string'\r\n                typ['hana'] = 'NVARCHAR'\r\n    return cls,kind,typ,prec,scale    \r\n\r\ndef on_input(inData):\r\n    tabname = str(api.config.TabName)\r\n    # read body\r\n    data = StringIO(inData.body) \r\n    # read attributes\r\n    var = json.dumps(inData.attributes) \r\n    result = json.loads(var)\r\n    # from here we start json parsing \r\n    if 'message.lastBatch' in result:\r\n        #last batch\r\n        api.logger.info(\"Last batch\")\r\n        \r\n    else:\r\n        \r\n        ABAP = result['ABAP']\r\n        Fields = ABAP['Fields']\r\n        \r\n        meta = result['metadata']\r\n        \r\n        tabmsg = {}\r\n        tabmsg['Attributes'] = {}\r\n        tabmsg['Attributes']['table'] = {}\r\n        tabmsg['Attributes']['table']['version'] = 1\r\n        \r\n        tabmsg['Attributes']['table']['columns'] = []\r\n        cols = []\r\n        keys = []\r\n        \r\n        for field in meta:\r\n            name = str(field['Field']['COLUMNNAME'])\r\n            size = field['Field']['OUTPUTLEN'].lstrip('0')\r\n            if size == '':\r\n                continue\r\n            else:\r\n                size = int(size)\r\n            \r\n            nullable = \"False\"\r\n            if field['Field']['NULLABLE'] == 'X':\r\n                nullable = \"True\"\r\n                \r\n            cls,kind,typ,prec,scale = map_dtypes(field,Fields)     \r\n            \r\n            if cls == 'string':    \r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'size':size,'nullable' : nullable})\r\n            elif cls =='timestamp':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            elif cls == 'float':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            elif cls == 'integer':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            else:\r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'nullable' : nullable})\r\n            \r\n            if field['Field']['KEY'] == 'X':\r\n                keys.append(name)\r\n                \r\n        tabmsg['Attributes']['table']['primaryKey'] = keys\r\n        tabmsg['Attributes']['table']['columns'] = cols\r\n        tabmsg['Encoding'] = 'table'\r\n        \r\n        body = []\r\n        tab_payload = ''\r\n        while True:\r\n        # Read one line.\r\n            line = data.readline()\r\n        # If reach the end of the data then jump out of the loop.\r\n            if line == '':\r\n                break\r\n            else:\r\n                lista = []\r\n                if tab_payload == '':\r\n                    tab_paylaod = line.split(',')[-2]\r\n                    break;\r\n                    \r\n                #lista = line.split(',')\r\n                #lista.append(line.strip())\r\n                #body.append(lista)\r\n        \r\n        #tabmsg['Body'] = body\r\n        \r\n        #tabjson = json.dumps(tabmsg)\r\n        \r\n        if tabname == '':\r\n            tabmsg['Attributes']['table']['name'] = tab_payload.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        else:    \r\n            tabmsg['Attributes']['table']['name'] = tabname.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        \r\n        api.send('out', api.Message(attributes=tabmsg['Attributes'], body=None))\r\n        api.send('out2', api.Message(attributes=tabmsg['Attributes'], body=inData.body))\r\n        \r\napi.set_port_callback('input2', on_input)",
+                    "TabName": "\"SAPHANADB\".\"XXBUT000\""
+                },
+                "additionalinports": [
+                    {
+                        "name": "input2",
+                        "type": "any.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out2",
+                        "type": "message"
+                    },
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "880.999997138977,126.49999976158142 908.9999966621399,126.49999976158142 908.9999966621399,177.49999976158142 971.4999961853027,177.49999976158142"
+            },
+            "src": {
+                "port": "output",
+                "process": "decodetable1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1030.4999961853027,186.49999976158142 1093.9999957084656,186.49999976158142 1093.9999957084656,121 1121.9999952316284,121"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "body",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "880.999997138977,126.49999976158142 908.9999966621399,126.49999976158142 908.9999966621399,81.49999976158142 936.9999961853027,81.49999976158142"
+            },
+            "src": {
+                "port": "output",
+                "process": "decodetable1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1419.9999952316284,103 1447.9999947547913,103 1447.9999947547913,52 1475.999994277954,52"
+            },
+            "src": {
+                "port": "success",
+                "process": "initializehanatable1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "writehanatable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "325.9999990463257,172 353.9999985694885,172 353.9999985694885,112 381.99999809265137,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator2"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,103 168.99999952316284,103 168.99999952316284,172 196.99999904632568,172"
+            },
+            "src": {
+                "port": "message",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,103 168.99999952316284,103 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1250.9999952316284,112 1290.9999952316284,112"
+            },
+            "src": {
+                "port": "tableMessage",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "initializehanatable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1419.9999952316284,103 1447.9999947547913,103 1447.9999947547913,172 1475.999994277954,172"
+            },
+            "src": {
+                "port": "success",
+                "process": "initializehanatable1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "510.99999809265137,112 550.9999980926514,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "input2",
+                "process": "python3operator3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "679.9999980926514,103 723.9999976158142,103 723.9999976158142,126.49999976158142 751.999997138977,126.49999976158142"
+            },
+            "src": {
+                "port": "out2",
+                "process": "python3operator3"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "decodetable1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "679.9999980926514,121 707.9999976158142,121 707.9999976158142,57.50000023841858 908.9999966621399,57.50000023841858 908.9999966621399,12.500000238418579 1093.9999957084656,12.500000238418579 1093.9999957084656,103 1121.9999952316284,103"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator3"
+            },
+            "tgt": {
+                "port": "attributes",
+                "process": "python3operator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

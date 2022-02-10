@@ -1,0 +1,10 @@
+{
+    "description": "Delete_MySQL",
+    "component": "com.sap.system.jsengine",
+    "versionStatus": "active",
+    "icon": "puzzle-piece",
+    "config": {
+        "$type": "http://sap.com/vflow/Delete_MySQL.configSchema.json",
+        "script": ""
+    }
+}

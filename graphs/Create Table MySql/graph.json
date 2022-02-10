@@ -1,0 +1,125 @@
+{
+    "properties": {},
+    "description": "",
+    "processes": {
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 186,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\nimport io \ndef on_input(File):\n    #query =  \"CREATE TABLE MATERIAL_GROUP (  Client varchar(255) NOT NULL,MaterialGroup varchar(255) NOT NULL, Division varchar(255) NOT NULL, LREF3 varchar(255) NOT NULL,ReferenceMaterial varchar(255) NOT NULL,GroupMaterial varchar(255) NOT NULL,DepartmentNumber varchar(255) NOT NULL,AuthorizationGroup varchar(255) NOT NULL,GEWEI varchar(255) NOT NULL,BrazilianNCMCode varchar(255) NOT NULL,ValuationClass varchar(255) NOT NULL,PurchasingValueKey varchar(255) NOT NULL,ANLKL varchar(255) NOT NULL,EventScenario varchar(255) NOT NULL,PRICE_GROUP varchar(255) NOT NULL,PRIMARY KEY (Client, MaterialGroup))\"\n    query = \"ALTER TABLE MATERIAL_GROUP MODIFY Client varchar(255) NOT NULL\"\n    api.send(\"out\", query)\n\napi.set_port_callback(\"File\", on_input)\n\n"
+                },
+                "additionalinports": [
+                    {
+                        "name": "File",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "flowagentsqlexecutor1": {
+            "component": "com.sap.dh.ds.sql.executor",
+            "metadata": {
+                "label": "Flowagent SQL Executor",
+                "x": 355,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "MySQL",
+                    "mysqlConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "AURORA_DB"
+                    },
+                    "separator": ";"
+                }
+            }
+        },
+        "constantgenerator1": {
+            "component": "com.sap.util.constantGenerator",
+            "metadata": {
+                "label": "Constant Generator",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "content": "1"
+                }
+            }
+        },
+        "workflowterminator1": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 539.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,52 181,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "constantgenerator1"
+            },
+            "tgt": {
+                "port": "File",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "310,52 350,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "sql",
+                "process": "flowagentsqlexecutor1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "479,43 506.99999952316284,43 506.99999952316284,52 534.9999990463257,52"
+            },
+            "src": {
+                "port": "result",
+                "process": "flowagentsqlexecutor1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

@@ -1,0 +1,258 @@
+{
+    "properties": {},
+    "icon": "envelope",
+    "description": "Send Email Notification in case of error",
+    "processes": {
+        "workflowterminator1": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 365.9999990463257,
+                "y": 27,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "pipeline1": {
+            "component": "com.sap.dh.vflowpipeline",
+            "metadata": {
+                "label": "Pipeline",
+                "x": 181,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "isPermanentlyRunning": "false",
+                    "vflowConnection": {
+                        "configurationType": "Configuration Manager"
+                    },
+                    "graphName": "SLTToMySQL_Test",
+                    "configurationSubstitutions": [
+                        {
+                            "name": "SrcTable",
+                            "value": "T003"
+                        },
+                        {
+                            "name": "TargetTable",
+                            "value": "T003"
+                        },
+                        {
+                            "name": "Subscription",
+                            "value": "T003_1"
+                        },
+                        {
+                            "name": "MTID",
+                            "value": "002"
+                        }
+                    ]
+                }
+            }
+        },
+        "notification1": {
+            "component": "com.sap.dh.notification",
+            "metadata": {
+                "label": "Notification",
+                "x": 731.999997138977,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Manual",
+                        "connectionProperties": {
+                            "host": "smtp.mail.yahoo.com",
+                            "port": 587,
+                            "user": "rd7319@yahoo.com",
+                            "authenticationType": "Auth",
+                            "useTLS": false,
+                            "insecureSkipVerify": true,
+                            "password": "qkywkjmdyduxeyze"
+                        }
+                    },
+                    "defaultSubject": "Your Pipeline Failed!",
+                    "defaultTo": [
+                        "rd7319@yahoo.com"
+                    ],
+                    "defaultFrom": "rd7319@yahoo.com"
+                }
+            }
+        },
+        "tomessageconverter1": {
+            "component": "com.sap.util.toMessageConverter",
+            "metadata": {
+                "label": "ToMessage Converter",
+                "x": 398.4999990463257,
+                "y": 147,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "workflowterminator2": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 900.999997138977,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 546.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": 12,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 546.9999980926514,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import json\nimport re\nimport ast\n\ndef on_input(message):\n    msg = message\n    api.logger.info(msg)\n    api.logger.info(msg.attributes)\n    api.logger.info(msg.body)\n    #var = json.dumps(msg.body)\n    msg_parsed = json.loads(msg.body)\n    \n    error_details = msg_parsed.get('data').get('messages')[0].get('details').get('error')\n    dict_object = json.loads(re.search('({.+})', error_details).group(0).replace(\"'\", '\"'))\n    \n    body = f\"\"\"\\\n    Hi,\n    \n    {msg_parsed.get('data').get('messages')[0].get('text')}\n    \n    {dict_object.get('body').get('message')}\n        \n    Configuration Substitutions used are:\n    {dict_object.get('body').get('configurationSubstitutions')}\n    \"\"\"\n    \n    api.send(\"out\",body)\n\n\napi.set_port_callback(\"in\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "305,103 332.99999952316284,103 332.99999952316284,67 360.9999990463257,67"
+            },
+            "src": {
+                "port": "output",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,121 332.99999952316284,121 332.99999952316284,163 393.4999990463257,163"
+            },
+            "src": {
+                "port": "error",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "inbody",
+                "process": "tomessageconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "855.999997138977,112 895.999997138977,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "notification1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "452.4999990463257,172 513.9999985694885,172 513.9999985694885,52 541.9999980926514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,112 176,112"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "pipeline1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "452.4999990463257,172 541.9999980926514,172"
+            },
+            "src": {
+                "port": "out",
+                "process": "tomessageconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "670.9999980926514,172 698.9999976158142,172 698.9999976158142,112 726.999997138977,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "notification1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

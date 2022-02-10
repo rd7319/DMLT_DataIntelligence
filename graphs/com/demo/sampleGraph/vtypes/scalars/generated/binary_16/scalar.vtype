@@ -1,0 +1,7 @@
+{
+	"name": "generated.binary_16",
+	"description": "Binary(16)",
+	"vflow.type": "scalar",
+	"template": "binary",
+	"value.length": 16
+}

@@ -1,0 +1,200 @@
+{
+    "properties": {},
+    "iconsrc": "",
+    "icon": "",
+    "connectionType": "Manual",
+    "description": "JSON Characteristics",
+    "processes": {
+        "s4hanacharacteristics1": {
+            "component": "com.tfnsw.poc.node.s4h.characteristics",
+            "metadata": {
+                "label": "S/4 HANA Characteristics",
+                "x": 554.9999990463257,
+                "y": 80,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionType": "Manual",
+                    "host": "http://52.7.70.125:50000",
+                    "user": "MDG_EXPERT",
+                    "password": "Welcome1",
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionId": "S4_ODATA_API_CLFN_CHARACTERISTIC_SRV"
+                    }
+                }
+            }
+        },
+        "wiretap4": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 350,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap41": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Payload",
+                "x": 815.999997138977,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap4"
+        },
+        "wiretap411": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "View Error Log",
+                "x": 815.999997138977,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            },
+            "name": "wiretap41"
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 181,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import json\r\ndef on_input1(message):\r\n    a = []\r\n    # b = {\r\n    #       \"characteristic\": \"MM_DMLT_CHAR\",\r\n    #       \"charcStatus\": \"1\",\r\n    #       \"charcDataType\": \"CHAR\",\r\n    #       \"charcLength\": 4,\r\n    #       \"charcDecimals\": 0,\r\n    #       \"multipleValuesAreAllowed\": True,\r\n    #       \"toCharacteristicDesc\": [\r\n    #         {\r\n    #           \"language\": \"EN\",\r\n    #           \"charcDescription\": \"DMLT NUM\"\r\n    #         }\r\n    #       ],\r\n    #       \"toCharacteristicValue\": [\r\n    #         {\r\n    #           \"charcValuePositionNumber\": \"1\",\r\n    #           #\"charcValueDependency\": \"1\",\r\n    #           \"charcValue\": \"VAL1\",\r\n    #           \"charcFromNumericValue\": 0,\r\n    #           \"toCharcValueDesc\": [\r\n    #             {\r\n    #               \"language\": \"EN\",\r\n    #               \"charcValueDescription\": \"value1\"\r\n    #             }\r\n    #           ]\r\n    #         },\r\n    #         {\r\n    #           \"charcValuePositionNumber\": \"2\",\r\n    #           #\"charcValueDependency\": \"1\",\r\n    #           \"charcFromNumericValue\": 0,\r\n    #           \"charcValue\": \"VAL2\",\r\n    #           \"toCharcValueDesc\": [\r\n    #             {\r\n    #               \"language\": \"EN\",\r\n    #               \"charcValueDescription\": \"Value2\"\r\n    #             }\r\n    #           ]\r\n    #         }\r\n    #       ]\r\n    #     }\r\n    b = {\"characteristic\": \"Aspect\", \"charcDataType\": \"CHAR\", \"charcStatus\": \"1\", \"charcLength\": 30, \"charcDecimals\": 0, \"multipleValuesAreAllowed\": True, \"toCharacteristicDesc\": [{\"language\": \"EN\", \"charcDescription\": \"Aspect\"}], \"toCharacteristicValue\": [{\"charcValue\": \"Left\", \"charcFromNumericValue\": 0, \"toCharcValueDesc\": [{\"language\": \"EN\", \"charcValueDescription\": \"\"}]}, {\"charcValue\": \"Unknown\", \"charcFromNumericValue\": 0, \"toCharcValueDesc\": [{\"language\": \"EN\", \"charcValueDescription\": \"The attribute is applicable to the asset instance.\"}]}, {\"charcValue\": \"Right\", \"charcFromNumericValue\": 0, \"toCharcValueDesc\": [{\"language\": \"EN\", \"charcValueDescription\": \"\"}]}]}\r\n    a.append(b)\r\n    api.send(\"out\",api.Message(attributes={\"message.batchTotal\":len(a)},body=json.dumps(a)))\r\n    \r\napi.set_port_callback(\"input1\",on_input1)    "
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": 12,
+                "y": 72,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "s4hanacharacteristics1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "s4-characteristics": ""
+            },
+            "multiplicity": 1
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "474,112 501.99999952316284,112 501.99999952316284,120 549.9999990463257,120"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap4"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "s4hanacharacteristics1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "678.9999990463257,111 706.9999985694885,111 706.9999985694885,114.5 782.9999976158142,114.5 782.9999976158142,52 810.999997138977,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap41"
+            }
+        },
+        {
+            "metadata": {
+                "points": "678.9999990463257,129 706.9999985694885,129 706.9999985694885,125.5 782.9999976158142,125.5 782.9999976158142,172 810.999997138977,172"
+            },
+            "src": {
+                "port": "error",
+                "process": "s4hanacharacteristics1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap411"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,112 176,112"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,112 345,112"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap4"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

@@ -1,0 +1,32 @@
+{
+    "description": "S/4 HANA Characteristics",
+    "component": "com.sap.node.operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "input",
+            "type": "message"
+        }
+    ],
+    "outports": [
+        {
+            "name": "output",
+            "type": "message"
+        },
+        {
+            "name": "error",
+            "type": "message"
+        }
+    ],
+    "icon": "puzzle-piece",
+    "config": {
+        "$type": "http://sap.com/vflow/com.tfnsw.poc.node.s4h.characteristics.configSchema.json",
+        "batch": false,
+        "connectionType": "Manual",
+        "script": "file://script.js"
+    },
+    "tags": {
+        "node": "",
+        "s4-characteristics": ""
+    }
+}

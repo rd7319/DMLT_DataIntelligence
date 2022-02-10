@@ -1,0 +1,57 @@
+{
+    "properties": {},
+    "description": "Delete MySQL table Data",
+    "processes": {
+        "flowagentsqlexecutor1": {
+            "component": "com.sap.dh.ds.sql.executor",
+            "metadata": {
+                "label": "Flowagent SQL Executor",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "MySQL",
+                    "mysqlConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "AURORA_DB"
+                    },
+                    "sqlStatements": "DELETE FROM MATERIAL_GROUP"
+                }
+            }
+        },
+        "workflowterminator1": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,43 168.99999952316284,43 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "result",
+                "process": "flowagentsqlexecutor1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

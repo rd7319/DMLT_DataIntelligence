@@ -1,0 +1,26 @@
+{
+    "description": "Kafka to Hana",
+    "component": "com.sap.system.python3Operator",
+    "inports": [
+        {
+            "name": "input1",
+            "type": "message"
+        }
+    ],
+    "outports": [
+        {
+            "name": "out",
+            "type": "message"
+        },
+        {
+            "name": "out2",
+            "type": "message"
+        }
+    ],
+    "iconsrc": "python.svg",
+    "config": {
+        "TabName": "\"SAPHANADB\".\"ZT003X\"",
+        "script": "import pandas as pd\r\nfrom io import StringIO\r\nimport csv\r\nimport json\r\n\r\ndef map_dtypes(meta,fields):\r\n    name = meta['Field']['COLUMNNAME']\r\n    cls = ''\r\n    typ = {}\r\n    prec = 0\r\n    scale = 0\r\n    for field in fields:\r\n        if field['Name'] == name:\r\n            kind = field['Kind']\r\n            \r\n            if kind == 'C':\r\n                cls = 'string'\r\n                typ['hana'] = 'NVARCHAR'\r\n            elif kind == 'S' or kind == 'I':\r\n                cls = 'integer'\r\n                typ['hana'] = 'INTEGER'\r\n            elif kind == 'P':\r\n                cls = 'decimal'\r\n                typ['hana'] = 'DECIMAL'\r\n                prec = int(meta['Field']['ABAPLEN'].lstrip('0'))\r\n                scale = field['Decimals']\r\n            elif kind == 'F':\r\n                cls = 'float'\r\n            elif kind == 'D':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'DATE'\r\n            elif kind == 'T':\r\n                cls = 'timestamp'\r\n                typ['hana'] = 'TIME'    \r\n            else:\r\n                cls = 'string'\r\n                typ['hana'] = 'NVARCHAR'\r\n    return cls,kind,typ,prec,scale    \r\n\r\ndef on_input(inData):\r\n    tabname = str(api.config.TabName)\r\n    # read body\r\n    data = StringIO(inData.body) \r\n    # read attributes\r\n    var = json.dumps(inData.attributes) \r\n    result = json.loads(var)\r\n    # from here we start json parsing \r\n    if 'message.lastBatch' in result:\r\n        #last batch\r\n        api.logger.info(\"Last batch\")\r\n        \r\n    else:\r\n        \r\n        ABAP = result['ABAP']\r\n        Fields = ABAP['Fields']\r\n        \r\n        meta = result['metadata']\r\n        \r\n        tabmsg = {}\r\n        tabmsg['Attributes'] = {}\r\n        tabmsg['Attributes']['table'] = {}\r\n        tabmsg['Attributes']['table']['version'] = 1\r\n        \r\n        tabmsg['Attributes']['table']['columns'] = []\r\n        cols = []\r\n        keys = []\r\n        \r\n        for field in meta:\r\n            name = str(field['Field']['COLUMNNAME'])\r\n            size = field['Field']['OUTPUTLEN'].lstrip('0')\r\n            if size == '':\r\n                continue\r\n            else:\r\n                size = int(size)\r\n            \r\n            nullable = \"False\"\r\n            if field['Field']['NULLABLE'] == 'X':\r\n                nullable = \"True\"\r\n                \r\n            cls,kind,typ,prec,scale = map_dtypes(field,Fields)     \r\n            \r\n            if cls == 'string':    \r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'size':size,'nullable' : nullable})\r\n            elif cls =='timestamp':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            elif cls == 'float':\r\n                cols.append({'name':name,'class':cls,'type':typ,'nullable' : nullable})\r\n            else:\r\n                cols.append({'name':name,'class':cls,'type':typ,'precision':prec,'scale':scale,'nullable' : nullable})\r\n            \r\n            if field['Field']['KEY'] == 'X':\r\n                keys.append(name)\r\n                \r\n        tabmsg['Attributes']['table']['primaryKey'] = keys\r\n        tabmsg['Attributes']['table']['columns'] = cols\r\n        tabmsg['Encoding'] = 'table'\r\n        \r\n        body = []\r\n        tab_payload = ''\r\n        while True:\r\n        # Read one line.\r\n            line = data.readline()\r\n        # If reach the end of the data then jump out of the loop.\r\n            if line == '':\r\n                break\r\n            else:\r\n                lista = []\r\n                if tab_payload == '':\r\n                    tab_paylaod = line.split(',')[-2]\r\n                    break;\r\n                    \r\n                #lista = line.split(',')\r\n                #lista.append(line.strip())\r\n                #body.append(lista)\r\n        \r\n        #tabmsg['Body'] = body\r\n        \r\n        #tabjson = json.dumps(tabmsg)\r\n        \r\n        if tabname == '':\r\n            tabmsg['Attributes']['table']['name'] = tab_payload.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        else:    \r\n            tabmsg['Attributes']['table']['name'] = tabname.format(inData.attributes[\"ABAP\"][\"Kind\"])\r\n        \r\n        api.send('out', api.Message(attributes=tabmsg['Attributes'], body=None))\r\n        api.send('out2', api.Message(attributes=tabmsg['Attributes'], body=inData.body))\r\n        \r\napi.set_port_callback('input1', on_input)",
+        "scriptReference": "script.py"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "description": "API Parser",
+    "component": "com.sap.system.python3Operator",
+    "inports": [
+        {
+            "name": "input1",
+            "type": "message"
+        }
+    ],
+    "iconsrc": "python.svg",
+    "config": {
+        "script": "import pandas as pd\r\nfrom io import BytesIO\r\nimport csv\r\nimport json\r\ndef on_input(inData):\r\n    # read body\r\n    #data = BytesIO(inData.attributes)\r\n    data = str(inData.body, encoding='utf-8')\r\n    \r\n    # read attributes\r\n    var = json.dumps(data) \r\n    result = json.loads(json.loads(var))\r\n    if 'containers' in result:\r\n        for i in result['containers']:\r\n            api.logger.info(i['name'])\r\n        \r\napi.set_port_callback('input1', on_input)",
+        "scriptReference": "script.py"
+    }
+}

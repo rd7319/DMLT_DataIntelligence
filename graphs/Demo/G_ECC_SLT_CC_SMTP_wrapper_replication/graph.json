@@ -1,0 +1,185 @@
+{
+    "properties": {},
+    "iconsrc": "",
+    "groupResources": {
+        "limits": {}
+    },
+    "description": "G_ECC_SLT_CC_SMTP_wrapper_limit_replication",
+    "processes": {
+        "sendemail1": {
+            "component": "com.sap.email.send",
+            "metadata": {
+                "label": "Send Email",
+                "x": 546.9999980926514,
+                "y": 57,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "Apo_smtp_email"
+                    },
+                    "defaultFrom": "SAPDI@apotex.com",
+                    "defaultTo": [
+                        "xwang7@apotex.com",
+                        "hthathir@apotex.com"
+                    ],
+                    "defaultSubject": "${env}_ECC REPLICATION ERROR | MTID: ${mtid}, Table: ${tableName}"
+                }
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 398.4999990463257,
+                "y": 132,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "pipeline1": {
+            "component": "com.sap.dh.vflowpipeline",
+            "metadata": {
+                "label": "Pipeline",
+                "x": 181,
+                "y": 57,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "configurationSubstitutions": [
+                        {
+                            "name": "tableName",
+                            "value": "${tableName}"
+                        },
+                        {
+                            "name": "mtid",
+                            "value": "${mtid}"
+                        },
+                        {
+                            "name": "subId",
+                            "value": "'NEW_BUT100'"
+                        },
+                        {
+                            "name": "src",
+                            "value": "${src}"
+                        }
+                    ],
+                    "retryInterval": 20,
+                    "graphName": "graphs.Demo.G_ECC_LOAD_FROM_SLT_LIMIT_REPLICATION",
+                    "vflowConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionId": ""
+                    }
+                }
+            }
+        },
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": 12,
+                "y": 57,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {}
+            }
+        },
+        "workflowterminator1": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 715.9999980926514,
+                "y": 57,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "workflowterminator2": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 365.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "452.4999990463257,157 513.9999985694885,157 513.9999985694885,97 541.9999980926514,97"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sendemail1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,106 332.99999952316284,106 332.99999952316284,148 393.4999990463257,148"
+            },
+            "src": {
+                "port": "error",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,97 176,97"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "pipeline1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "670.9999980926514,97 710.9999980926514,97"
+            },
+            "src": {
+                "port": "out",
+                "process": "sendemail1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,88 332.99999952316284,88 332.99999952316284,52 360.9999990463257,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

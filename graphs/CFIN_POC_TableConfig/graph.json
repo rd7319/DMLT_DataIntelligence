@@ -1,0 +1,186 @@
+{
+    "properties": {},
+    "description": "CFIN_POC_TableConfig",
+    "processes": {
+        "readfile1": {
+            "component": "com.sap.file.read",
+            "metadata": {
+                "label": "Read File",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "mode": "Once",
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "path": "/shared/Table_Config.csv"
+                }
+            }
+        },
+        "python3operator2": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 316.99999809265137,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "from io import StringIO,BytesIO\n\ndef on_input(message):\n    input1 = BytesIO(message.body)\n    data = StringIO(input1.read().decode('utf-8'))\n    body = []\n    #tab_payload = ''\n    api.logger.info(f'data is {data}')\n    while True:\n    # Read one line.\n        line = data.readline()\n        api.logger.info(line)\n    # If reach the end of the data then jump out of the loop.\n        if line == '':\n            break\n        else:\n            body.append(line.strip())\n    api.logger.info(f'budy is {body}')\n    for i in body:\n        s = []\n        msg = {}\n        s = i.split(',')\n        if s[1] == 'Y':\n            msg['Attributes'] = {} \n            msg['Attributes']['openapi.header_params.X-Requested-With'] =  'Fetch'\n            msg['Body'] = '{\"src\":\"'+s[2]+'\",\"name\":\"'+s[2]+'\"}'\n            \n            api.send(\"output\", msg)\n            \napi.set_port_callback(\"input\", on_input)  "
+                },
+                "additionalinports": [
+                    {
+                        "name": "input",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "fromfile1": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 201.99999904632568,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "openapiclient1": {
+            "component": "com.sap.openapi.client",
+            "metadata": {
+                "label": "OpenAPI Client",
+                "x": 654.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "host": "vsystem.ingress.dh-v2s5mq6l9.dh-canary.shoot.live.k8s-hana.ondemand.com",
+                    "schemes": "https",
+                    "basePath": "/app/pipeline-modeler/service/v1/",
+                    "pathPattern": "runtime/graphs",
+                    "method": "POST",
+                    "authScheme": "basic",
+                    "user": "default\\admin",
+                    "password": "Welcome@123"
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 485.99999809265137,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 823.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,43 168.99999952316284,43 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "readfile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "255.99999904632568,61 283.9999985694885,61 283.9999985694885,52 311.99999809265137,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "python3operator2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "440.99999809265137,52 480.99999809265137,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "python3operator2"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "609.9999980926514,52 649.9999980926514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "openapiclient1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "778.9999980926514,52 818.9999980926514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "openapiclient1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

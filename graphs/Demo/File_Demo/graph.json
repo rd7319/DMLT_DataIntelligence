@@ -1,0 +1,403 @@
+{
+    "properties": {},
+    "description": "G_40B_SFTP_PIPELINE",
+    "processes": {
+        "workflowtrigger1": {
+            "component": "com.sap.dh.trigger",
+            "metadata": {
+                "label": "Workflow Trigger",
+                "x": -398,
+                "y": -32,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {}
+            }
+        },
+        "pipeline1": {
+            "component": "com.sap.dh.vflowpipeline",
+            "metadata": {
+                "label": "READ_FILE",
+                "x": -194,
+                "y": 36,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "graphName": "apotex.sftp.sftp_read_file",
+                    "configurationSubstitutions": [
+                        {
+                            "name": "foldername",
+                            "value": "${foldername}"
+                        }
+                    ]
+                }
+            }
+        },
+        "pipeline2": {
+            "component": "com.sap.dh.vflowpipeline",
+            "metadata": {
+                "label": "REMOVE_FILE",
+                "x": 191,
+                "y": -124,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "graphName": "apotex.sftp.sftp_remove_file",
+                    "configurationSubstitutions": [
+                        {
+                            "name": "foldername",
+                            "value": "${foldername}"
+                        }
+                    ]
+                }
+            }
+        },
+        "workflowterminator1": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 369,
+                "y": -204,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "pipeline3": {
+            "component": "com.sap.dh.vflowpipeline",
+            "metadata": {
+                "label": "ARCHIVE_FILE",
+                "x": -3,
+                "y": -44,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "graphName": "apotex.sftp.sftp_archive_file",
+                    "configurationSubstitutions": [
+                        {
+                            "name": "foldername",
+                            "value": "${foldername}"
+                        }
+                    ]
+                }
+            }
+        },
+        "sendemail11": {
+            "component": "com.sap.email.send",
+            "metadata": {
+                "label": "Send Email",
+                "x": 95,
+                "y": 147,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "Apo_smtp_email"
+                    },
+                    "defaultFrom": "SAPDI@apotex.com",
+                    "defaultTo": [
+                        "xwang7@apotex.com",
+                        "hthathir@apotex.com"
+                    ],
+                    "defaultSubject": "SFTP ERROR | Operator: Read Error | foldername: ${foldername}"
+                }
+            },
+            "name": "sendemail1"
+        },
+        "workflowterminator21": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 277,
+                "y": 147,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            },
+            "name": "workflowterminator2"
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 6.5,
+                "y": 166,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "sendemail111": {
+            "component": "com.sap.email.send",
+            "metadata": {
+                "label": "Send Email",
+                "x": 281,
+                "y": 17,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "Apo_smtp_email"
+                    },
+                    "defaultFrom": "SAPDI@apotex.com",
+                    "defaultTo": [
+                        "xwang7@apotex.com",
+                        "hthathir@apotex.com"
+                    ],
+                    "defaultSubject": "SFTP ERROR | Operator: Archive Error | foldername: ${foldername}"
+                }
+            },
+            "name": "sendemail11"
+        },
+        "workflowterminator211": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 463,
+                "y": 17,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            },
+            "name": "workflowterminator21"
+        },
+        "tostringconverter11": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 192.5,
+                "y": 36,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            },
+            "name": "tostringconverter1"
+        },
+        "sendemail112": {
+            "component": "com.sap.email.send",
+            "metadata": {
+                "label": "Send Email",
+                "x": 462,
+                "y": -92,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "Apo_smtp_email"
+                    },
+                    "defaultFrom": "SAPDI@apotex.com",
+                    "defaultTo": [
+                        "xwang7@apotex.com",
+                        "hthathir@apotex.com"
+                    ],
+                    "defaultSubject": "SFTP ERROR | Operator: Remove Error | foldername: ${foldername}"
+                }
+            },
+            "name": "sendemail11"
+        },
+        "workflowterminator212": {
+            "component": "com.sap.dh.terminator",
+            "metadata": {
+                "label": "Workflow Terminator",
+                "x": 644,
+                "y": -92,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            },
+            "name": "workflowterminator21"
+        },
+        "tostringconverter12": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 373.5,
+                "y": -73,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            },
+            "name": "tostringconverter1"
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "-274,8 -236.5,8 -236.5,76 -199,76"
+            },
+            "src": {
+                "port": "output",
+                "process": "workflowtrigger1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "pipeline1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "-70,67 -39,67 -39,-4 -8,-4"
+            },
+            "src": {
+                "port": "output",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "pipeline3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "315,-93 339.5,-93 339.5,-164 364,-164"
+            },
+            "src": {
+                "port": "output",
+                "process": "pipeline2"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "219,187 272,187"
+            },
+            "src": {
+                "port": "out",
+                "process": "sendemail11"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator21"
+            }
+        },
+        {
+            "metadata": {
+                "points": "-70,85 -34.25,85 -34.25,182 1.5,182"
+            },
+            "src": {
+                "port": "error",
+                "process": "pipeline1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "60.5,191 75.25,191 75.25,187 90,187"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sendemail11"
+            }
+        },
+        {
+            "metadata": {
+                "points": "405,57 458,57"
+            },
+            "src": {
+                "port": "out",
+                "process": "sendemail111"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator211"
+            }
+        },
+        {
+            "metadata": {
+                "points": "246.5,61 261.25,61 261.25,57 276,57"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter11"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sendemail111"
+            }
+        },
+        {
+            "metadata": {
+                "points": "121,5 154.25,5 154.25,52 187.5,52"
+            },
+            "src": {
+                "port": "error",
+                "process": "pipeline3"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter11"
+            }
+        },
+        {
+            "metadata": {
+                "points": "586,-52 639,-52"
+            },
+            "src": {
+                "port": "out",
+                "process": "sendemail112"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "workflowterminator212"
+            }
+        },
+        {
+            "metadata": {
+                "points": "427.5,-48 442.25,-48 442.25,-52 457,-52"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter12"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sendemail112"
+            }
+        },
+        {
+            "metadata": {
+                "points": "315,-75 341.75,-75 341.75,-57 368.5,-57"
+            },
+            "src": {
+                "port": "error",
+                "process": "pipeline2"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter12"
+            }
+        },
+        {
+            "metadata": {
+                "points": "121,-13 153.5,-13 153.5,-84 186,-84"
+            },
+            "src": {
+                "port": "output",
+                "process": "pipeline3"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "pipeline2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {}
+}

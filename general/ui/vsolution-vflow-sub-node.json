@@ -1,0 +1,1 @@
+{"operatorCategories":[{"name":"Processing","entities":["com.sap.node.operator","com.sap.node.counter","com.sap.node.datagenerator"]}],"graphCategories":[{"name":"Examples","entities":["com.sap.demo.node.ProducerConsumer"]}],"graphSnippetCategories":[],"extensions":null}

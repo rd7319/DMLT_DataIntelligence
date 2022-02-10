@@ -1,0 +1,35 @@
+{
+    "description": "S/4 HANA Classification",
+    "component": "com.sap.node.operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "input",
+            "type": "message"
+        }
+    ],
+    "outports": [
+        {
+            "name": "output",
+            "type": "message"
+        },
+        {
+            "name": "error",
+            "type": "message"
+        }
+    ],
+    "icon": "puzzle-piece",
+    "config": {
+        "$type": "http://sap.com/vflow/com.tfnsw.poc.node.s4h.classification.configSchema.json",
+        "batch": false,
+        "connectionType": "Manual",
+        "host": "https://tfnsw.demosap.com:44301",
+        "password": "Welcome1",
+        "script": "file://script.js",
+        "user": "S4H_MM_DEM"
+    },
+    "tags": {
+        "node": "",
+        "s4-classification": ""
+    }
+}

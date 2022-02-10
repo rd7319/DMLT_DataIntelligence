@@ -1,0 +1,67 @@
+{
+    "properties": {},
+    "description": "Subscription Deletion",
+    "processes": {
+        "sapabapoperator1": {
+            "component": "com.sap.abap.sap",
+            "metadata": {
+                "label": "Resilience Subscription Eraser V1",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "Project_Atlas_CFIN",
+                    "operatorID": "com.sap.abap.subscr.eraser.v1",
+                    "readerObj": "CDS Views",
+                    "cdsSubscrID": "0EB1C2E1670D1EDC99F8CAE3E4B98117"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 186,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,52 181,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "sapabapoperator1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

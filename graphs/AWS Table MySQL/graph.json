@@ -1,0 +1,154 @@
+{
+    "properties": {},
+    "description": "Upload data in mySQL",
+    "processes": {
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 177,
+                "y": 170,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\nimport io \ndef on_input(File):\n    #insert_query =  \"CREATE TABLE DEVICE_DETAIL(  DeviceID int(4) NOT NULL, Temperatur varchar(10) , Humidity varchar(10) ,  CO2 varchar(10), CO int(4), LPG varchar(10), Smoke varchar(10), Presence int(4), Light varchar(10), Sound varchar(10)  )\"\n    \n    #Read data to DataFrame\n    data_stream = io.StringIO(File)\n    df = pd.read_csv(data_stream)\n    \n    #first element will be header and last element will be blank so not considering them when we conver Dataframe to csv\n    df_1=df.to_csv(index=False).split('\\n')[1:-1]\n    \n    #getting the column count for each file given\n    column_count=int(len(str(df_1).split(','))/len(df_1))\n    \n    #generating data in necessary format\n    data=''\n    final_data=[]\n    final_data1=[]\n    for row in range(0,len(df_1)):\n        for value in range(0,column_count):\n            if value == 0:\n                data=(str(df_1[row]).split(',')[value])\n                data='('+data\n                final_data.append(data)\n            elif value == (column_count-1):\n                data=(str(df_1[row]).split(',')[value])\n                data=data+')'\n                final_data.append(data)\n            else:\n                data=(str(df_1[row]).split(',')[value])\n                final_data.append(data)\n    final_data=str(final_data).replace(\"'(\",\"('\").replace(\")'\",\"')\")   \n    final_data1.append(final_data)\n                \n    #concatenate all the records into insert query\n    insert_query = 'insert into ztest_di values '+','.join(final_data1)\n    insert_query=insert_query.replace('[','').replace(']','')\n    \n    api.send(\"out\", insert_query)\n\napi.set_port_callback(\"File\", on_input)\n\n"
+                },
+                "additionalinports": [
+                    {
+                        "name": "File",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "readfile1": {
+            "component": "com.sap.file.read",
+            "metadata": {
+                "label": "Read File",
+                "x": -115,
+                "y": 170,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "mode": "Once",
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "path": "/shared/Test%20DI_S4/ZTEST_DI_S4_1.csv"
+                }
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 80.5,
+                "y": 184.5,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "flowagentsqlexecutor1": {
+            "component": "com.sap.dh.ds.sql.executor",
+            "metadata": {
+                "label": "Flowagent SQL Executor",
+                "x": 349,
+                "y": 170,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "generation": 1,
+                "config": {
+                    "service": "MySQL",
+                    "mysqlConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "AURORA_DB"
+                    },
+                    "separator": ";"
+                }
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 530,
+                "y": 170,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "9,201 42.25,201 42.25,200.5 75.5,200.5"
+            },
+            "src": {
+                "port": "file",
+                "process": "readfile1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "134.5,209.5 153.25,209.5 153.25,210 172,210"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "File",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "473,201 499,201 499,210 525,210"
+            },
+            "src": {
+                "port": "result",
+                "process": "flowagentsqlexecutor1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "301,210 344,210"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "sql",
+                "process": "flowagentsqlexecutor1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

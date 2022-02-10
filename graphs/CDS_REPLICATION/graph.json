@@ -1,0 +1,218 @@
+{
+    "iconsrc": "icon.svg",
+    "description": "Sample Graph using Snippets ",
+    "processes": {
+        "abapcdsreader111": {
+            "component": "com.sap.abap.cds.reader",
+            "metadata": {
+                "label": "ABAP CDS Reader V2",
+                "x": 52,
+                "y": 52,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "action": "Initial Load",
+                    "cdsname": "I_BUSINESSPARTNER",
+                    "chunkSize": 1000,
+                    "connectionID": "ATLAS_S4H",
+                    "operatorID": "com.sap.abap.cds.reader.v2",
+                    "subscriptionName": "CDSVIEW_EXT_1",
+                    "subscriptionType": "New",
+                    "wireformat": "Enhanced Format Conversions"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            },
+            "name": "abapcdsreader11"
+        },
+        "fromfile111": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 689.9999980926514,
+                "y": 67,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            },
+            "name": "fromfile11"
+        },
+        "gooperator111": {
+            "component": "com.sap.system.golangExecutor2",
+            "metadata": {
+                "label": "Terminate after last Batch",
+                "x": 804.999997138977,
+                "y": 52,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "package main\n\n\nfunc main() {\n\n}\n\nvar Finished func(interface{})\n\nfunc Input(msg interface{}) {\n\n if msg.(map[string]interface{})[\"Attributes\"].(map[string]interface{})[\"message.lastBatch\"] == true {\n     if Finished != nil {\n       Finished(\"true\")\n     }\n }\n \n\n}"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "finished",
+                        "type": "string"
+                    }
+                ]
+            },
+            "name": "gooperator11"
+        },
+        "graphterminator111": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 973.999997138977,
+                "y": 52,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            },
+            "name": "graphterminator11"
+        },
+        "messageoperator111": {
+            "component": "com.sap.system.golangmengine2",
+            "metadata": {
+                "label": "Generate Filenumber",
+                "x": 221,
+                "y": 52,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "// Here the message header variable \"ABAPfilenumber\" gets calculated.\n// \"ABAPfilenumber\" is used by the \"Write File\" operator in the subsequent step.\n// By default, a new filenumber gets created after 1024kb - please adjust the code if necessary.\n\npackage main\n\nimport (\n\t\"strconv\"\n)\n\n//#### Begin of Configuration ####\n\n// Initial Value for \"ABAPfilenumber\"\nvar mycounter=0    \n// Threshold in kilobytes after which filenumber gets incremented\nvar mykblimit=1024 \n//#### End of Configuration ####\n\nvar mysize=0\nvar GetInt func(string) int\nvar Output func(interface{})\n\nfunc main() {\n\n}\n\n\nfunc Input(msg interface{}) {\n\n    if msg == nil {\n      return\n    }\n\n    mykblimit = GetInt(\"maxsizekb\")\n    \n    if mykblimit == 0 { mykblimit = 1024 }\n\n    mysize += len(msg.(map[string]interface{})[\"Body\"].(string))\n    if mysize >= 1024 * mykblimit {\n      mycounter += 1\n      mysize = len(msg.(map[string]interface{})[\"Body\"].(string))\n    }\n     \n    msg.(map[string]interface{})[\"Attributes\"].(map[string]interface{})[\"ABAPfilenumber\"] = strconv.Itoa(mycounter)\n\n\tOutput(msg)\n    \n}\n"
+                }
+            },
+            "name": "messageoperator11"
+        },
+        "tofile111": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 405.9999990463257,
+                "y": 67,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            },
+            "name": "tofile11"
+        },
+        "writefile211": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 504.9999990463257,
+                "y": 52,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "joinBatches": false,
+                    "mode": "Append",
+                    "path": "/shared/file_<header:ABAPfilenumber>.csv",
+                    "pathMode": "Static with placeholders"
+                }
+            },
+            "name": "writefile21"
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "459.9999990463257,92 499.9999990463257,92"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile111"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile211"
+            }
+        },
+        {
+            "metadata": {
+                "points": "628.9999990463257,83 656.9999985694885,83 656.9999985694885,92 684.9999980926514,92"
+            },
+            "src": {
+                "port": "file",
+                "process": "writefile211"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile111"
+            }
+        },
+        {
+            "metadata": {
+                "points": "928.999997138977,92 968.999997138977,92"
+            },
+            "src": {
+                "port": "finished",
+                "process": "gooperator111"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator111"
+            }
+        },
+        {
+            "metadata": {
+                "points": "743.9999980926514,101 771.9999976158142,101 771.9999976158142,92 799.999997138977,92"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile111"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "gooperator111"
+            }
+        },
+        {
+            "metadata": {
+                "points": "345,92 372.99999952316284,92 372.99999952316284,101 400.9999990463257,101"
+            },
+            "src": {
+                "port": "output",
+                "process": "messageoperator111"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile111"
+            }
+        },
+        {
+            "metadata": {
+                "points": "176,92 216,92"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "abapcdsreader111"
+            },
+            "tgt": {
+                "port": "input",
+                "process": "messageoperator111"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "properties": {},
+    "metadata": {}
+}

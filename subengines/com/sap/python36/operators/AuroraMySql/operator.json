@@ -1,0 +1,27 @@
+{
+    "description": "My SQL Connector for Aurora",
+    "component": "com.sap.system.python3Operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "InPut",
+            "type": "string"
+        }
+    ],
+    "outports": [
+        {
+            "name": "OutPut",
+            "type": "string"
+        }
+    ],
+    "icon": "puzzle-piece",
+    "config": {
+        "$type": "http://sap.com/vflow/AuroraMySql.configSchema.json",
+        "script": "file://script.py"
+    },
+    "tags": {
+        "mysqlaurora": "8.0.12",
+        "python36": "",
+        "tornado": "5.0.2"
+    }
+}

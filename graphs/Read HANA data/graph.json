@@ -1,0 +1,64 @@
+{
+    "properties": {},
+    "description": "HANA data read",
+    "processes": {
+        "readhanatable": {
+            "component": "com.sap.hana.readTable.v2",
+            "metadata": {
+                "label": "Read HANA Table",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "HANA_DB"
+                    },
+                    "configMode": "Static (from configuration)",
+                    "batching": "Fixed size",
+                    "snapshotEnabled": true,
+                    "connectionTimeout": "50s",
+                    "batchSize": 1000,
+                    "tableName": "ZTEST_DI_S4"
+                }
+            },
+            "name": "readhanatable"
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap.v2",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 204.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 2,
+                "isNewAPI": true,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,43 170.5,43 170.5,52 199.99999904632568,52"
+            },
+            "src": {
+                "port": "success",
+                "process": "readhanatable"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 2
+    }
+}

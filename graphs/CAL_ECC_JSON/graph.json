@@ -1,0 +1,183 @@
+{
+    "properties": {},
+    "description": "CAL ECC Json",
+    "processes": {
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V1",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "CAL_ECC",
+                    "operatorID": "com.sap.abap.slt.reader.v1",
+                    "subscriptionType": "New",
+                    "action": "Replication",
+                    "chunkSize": 50000,
+                    "subscriptionName": "CAL_ECC_T0",
+                    "massTransferID": "001",
+                    "tableName": "T003"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outData",
+                        "type": "abap.*"
+                    }
+                ]
+            }
+        },
+        "abapconverter1": {
+            "component": "com.sap.abap.stringConverter",
+            "metadata": {
+                "label": "ABAP Converter",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "operatorID": "com.sap.abap.toStringConverter",
+                    "connectionID": "CAL_ECC",
+                    "format": "json"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "abap.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000000
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 519,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import json\r\nfrom datetime import datetime\r\n\r\ndef on_input(input1):\r\n    #Read the Json\r\n    main_dict = json.loads(input1)\r\n    \r\n    #Add timestamp field to the metadata\r\n    if \"METADATA\" in main_dict:\r\n        meta_list = main_dict['METADATA']\r\n        field = dict({\"FIELD\":{\"COLUMNNAME\":\"TIMESTAMP\",\"KEY\":\"\",\"ABAPTYPE\":\"TIMESTAMP\",\"ABAPLEN\":\"000000\",\"OUTPUTLEN\":\"000000\",\"DECIMALS\":\"000000\"}})\r\n        meta_list.append(field)\r\n        main_dict['METADATA'] = meta_list\r\n        \r\n        \r\n        \r\n        #Insert Timestamp field into every row\r\n        data_list = main_dict[\"DATA\"]\r\n        for i in data_list:\r\n            #Get Timestamp object\r\n            now = datetime.now()\r\n            \r\n            i[\"TIMESTAMP\"] = now.strftime(\"%Y%m%d %H:%M:%S.%f\")\r\n            \r\n        main_dict[\"DATA\"] = data_list\r\n    \r\n    \r\n    api.send('output', json.dumps(main_dict))\r\n        \r\napi.set_port_callback(['input1'], on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "output",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 688,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 1000000000
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "abapconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "abapconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "474,52 514,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "643,52 683,52"
+            },
+            "src": {
+                "port": "output",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

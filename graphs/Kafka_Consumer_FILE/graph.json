@@ -1,0 +1,213 @@
+{
+    "properties": {},
+    "description": "Kafka_Consumer_FILE",
+    "processes": {
+        "kafkaconsumer1": {
+            "component": "com.sap.kafka.consumer2",
+            "metadata": {
+                "label": "Kafka Consumer",
+                "x": 17,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "kafkaVersion": "2.13.2",
+                    "brokers": "52.140.47.63:9092",
+                    "groupId": "quickstart-event5",
+                    "topics": "quickstart-events"
+                }
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 571.999997138977,
+                "y": 147,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "writefile1": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 670.999997138977,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "pathMode": "Static (from configuration)",
+                    "path": "/shared/sap/BUT000_output.csv",
+                    "mode": "Append",
+                    "joinBatches": false
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 201.99999904632568,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000
+                }
+            }
+        },
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Kafka Decoder",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "from io import StringIO\r\nimport json\r\n\r\ndef on_input(input1):\r\n    main = json.loads(input1.body)\r\n    if \"Attributes\" in main and \"Body\" in main:\r\n        api.send('out', api.Message(attributes=main[\"Attributes\"], body=main[\"Body\"]))\r\n        \r\napi.set_port_callback(\"input1\", on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input1",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 201.99999904632568,
+                "y": 252,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap3": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 386.99999809265137,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "625.999997138977,172 665.999997138977,172"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,163 168.99999952316284,163 168.99999952316284,172 196.99999904632568,172"
+            },
+            "src": {
+                "port": "message",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,181 168.99999952316284,181 168.99999952316284,292 196.99999904632568,292"
+            },
+            "src": {
+                "port": "event",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "141,163 168.99999952316284,163 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "input1",
+                "process": "python3operator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "325.9999990463257,52 353.9999985694885,52 353.9999985694885,172 381.99999809265137,172"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "510.99999809265137,172 538.9999976158142,172 538.9999976158142,181 566.999997138977,181"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap3"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

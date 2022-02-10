@@ -1,0 +1,173 @@
+{
+    "properties": {},
+    "iconsrc": "jsengine.svg",
+    "description": "File-to-File Javascript",
+    "processes": {
+        "blankjsoperator1": {
+            "component": "com.sap.system.jsoperator",
+            "metadata": {
+                "label": "Process Data",
+                "x": 316.99999809265137,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "file://script.js"
+                },
+                "additionalinports": [
+                    {
+                        "name": "inData",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "outData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 785.9999961853027,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        },
+        "readfile2": {
+            "component": "com.sap.file.read",
+            "metadata": {
+                "label": "Read Input File",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "mode": "Once",
+                    "connection": {
+                        "configurationType": "System Management Files (\"/files/\")",
+                        "vrepRoot": "/files/"
+                    },
+                    "path": "${PATH_INPUT}"
+                }
+            }
+        },
+        "writefile2": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write Results File",
+                "x": 600.999997138977,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "mode": "${WRITE_MODE}",
+                    "pathMode": "Static (from configuration)",
+                    "path": "${PATH_RESULT}",
+                    "connection": {
+                        "configurationType": "From input"
+                    }
+                }
+            }
+        },
+        "fromfile1": {
+            "component": "com.sap.file.fromFile",
+            "metadata": {
+                "label": "From File",
+                "x": 201.99999904632568,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 501.99999713897705,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,43 168.99999952316284,43 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "readfile2"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "fromfile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "255.99999904632568,61 283.9999985694885,61 283.9999985694885,52 311.99999809265137,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "fromfile1"
+            },
+            "tgt": {
+                "port": "inData",
+                "process": "blankjsoperator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "440.99999809265137,52 468.9999976158142,52 468.9999976158142,61 496.99999713897705,61"
+            },
+            "src": {
+                "port": "outData",
+                "process": "blankjsoperator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "555.999997138977,52 595.999997138977,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "724.999997138977,43 752.9999966621399,43 752.9999966621399,52 780.9999961853027,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "writefile2"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

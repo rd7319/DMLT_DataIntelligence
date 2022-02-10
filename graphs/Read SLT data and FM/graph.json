@@ -1,0 +1,266 @@
+{
+    "properties": {},
+    "description": "Read SLT data and FM data",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 350,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 10000000000000
+                }
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V1",
+                "x": 12,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DMS_CAL_S4",
+                    "operatorID": "com.sap.abap.slt.reader.v1",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "009",
+                    "tableName": "BUT100",
+                    "subscriptionName": "but100_ss3",
+                    "chunkSize": 30000
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outData",
+                        "type": "abap.*"
+                    }
+                ]
+            }
+        },
+        "sapabapoperator1": {
+            "component": "com.sap.abap.sap",
+            "metadata": {
+                "label": "Class to retrieve data from ECC",
+                "x": 633.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DMS_CAL_S4",
+                    "operatorID": "customer.readdata.abap.sap.com",
+                    "myparameter": ""
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "string"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "tostringconverter1": {
+            "component": "com.sap.util.toStringConverter",
+            "metadata": {
+                "label": "ToString Converter",
+                "x": 534.9999990463257,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "abapconverter1": {
+            "component": "com.sap.abap.stringConverter",
+            "metadata": {
+                "label": "ABAP Converter",
+                "x": 181,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "operatorID": "com.sap.abap.toStringConverter",
+                    "connectionID": "DMS_CAL_S4",
+                    "format": "json"
+                },
+                "additionalinports": [
+                    {
+                        "name": "in",
+                        "type": "abap.*"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 802.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 10000000000000
+                }
+            }
+        },
+        "writefile1": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 1086.9999980926514,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "pathMode": "Static with placeholders",
+                    "mode": "Create only",
+                    "ifExist": "Ignore",
+                    "path": "/shared/TEST%20S4%20to%20DI/Zbut100_write_<date>_<time>.json"
+                }
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 987.9999980926514,
+                "y": 27,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "474,52 501.99999952316284,52 501.99999952316284,43 529.9999990463257,43"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "ininterface",
+                "process": "tostringconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "588.9999990463257,52 628.9999990463257,52"
+            },
+            "src": {
+                "port": "outstring",
+                "process": "tostringconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "sapabapoperator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,52 176,52"
+            },
+            "src": {
+                "port": "outData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "abapconverter1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,52 345,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "abapconverter1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "757.9999990463257,52 797.9999990463257,52"
+            },
+            "src": {
+                "port": "out",
+                "process": "sapabapoperator1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "926.9999990463257,52 954.9999985694885,52 954.9999985694885,61 982.9999980926514,61"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1041.9999980926514,52 1081.9999980926514,52"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}

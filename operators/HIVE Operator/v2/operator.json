@@ -1,0 +1,43 @@
+{
+    "description": "HiveQuery",
+    "component": "com.sap.system.python3Operator",
+    "versionStatus": "active",
+    "inports": [
+        {
+            "name": "FileData",
+            "type": "message.file"
+        },
+        {
+            "name": "intrigger",
+            "type": "string"
+        }
+    ],
+    "outports": [
+        {
+            "name": "output",
+            "type": "string"
+        }
+    ],
+    "icon": "puzzle-piece",
+    "iconsrc": "Hive_Home_logo.svg",
+    "config": {
+        "$type": "http://sap.com/vflow/Copy HIVE Operator.v2.configSchema.json",
+        "Query": "",
+        "Query_mode": "${query_mode}",
+        "database": "dsmodel_validation",
+        "hive_host": "datavault-e3.core.unionbank.com",
+        "hive_port": 10000,
+        "jks_file": "cm-auto-global_truststore",
+        "key_tab": "dvmrmsvc01.headless",
+        "krb_conf": "krb5",
+        "principal": "hive/datavault-e3.core.unionbank.com@CORE.UNIONBANK.COM",
+        "script": "file://script.py",
+        "ssl_enabled": true,
+        "user_principal": "dvmrmsvc01@CORE.UNIONBANK.COM"
+    },
+    "tags": {
+        "hive_python": "",
+        "python36": "\"\"",
+        "tornado": "5.0.2"
+    }
+}

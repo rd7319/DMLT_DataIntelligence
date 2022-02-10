@@ -1,0 +1,45 @@
+{
+	"name": "generated.structuredfileconsumer2_outTable",
+	"description": "auto-generated generated.structuredfileconsumer2_outTable",
+	"vflow.type": "table",
+	"rows": {
+		"components": [
+			{
+				"ID": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_30"
+				}
+			},
+			{
+				"dataType": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_12"
+				}
+			},
+			{
+				"dataformat": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_11"
+				}
+			},
+			{
+				"Code": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_30"
+				}
+			},
+			{
+				"value": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_130"
+				}
+			},
+			{
+				"description": {
+					"vflow.type": "scalar",
+					"vtype-ID": "$GRAPH.generated.string_130"
+				}
+			}
+		]
+	}
+}

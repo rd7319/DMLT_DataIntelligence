@@ -1,0 +1,24 @@
+{
+    "properties": {},
+    "description": "MySQL Execute Many",
+    "processes": {
+        "mysqlinsert1": {
+            "component": "MySQL_ExecuteMany",
+            "metadata": {
+                "label": "MySQL Insert",
+                "x": -58,
+                "y": 74,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}

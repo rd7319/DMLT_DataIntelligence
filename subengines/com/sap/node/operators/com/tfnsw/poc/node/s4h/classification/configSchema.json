@@ -1,0 +1,121 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$id": "http://sap.com/vflow/com.tfnsw.poc.node.s4h.classification.configSchema.json",
+    "type": "object",
+    "properties": {
+        "codelanguage": {
+            "readOnly": true,
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": false,
+                "ui_disabled": true
+            }
+        },
+        "script": {
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": false
+            }
+        },
+        "connectionType": {
+            "title": "Connection Type",
+            "type": "string",
+            "enum": [
+                "Manual",
+                "connection"
+            ]
+        },
+        "host": {
+            "title": "Host",
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": [
+                    {
+                        "name": "connectionType",
+                        "value": "Manual"
+                    }
+                ]
+            }
+        },
+        "user": {
+            "title": "User",
+            "description": "User Name",
+            "type": "string",
+            "sap_vflow_constraints": {
+                "ui_visibility": [
+                    {
+                        "name": "connectionType",
+                        "value": "Manual"
+                    }
+                ]
+            }
+        },
+        "password": {
+            "title": "Password",
+            "type": "string",
+            "format": "password",
+            "sap_vflow_constraints": {
+                "ui_visibility": [
+                    {
+                        "name": "connectionType",
+                        "value": "Manual"
+                    }
+                ]
+            }
+        },
+        "connection": {
+            "title": "Connection",
+            "type": "object",
+            "properties": {
+                "configurationType": {
+                    "title": "Configuration Type",
+                    "type": "string",
+                    "enum": [
+                        "Configuration Manager",
+                        "Manual"
+                    ]
+                },
+                "connectionId": {
+                    "title": "Connection ID",
+                    "type": "string",
+                    "format": "com.sap.dh.connection.id",
+                    "sap_vflow_valuehelp": {
+                        "url": "/app/datahub-app-connection/connections?connectionTypes=ODATA",
+                        "valuepath": "id"
+                    },
+                    "sap_vflow_constraints": {
+                        "ui_visibility": [
+                            {
+                                "name": "configurationType",
+                                "value": "Configuration Manager"
+                            }
+                        ]
+                    }
+                },
+                "connectionProperties": {
+                    "title": "Connection Properties",
+                    "$ref": "http://sap.com/vflow/com.sap.dh.connections.odata.schema.json",
+                    "sap_vflow_constraints": {
+                        "ui_visibility": [
+                            {
+                                "name": "configurationType",
+                                "value": "Manual"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "batch": {
+            "title": "Batch",
+            "description": "Process data as $batch calls",
+            "type": "boolean"
+        }
+    },
+    "required": [
+        "connectionType",
+        "user",
+        "password",
+        "batch"
+    ]
+}

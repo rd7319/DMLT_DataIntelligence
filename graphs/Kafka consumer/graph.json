@@ -1,0 +1,58 @@
+{
+    "properties": {},
+    "iconsrc": "SAP_ABAP_Logo.png",
+    "description": "Copy of SLT to Kafka",
+    "processes": {
+        "kafkaconsumer1": {
+            "component": "com.sap.kafka.consumer2",
+            "metadata": {
+                "label": "Kafka Consumer",
+                "x": 17,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connectionType": "manual",
+                    "maxMessageBytes": 1000000,
+                    "kafkaVersion": "2.13.2",
+                    "brokers": "52.140.47.63:9092",
+                    "groupId": "quickstart-events",
+                    "topics": "quickstart-events"
+                }
+            }
+        },
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 201.99999904632568,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "ui": "dynpath",
+                "config": {
+                    "maxSize": 100000000000
+                }
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "141,43 168.99999952316284,43 168.99999952316284,52 196.99999904632568,52"
+            },
+            "src": {
+                "port": "message",
+                "process": "kafkaconsumer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {}
+}
