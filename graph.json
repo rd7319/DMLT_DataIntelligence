@@ -1,0 +1,309 @@
+{
+    "properties": {},
+    "description": "Python3_Inport_Test",
+    "processes": {
+        "wiretap1": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 783.9999980926514,
+                "y": 94.99999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap2": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 397.9999990463257,
+                "y": 132,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "wiretap3": {
+            "component": "com.sap.util.wiretap",
+            "metadata": {
+                "label": "Wiretap",
+                "x": 397.9999990463257,
+                "y": 12,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "ui": "dynpath",
+                "config": {}
+            }
+        },
+        "sltconnector1": {
+            "component": "com.sap.abap.slt.reader",
+            "metadata": {
+                "label": "SLT Connector V2",
+                "x": 12,
+                "y": 94.99999976158142,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {
+                    "connectionID": "DI_JD1",
+                    "operatorID": "com.sap.abap.slt.reader.v2",
+                    "subscriptionType": "New",
+                    "action": "Initial Load",
+                    "massTransferID": "04T",
+                    "tableName": "T006",
+                    "subscriptionName": "T006_py",
+                    "chunkSize": 500
+                },
+                "additionaloutports": [
+                    {
+                        "name": "outMessageData",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "writefile1": {
+            "component": "com.sap.file.write",
+            "metadata": {
+                "label": "Write File",
+                "x": 1067.999997138977,
+                "y": 94.99999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {
+                    "connection": {
+                        "configurationType": "Connection Management",
+                        "connectionID": "DI_DATA_LAKE"
+                    },
+                    "pathMode": "Static (from configuration)",
+                    "path": "/shared/ml/df.csv",
+                    "mode": "Overwrite"
+                }
+            }
+        },
+        "tofile1": {
+            "component": "com.sap.file.toFile",
+            "metadata": {
+                "label": "To File",
+                "x": 968.999997138977,
+                "y": 109.99999976158142,
+                "height": 50,
+                "width": 50,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "compareconfigtables1": {
+            "component": "Config_Comparator",
+            "metadata": {
+                "label": "Compare Config Tables",
+                "x": 614.9999980926514,
+                "y": 93.99999976158142,
+                "height": 82,
+                "width": 120,
+                "extensible": true,
+                "filesRequired": [
+                    "script.py"
+                ],
+                "generation": 1,
+                "config": {
+                    "script": "import pandas as pd\nimport copy\nimport json\nimport io\nimport numpy as np\nimport sys\n\n\n\ncounter = 0\nmain_df = pd.DataFrame()\nmain_dict = {}\ncol_dict = {}\n\nclass Functor:\n    def __init__(self, n): \n        self.port = n\n    \n    def get_tab_cols_keys(self,abtyplist,sid):\n        keys = []\n        cols = []\n        global col_dict\n        \n        if not col_dict.get(sid):\n            col_dict.update({sid : {}})\n        #api.logger.info(col_dict)\n        for i in abtyplist:\n            name = i.get('Field').get('COLUMNNAME')\n            name_sid = f\"{i.get('Field').get('COLUMNNAME')}_{sid}\"\n            \n            #if col_dict.get(sid):\n            col_dict.get(sid).update({name : name_sid})\n            \n            if i.get('Field').get('KEY') == 'X':\n                col_dict.get(sid).update({name : name})\n                cols.append(name)\n                keys.append(name)\n            else:\n                col_dict.get(sid).update({name : name_sid})\n                cols.append(name_sid)\n                # cols.append(i.get('Field').get('COLUMNNAME'))\n        cols.append(f\"Table_{sid}\")\n        cols.append(f\"Flag_{sid}\")\n        #api.logger.info(col_dict)\n        return cols,keys\n        \n    \n    def on_input(self,msg):\n        global counter\n        global main_df\n        global main_dict\n        # global col_dict\n        #counter += 1\n        inp_ports = api.get_inport_names()\n        #api.logger.info(counter)\n        \n        message = msg\n        \n        #Read attributes\n        var = json.dumps(message.attributes) \n        attr = json.loads(var)    \n        \n        #CHECK If its last batch\n        if \"message.lastBatch\" in attr:\n            #\n            counter += 1\n            if counter == len(inp_ports):\n                a = str(main_dict.get(\"JD1\").shape)\n                b = str(main_dict.get(\"JD2\").shape)\n                api.logger.info(a)\n                api.logger.info(b)\n                api.logger.info(main_dict)\n                \n                main_sys = inp_ports[0]\n                main_dict[main_sys] = main_dict[main_sys].iloc[:,:-2]\n                \n                for n,df in enumerate(main_dict.values()):\n                    # if n == 0:\n                    #     continue\n                    sys2 = list(main_dict.keys())[n]\n                    if sys2 == main_sys:\n                        \n                        api.logger.info(f\"mainy{sys2}\")\n                        continue\n                    api.logger.info(f\"not{sys2}\")\n                    df = df.iloc[:,:-2]\n                    if main_df.empty:\n                        main_df = main_dict[main_sys].join(df,how='inner')\n                    else:\n                        main_df = main_df.join(df,how='inner')\n                    \n                api.logger.info(main_df.shape)    \n                api.logger.info(main_df.head())  \n                main_df = main_df.applymap(str)\n                for i in inp_ports:\n                    if i == main_sys:\n                        api.logger.info(f\"inside main sys{i}\")\n                        continue\n                    \n                    api.logger.info(col_dict[i])\n                    \n                    for data in col_dict[i]:\n                        \n                        col_sid = col_dict.get(i).get(data)\n                        col_main = col_dict.get(main_sys).get(data)\n                        \n                        if data == col_sid:\n                            continue               \n                        #api.logger.info(col_sid)\n                        #api.logger.info(col_main)\n                        \n                        main_df[col_sid] = main_df.apply(lambda x : x if x[col_sid] != x[col_main] else \n                                                              np.nan,axis=1)\n\n                # df_list = list(main_dict.values())\n                # main_df = pd.concat(df_list).drop_duplicates(keep=False)\n                api.logger.info(\"out of df\")\n                #api.logger.info(main_df.head())\n                api.logger.info(main_df.shape)\n                df_csv = main_df.to_csv()\n                api.send(\"out\", api.Message(attributes = None, body=df_csv))    \n            \n        else:\n            \n            dtypelist = attr.get('ABAP').get('Fields')\n            abaptypelist = attr.get('metadata')\n            abtyplist = [i for i in abaptypelist if not (i.get('Field').get('ABAPTYPE') == '')]\n            \n            current_port = self.port\n            api.logger.info(current_port)\n            #Read data to DataFrame\n            data_stream = io.StringIO(message.body)\n            \n            #Get Cols and Keys from MySQL\n            cols,keys = self.get_tab_cols_keys(abtyplist,current_port)\n            \n            temp_df = pd.read_csv(data_stream,names=cols,index_col=keys,dtype=str)\n            \n            # temp_df.insert(0,'SystemID',str(current_port))\n            # keys.insert(0,'SystemID')\n            \n            # temp_df = temp_df.set_index(keys)            \n            \n            if current_port not in main_dict:\n                main_dict[current_port] = copy.deepcopy(temp_df)\n            else:\n                main_dict[current_port] = main_dict[current_port].append(temp_df)\n        \n        \n        # if counter == len(inp_ports):\n        #     counter = 0\n        \n\n# inp_port = api.get_inport_names()\n# api.logger.info(inp_port)\n\n# for i in inp_port:\n#     api.logger.info(i)\n#     def data_in(data):\n#         api.logger.info(f\"Port is {i}\")\n#         on_input(data)\n#     api.set_port_callback(i, data_in)\n\nobj_dict = {}\n\ninp_port = api.get_inport_names()\napi.logger.info(inp_port)\n\nfor i in inp_port:\n    obj_dict[i] = Functor(i)\n    if obj_dict[i]:\n        api.set_port_callback(i, obj_dict[i].on_input)"
+                },
+                "additionalinports": [
+                    {
+                        "name": "JD3",
+                        "type": "message"
+                    },
+                    {
+                        "name": "JD4",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 1252.9999961853027,
+                "y": 94.99999976158142,
+                "height": 80,
+                "width": 120,
+                "generation": 1,
+                "config": {}
+            }
+        },
+        "14multiplexer1": {
+            "component": "com.sap.system.multiplexer.1-4",
+            "metadata": {
+                "label": "1:4 Multiplexer",
+                "x": 181,
+                "y": 93.99999976158142,
+                "height": 82,
+                "width": 120,
+                "extensible": true,
+                "generation": 1,
+                "config": {}
+            }
+        }
+    },
+    "groups": [],
+    "connections": [
+        {
+            "metadata": {
+                "points": "907.9999980926514,134.99999976158142 935.9999976158142,134.99999976158142 935.9999976158142,143.99999976158142 963.999997138977,143.99999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "tofile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1022.999997138977,134.99999976158142 1062.999997138977,134.99999976158142"
+            },
+            "src": {
+                "port": "file",
+                "process": "tofile1"
+            },
+            "tgt": {
+                "port": "file",
+                "process": "writefile1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "521.9999990463257,52 549.9999985694885,52 549.9999985694885,107.99999976158142 609.9999980926514,107.99999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap3"
+            },
+            "tgt": {
+                "port": "JD1",
+                "process": "compareconfigtables1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "521.9999990463257,172 549.9999985694885,172 549.9999985694885,125.99999976158142 609.9999980926514,125.99999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "wiretap2"
+            },
+            "tgt": {
+                "port": "JD2",
+                "process": "compareconfigtables1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "738.9999980926514,134.99999976158142 778.9999980926514,134.99999976158142"
+            },
+            "src": {
+                "port": "out",
+                "process": "compareconfigtables1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "1191.999997138977,125.99999976158142 1219.99999666214,125.99999976158142 1219.99999666214,134.99999976158142 1247.9999961853027,134.99999976158142"
+            },
+            "src": {
+                "port": "file",
+                "process": "writefile1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "136,134.99999976158142 176,134.99999976158142"
+            },
+            "src": {
+                "port": "outMessageData",
+                "process": "sltconnector1"
+            },
+            "tgt": {
+                "port": "in1",
+                "process": "14multiplexer1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,107.99999976158142 332.99999952316284,107.99999976158142 332.99999952316284,52 392.9999990463257,52"
+            },
+            "src": {
+                "port": "out1",
+                "process": "14multiplexer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap3"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,125.99999976158142 364.99999952316284,125.99999976158142 364.99999952316284,172 392.9999990463257,172"
+            },
+            "src": {
+                "port": "out2",
+                "process": "14multiplexer1"
+            },
+            "tgt": {
+                "port": "in",
+                "process": "wiretap2"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,143.99999976158142 348.99999952316284,143.99999976158142 348.99999952316284,239.99999952316284 565.9999985694885,239.99999952316284 565.9999985694885,143.99999976158142 609.9999980926514,143.99999976158142"
+            },
+            "src": {
+                "port": "out3",
+                "process": "14multiplexer1"
+            },
+            "tgt": {
+                "port": "JD3",
+                "process": "compareconfigtables1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "305,161.99999976158142 332.99999952316284,161.99999976158142 332.99999952316284,256.99999952316284 581.9999985694885,256.99999952316284 581.9999985694885,161.99999976158142 609.9999980926514,161.99999976158142"
+            },
+            "src": {
+                "port": "out4",
+                "process": "14multiplexer1"
+            },
+            "tgt": {
+                "port": "JD4",
+                "process": "compareconfigtables1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {},
+    "metadata": {
+        "generation": 1
+    }
+}
